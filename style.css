@@ -16,11 +16,7 @@ body {
   padding: 20px;
 }
 
-h1 {
-  color: white;
-  font-size: 36px;
-  margin-bottom: 30px;
-}
+/* Removed h1 title block */
 
 textarea,
 .output-box {
