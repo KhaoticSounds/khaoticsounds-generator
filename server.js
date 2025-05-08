@@ -40,7 +40,7 @@ app.post("/generate", async (req, res) => {
     const result = response.data.choices[0].message.content.trim();
     res.json({ lyrics: result });
   } catch (err) {
-    console.error("API error:", err.response?.data || err.message);
+    console.error("OpenAI API error:", err.response?.data || err.message);
     res.status(500).send("Failed to generate lyrics");
   }
 });
@@ -48,3 +48,4 @@ app.post("/generate", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
