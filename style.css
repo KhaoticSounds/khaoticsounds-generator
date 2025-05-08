@@ -1,33 +1,87 @@
-.input-area {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 10px;
-  background: #000;
-}
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000; /* Solid black background */
+    color: white;
+  }
 
-input[type="text"] {
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  background-color: white;
-  color: black;
-  min-width: 200px;
-}
+  .content {
+    max-width: 900px;
+    margin: auto;
+    padding: 0 15px 20px;
+    border: none; /* Removed blue border */
+    background-color: transparent; /* Makes background invisible */
+  }
 
-button {
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: none;
-  background-color: #007BFF;
-  color: white;
-  cursor: pointer;
-}
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
 
-button:hover {
-  background-color: #0056b3;
-}
+  .controls label {
+    font-weight: bold;
+  }
 
+  .output-box {
+    background-color: white;
+    color: black;
+    padding: 15px;
+    border-radius: 5px;
+    min-height: 200px;
+    margin-bottom: 15px;
+    overflow-y: auto;
+  }
+
+  .input-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: black;
+    min-width: 200px;
+  }
+
+  button, select {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  #timer {
+    margin-left: auto;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  @media (max-width: 600px) {
+    .controls, .input-area {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    #timer {
+      margin-left: 0;
+    }
+  }
+</style>
