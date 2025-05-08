@@ -138,9 +138,23 @@
         return;
       }
 
-      const displayLength = length === "8" ? "8 Bars" : length === "8hook" ? "8 Bars (Hook)" : "16 Bars (Verse)";
-      const lyrics = `(${displayLength}) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
-      document.getElementById("lyrics-output").textContent = lyrics;
+      document.getElementById("lyrics-output").textContent = "Generating...";
+
+      fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: input, mood, length })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("lyrics-output").textContent =
+            data.lyrics || "No lyrics returned.";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("lyrics-output").textContent =
+            "Failed to generate lyrics.";
+        });
     }
 
     function copyLyrics() {
