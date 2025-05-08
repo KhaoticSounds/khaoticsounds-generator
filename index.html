@@ -1,10 +1,68 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>KhaoticSounds Generator</title>
-  </head>
-  <body>
-    <h1>🚀 KhaoticSounds Generator Is LIVE!</h1>
-    <p>If you see this, the server is working!</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KhaoticSounds Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: #0f0;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h1 {
+      font-size: 36px;
+    }
+
+    textarea, button {
+      margin-top: 20px;
+      width: 90%;
+      max-width: 600px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #0f0;
+      color: #000;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0c0;
+    }
+
+    #output {
+      margin-top: 20px;
+      white-space: pre-wrap;
+      background-color: #222;
+      padding: 20px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>KhaoticSounds Lyric Generator</h1>
+  <textarea id="prompt" placeholder="Enter a mood or topic..."></textarea><br>
+  <button onclick="generateLyrics()">Generate</button>
+
+  <div id="output"></div>
+
+  <script>
+    async function generateLyrics() {
+      const prompt = document.getElementById('prompt').value;
+      const res = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt })
+      });
+      const data = await res.json();
+      document.getElementById('output').textContent = data.output || 'No response.';
+    }
+  </script>
+</body>
 </html>
