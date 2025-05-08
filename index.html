@@ -8,88 +8,99 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
+      background-color: #000;
+      border: 4px solid #00BFFF;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
-    .generator-container {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 15px;
-      background-color: transparent;
-      border: 3px solid #00BFFF;
+    .content {
+      flex: 1;
+      padding: 10px;
+      color: white;
+      max-width: 100%;
     }
 
     .controls {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       gap: 10px;
       margin-bottom: 10px;
-      align-items: center;
     }
 
     .controls label {
       font-weight: bold;
     }
 
-    .controls select,
-    .controls button,
-    .controls input[type="text"] {
-      padding: 10px;
+    .output-box {
+      background-color: white;
+      color: black;
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 200px;
+      white-space: pre-wrap;
+      overflow-y: auto;
       font-size: 16px;
+    }
+
+    .input-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px;
+      background: #000;
+    }
+
+    input[type="text"],
+    select,
+    button {
+      font-size: 16px;
+      padding: 10px;
       border-radius: 5px;
       border: 1px solid #007BFF;
     }
 
-    #lyrics-output {
-      background-color: white;
-      color: black;
-      height: 200px;
-      overflow-y: auto;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
-
-    #user-input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-    }
-
-    #buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    #buttons button {
+    input[type="text"] {
       flex: 1;
-      padding: 10px;
-      font-size: 16px;
+      background: white;
+      color: black;
+    }
+
+    button {
       background-color: #007BFF;
       color: white;
-      border: none;
-      border-radius: 5px;
       cursor: pointer;
     }
 
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    #timer {
+      color: #00BFFF;
+      font-size: 14px;
+    }
+
     @media (max-width: 600px) {
-      .controls {
+      .controls,
+      .input-area {
         flex-direction: column;
         align-items: stretch;
       }
 
-      #buttons {
-        flex-direction: column;
+      select,
+      button,
+      input[type="text"],
+      .output-box {
+        width: 100%;
       }
     }
   </style>
 </head>
 <body>
-  <div class="generator-container">
+  <div class="content">
     <div class="controls">
       <label for="mood-select">Moods:</label>
       <select id="mood-select">
@@ -103,31 +114,30 @@
       <label for="length-select">Bars:</label>
       <select id="length-select">
         <option value="8">8 Bars</option>
-        <option value="8h">8 Bars (Hook)</option>
         <option value="16">16 Bars (Verse)</option>
       </select>
+
+      <span id="timer"></span>
     </div>
 
-    <div id="lyrics-output"><!-- Output will appear here --></div>
-
-    <input type="text" id="user-input" placeholder="Type your prompt here..." />
-
-    <div id="buttons">
-      <button onclick="generateLyrics()">Generate</button>
-      <button onclick="copyLyrics()">Copy Lyrics</button>
+    <div class="output-box" id="lyrics-output">
+      <!-- Lyrics will show up here -->
     </div>
   </div>
 
+  <div class="input-area">
+    <input type="text" id="user-input" placeholder="Type your prompt here..." />
+    <button id="generate-btn" onclick="generateLyrics()">Generate</button>
+    <button onclick="copyLyrics()">Copy Lyrics</button>
+  </div>
+
   <script>
-    let lastGenerationTime = 0;
+    let cooldown = 30;
+    let canGenerate = true;
+    let timerInterval;
 
     function generateLyrics() {
-      const now = Date.now();
-      if (now - lastGenerationTime < 30000) {
-        alert("Please wait 30 seconds between generations.");
-        return;
-      }
-      lastGenerationTime = now;
+      if (!canGenerate) return;
 
       const input = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
@@ -138,8 +148,24 @@
         return;
       }
 
-      const lyrics = `(${length}) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
-      document.getElementById("lyrics-output").textContent = lyrics;
+      canGenerate = false;
+      startCooldown();
+
+      fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: input, mood, length })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("lyrics-output").textContent =
+            data.lyrics || "No lyrics returned.";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          document.getElementById("lyrics-output").textContent =
+            "Failed to generate lyrics.";
+        });
     }
 
     function copyLyrics() {
@@ -150,7 +176,29 @@
       }
       navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
     }
+
+    function startCooldown() {
+      let remaining = cooldown;
+      const timer = document.getElementById("timer");
+      const button = document.getElementById("generate-btn");
+
+      button.disabled = true;
+      timer.textContent = `Wait ${remaining}s`;
+
+      timerInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+          timer.textContent = "";
+          canGenerate = true;
+          button.disabled = false;
+        } else {
+          timer.textContent = `Wait ${remaining}s`;
+        }
+      }, 1000);
+    }
   </script>
 </body>
 </html>
+
 
