@@ -1,22 +1,16 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #000; /* page background */
-  overflow: hidden; /* prevents entire page scrolling */
+  background-color: black;
   color: white;
 }
 
 .generator-container {
-  max-width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: #000; /* no outer black box */
-  border: 4px solid #00BFFF;
-  padding: 10px;
-  box-sizing: border-box;
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 15px;
+  background-color: transparent;
+  border: 3px solid #00BFFF;
 }
 
 .controls {
@@ -29,61 +23,59 @@ body {
 
 .controls label {
   font-weight: bold;
-  margin-right: 5px;
 }
 
-select, input[type="text"], button {
+.controls select,
+.controls button,
+.controls input[type="text"] {
   padding: 10px;
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid #007BFF;
-  background-color: #007BFF;
-  color: white;
-  cursor: pointer;
 }
 
-input[type="text"] {
-  background: white;
+#lyrics-output {
+  background-color: white;
   color: black;
-  border: 1px solid #ccc;
-  flex: 1;
-}
-
-textarea {
-  width: 100%;
-  height: 100%;
-  border: none;
-  padding: 10px;
-  resize: none;
-  font-size: 16px;
-  box-sizing: border-box;
-  background: white;
-  color: black;
+  height: 200px;
   overflow-y: auto;
-}
-
-.output-box {
-  flex: 1;
-  width: 100%;
-  background: white;
-  color: black;
+  padding: 10px;
+  margin-bottom: 10px;
   border-radius: 5px;
-  overflow-y: auto;
+}
+
+#user-input {
+  width: 100%;
   padding: 10px;
-  box-sizing: border-box;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
   margin-bottom: 10px;
 }
 
-.input-area {
+#buttons {
   display: flex;
   gap: 10px;
-  width: 100%;
+}
+
+#buttons button {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
-  .controls, .input-area {
+  .controls {
     flex-direction: column;
     align-items: stretch;
   }
-}
 
+  #buttons {
+    flex-direction: column;
+  }
+}
