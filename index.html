@@ -11,8 +11,8 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      background-color: #000; /* Solid black */
-      border: 4px solid #00BFFF;
+      background-color: #001f3f; /* Navy blue background */
+      border: 4px solid #00BFFF; /* Light blue border */
     }
 
     .content {
@@ -20,19 +20,17 @@
       display: flex;
       flex-direction: column;
       padding: 10px;
-      overflow: hidden;
       color: white;
     }
 
     .output-box {
       flex: 1;
-      background-color: #000; /* Black output */
-      color: #00ffff; /* Neon blue text */
+      background-color: #000; /* Black box */
+      color: white;
+      border: 1px solid #00BFFF;
       border-radius: 5px;
       padding: 15px;
       margin-bottom: 10px;
-      font-size: 16px;
-      border: 1px solid #00BFFF;
       white-space: pre-wrap;
       overflow-y: auto;
       max-height: 350px;
@@ -64,6 +62,8 @@
       padding: 10px;
       font-size: 16px;
       border-radius: 5px;
+      background: white; /* Prompt box stays white */
+      color: black;
       border: 1px solid #ccc;
     }
 
@@ -81,15 +81,21 @@
       background-color: #0056b3;
     }
 
-    ::-webkit-scrollbar {
-      width: 0px;
-      background: transparent;
+    #timer {
+      color: #00BFFF;
+      font-size: 14px;
+      margin-left: 10px;
     }
 
     @media (max-width: 600px) {
       .controls, .input-area {
         flex-direction: column;
         align-items: stretch;
+      }
+
+      #timer {
+        margin-left: 0;
+        margin-top: 5px;
       }
     }
   </style>
@@ -111,29 +117,28 @@
         <option value="8">8 Bars (Hook)</option>
         <option value="16">16 Bars (Verse)</option>
       </select>
+
+      <span id="timer"></span>
     </div>
 
     <div class="output-box" id="lyrics-output">
-      <!-- Lyrics will appear here -->
+      <!-- Generated lyrics will appear here -->
     </div>
   </div>
 
   <div class="input-area">
     <input type="text" id="user-input" placeholder="Type your prompt here..." />
-    <button onclick="generateLyrics()">Generate</button>
+    <button id="generate-btn" onclick="generateLyrics()">Generate</button>
     <button onclick="copyLyrics()">Copy Lyrics</button>
   </div>
 
   <script>
-    let lastGenerationTime = 0;
+    let cooldown = 30;
+    let canGenerate = true;
+    let timerInterval;
 
     function generateLyrics() {
-      const now = Date.now();
-      if (now - lastGenerationTime < 30000) {
-        alert("Please wait 30 seconds between generations.");
-        return;
-      }
-      lastGenerationTime = now;
+      if (!canGenerate) return;
 
       const input = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
@@ -144,11 +149,12 @@
         return;
       }
 
+      canGenerate = false;
+      startCooldown();
+
       fetch("/generate", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: input, mood, length })
       })
         .then(res => res.json())
@@ -168,6 +174,27 @@
         return;
       }
       navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
+    }
+
+    function startCooldown() {
+      let remaining = cooldown;
+      const timer = document.getElementById("timer");
+      const button = document.getElementById("generate-btn");
+
+      button.disabled = true;
+      timer.textContent = `Wait ${remaining}s`;
+
+      timerInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+          timer.textContent = "";
+          canGenerate = true;
+          button.disabled = false;
+        } else {
+          timer.textContent = `Wait ${remaining}s`;
+        }
+      }, 1000);
     }
   </script>
 </body>
