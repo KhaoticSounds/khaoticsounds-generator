@@ -9,48 +9,52 @@
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #000;
-    }
-
-    .content {
-      max-width: 100%;
-      margin: 20px auto;
-      border: 4px solid #00BFFF;
-      background-color: transparent;
+      color: white;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      border: 4px solid #00BFFF;
+      background-color: #000;
+      padding: 10px;
+      width: 95%;
+      max-width: 800px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
 
     .controls {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      padding: 10px;
-      background-color: #001f3f;
-      color: white;
+      align-items: center;
+      margin-bottom: 10px;
     }
 
     .controls label {
       font-weight: bold;
-      margin-right: 5px;
     }
 
     .output-box {
-      background-color: white;
-      color: black;
+      background-color: #fff;
+      color: #000;
+      border-radius: 5px;
       padding: 10px;
       height: 200px;
       overflow-y: auto;
-      border-radius: 4px;
-      margin: 0 10px;
+      margin-bottom: 10px;
       white-space: pre-wrap;
     }
 
     .input-area {
       display: flex;
       gap: 10px;
-      padding: 10px;
-      background-color: #001f3f;
     }
 
     input[type="text"] {
@@ -75,28 +79,16 @@
       background-color: #0056b3;
     }
 
-    #timer {
-      color: white;
-      font-size: 14px;
-      margin-left: auto;
-    }
-
     @media (max-width: 600px) {
-      .controls,
-      .input-area {
+      .controls, .input-area {
         flex-direction: column;
         align-items: stretch;
-      }
-
-      #timer {
-        margin-left: 0;
-        text-align: right;
       }
     }
   </style>
 </head>
 <body>
-  <div class="content">
+  <div class="container">
     <div class="controls">
       <label for="mood-select">Moods:</label>
       <select id="mood-select">
@@ -110,62 +102,53 @@
       <label for="length-select">Bars:</label>
       <select id="length-select">
         <option value="8">8 Bars</option>
-        <option value="8hook">8 Bars (Hook)</option>
+        <option value="8-hook">8 Bars (Hook)</option>
         <option value="16">16 Bars (Verse)</option>
       </select>
-
-      <span id="timer"></span>
+      <span id="timer-display"></span>
     </div>
 
     <div class="output-box" id="lyrics-output"></div>
 
     <div class="input-area">
       <input type="text" id="user-input" placeholder="Type your prompt here..." />
-      <button onclick="generateLyrics()" id="generate-btn">Generate</button>
+      <button onclick="generateLyrics()">Generate</button>
       <button onclick="copyLyrics()">Copy Lyrics</button>
     </div>
   </div>
 
   <script>
     let lastGenerationTime = 0;
-    const timerSpan = document.getElementById("timer");
-
-    function updateTimer(seconds) {
-      if (seconds <= 0) {
-        timerSpan.textContent = '';
-        document.getElementById('generate-btn').disabled = false;
-        return;
-      }
-      timerSpan.textContent = `Wait ${seconds}s`;
-      setTimeout(() => updateTimer(seconds - 1), 1000);
-    }
+    let cooldown = 30000; // 30 seconds
 
     function generateLyrics() {
       const now = Date.now();
-      if (now - lastGenerationTime < 30000) {
-        alert("Please wait 30 seconds between generations.");
+      const timerDisplay = document.getElementById("timer-display");
+
+      if (now - lastGenerationTime < cooldown) {
+        const remaining = Math.ceil((cooldown - (now - lastGenerationTime)) / 1000);
+        timerDisplay.textContent = `Wait ${remaining}s`;
         return;
       }
+
       lastGenerationTime = now;
-      updateTimer(30);
-      document.getElementById('generate-btn').disabled = true;
+      timerDisplay.textContent = "";
 
       const input = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
-      const lengthRaw = document.getElementById("length-select").value;
-
-      let lengthText = '';
-      if (lengthRaw === '8hook') lengthText = '8 Bars (Hook)';
-      else if (lengthRaw === '16') lengthText = '16 Bars (Verse)';
-      else lengthText = '8 Bars';
+      const length = document.getElementById("length-select").value;
 
       if (!input) {
         alert("Please enter a prompt before generating.");
         return;
       }
 
-      const output = `(${lengthText}) Mood: ${mood}\n\nGenerated lyrics for: "${input}"\n\n[Your lyrics will be generated here...]`;
-      document.getElementById("lyrics-output").textContent = output;
+      let barsLabel = length === "8" ? "8 Bars" :
+                      length === "8-hook" ? "8 Bars (Hook)" :
+                      "16 Bars (Verse)";
+
+      const lyrics = `(${barsLabel}) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
+      document.getElementById("lyrics-output").textContent = lyrics;
     }
 
     function copyLyrics() {
