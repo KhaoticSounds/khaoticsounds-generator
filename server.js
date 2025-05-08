@@ -1,35 +1,42 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const axios = require("axios");
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(__dirname));
 
-// API route
-app.post('/generate', async (req, res) => {
-  const prompt = req.body.prompt;
+app.post("/generate", async (req, res) => {
+  const { prompt, mood, length } = req.body;
 
-  // Temporary mock response (replace this with OpenAI API call)
-  const mockLyrics = `
-Here’s your verse on "${prompt}":
+  const fullPrompt = `Write a ${length}-bar ${mood} rap about: ${prompt}`;
 
-Yeah, I’m steppin' in the light, tryna make a change,  
-Khaotic on the beat, feelin’ out the range.  
-Tales from the block to the stars we claim,  
-Turnin' pain into power, remember the name.
-`;
+  try {
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        model: "gpt-3.5-turbo",
+        messages: [{ role: "user", content: fullPrompt }],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  res.json({ output: mockLyrics });
-});
-
-// Serve the HTML
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+    const result = response.data.choices[0].message.content.trim();
+    res.json({ lyrics: result });
+  } catch (err) {
+    console.error("API error:", err);
+    res.status(500).send("Failed to generate lyrics");
+  }
 });
 
 app.listen(PORT, () => {
