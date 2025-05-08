@@ -15,9 +15,8 @@
     .content {
       max-width: 900px;
       margin: auto;
-      padding: 20px;
-      border: 4px solid #00BFFF;
-      background-color: #000;
+      padding: 0 15px 20px;
+      background-color: transparent;
     }
 
     .controls {
@@ -40,6 +39,7 @@
       min-height: 200px;
       margin-bottom: 15px;
       overflow-y: auto;
+      white-space: pre-wrap;
     }
 
     .input-area {
@@ -114,7 +114,7 @@
     </div>
 
     <div class="output-box" id="lyrics-output">
-      <!-- Lyrics will appear here -->
+      <!-- Real lyrics from server will appear here -->
     </div>
 
     <div class="input-area">
@@ -125,33 +125,40 @@
   </div>
 
   <script>
-    let lastGenerated = 0;
+    let cooldown = 30;
+    let canGenerate = true;
     let timerInterval;
 
     function generateLyrics() {
-      const now = Date.now();
-      const delay = 30000;
-      const remaining = delay - (now - lastGenerated);
+      if (!canGenerate) return;
 
-      if (remaining > 0) {
-        alert(`Please wait ${Math.ceil(remaining / 1000)} seconds before generating again.`);
-        return;
-      }
-
-      const input = document.getElementById("user-input").value.trim();
+      const prompt = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
-      const bars = document.getElementById("length-select").value;
+      const length = document.getElementById("length-select").value;
       const output = document.getElementById("lyrics-output");
 
-      if (!input) {
+      if (!prompt) {
         alert("Please enter a prompt.");
         return;
       }
 
-      output.textContent = `(${bars} bars) Mood: ${mood}\n\nGenerated lyrics for: "${input}"\n\n(Your lyrics would appear here...)`;
-
-      lastGenerated = Date.now();
+      canGenerate = false;
       startCooldown();
+      output.textContent = "Generating...";
+
+      fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, mood, length })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          output.textContent = data.lyrics || "No lyrics returned.";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          output.textContent = "Failed to generate lyrics.";
+        });
     }
 
     function copyLyrics() {
@@ -165,17 +172,15 @@
 
     function startCooldown() {
       const timer = document.getElementById("timer");
-      const cooldown = 30;
       let remaining = cooldown;
 
-      clearInterval(timerInterval);
       timer.textContent = `Wait ${remaining}s`;
-
       timerInterval = setInterval(() => {
         remaining--;
         if (remaining <= 0) {
           clearInterval(timerInterval);
           timer.textContent = "Ready";
+          canGenerate = true;
         } else {
           timer.textContent = `Wait ${remaining}s`;
         }
