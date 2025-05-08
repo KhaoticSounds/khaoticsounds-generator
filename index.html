@@ -29,10 +29,12 @@
       border: 1px solid #ccc;
       border-radius: 5px;
       padding: 10px;
-      overflow-y: auto;
       margin-bottom: 10px;
       background: #f9f9f9;
       color: black;
+      height: auto;
+      overflow: visible;
+      white-space: pre-wrap;
     }
 
     .controls {
@@ -125,19 +127,28 @@
       }
       lastGenerationTime = now;
 
-      const input = document.getElementById("user-input").value;
+      const input = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
       const length = document.getElementById("length-select").value;
 
-      // Placeholder generation logic
+      if (!input) {
+        alert("Please enter a prompt before generating.");
+        return;
+      }
+
       const lyrics = `(${length} bars) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
       document.getElementById("lyrics-output").textContent = lyrics;
     }
 
     function copyLyrics() {
       const lyrics = document.getElementById("lyrics-output").textContent;
+      if (!lyrics.trim()) {
+        alert("Nothing to copy yet!");
+        return;
+      }
       navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
     }
   </script>
 </body>
 </html>
+
