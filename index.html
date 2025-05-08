@@ -11,7 +11,8 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      border: 4px solid #007BFF; /* Blue border */
+      background-color: #001f3f; /* Solid navy blue */
+      border: 4px solid #00BFFF; /* Light blue highlight */
     }
 
     .content {
@@ -20,6 +21,7 @@
       flex-direction: column;
       padding: 10px;
       overflow: hidden;
+      color: white;
     }
 
     .output-box {
@@ -30,6 +32,7 @@
       overflow-y: auto;
       margin-bottom: 10px;
       background: #f9f9f9;
+      color: black;
     }
 
     .controls {
@@ -37,6 +40,12 @@
       gap: 10px;
       margin-bottom: 10px;
       flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .controls label {
+      font-weight: bold;
+      margin-right: 5px;
     }
 
     .input-area {
@@ -80,6 +89,7 @@
 <body>
   <div class="content">
     <div class="controls">
+      <label for="mood-select">Moods:</label>
       <select id="mood-select">
         <option value="chill">Chill</option>
         <option value="aggressive">Aggressive</option>
@@ -87,6 +97,8 @@
         <option value="romantic">Romantic</option>
         <option value="inspirational">Inspirational</option>
       </select>
+
+      <label for="length-select">Bars:</label>
       <select id="length-select">
         <option value="8">8 Bars (Hook)</option>
         <option value="16">16 Bars (Verse)</option>
