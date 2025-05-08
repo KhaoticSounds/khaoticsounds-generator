@@ -2,24 +2,130 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Lyric Generator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <title>KhaoticSounds Generator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      border: 4px solid #007BFF; /* Blue border */
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    .output-box {
+      flex: 1;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      background: #eee;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button, select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #007BFF;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      .controls, .input-area {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Title removed -->
-    
-    <div id="output" class="output-box">Your lyrics will appear here...</div>
-
-    <textarea id="prompt" placeholder="Enter a topic or mood..."></textarea><br />
-
-    <div class="button-group">
-      <button onclick="generateLyrics()">Generate</button>
-      <button onclick="copyOutput()">Copy</button>
+  <div class="content">
+    <div class="controls">
+      <select id="mood-select">
+        <option value="chill">Chill</option>
+        <option value="aggressive">Aggressive</option>
+        <option value="dark">Dark</option>
+        <option value="romantic">Romantic</option>
+        <option value="inspirational">Inspirational</option>
+      </select>
+      <select id="length-select">
+        <option value="8">8 Bars (Hook)</option>
+        <option value="16">16 Bars (Verse)</option>
+      </select>
+    </div>
+    <div class="output-box" id="lyrics-output">
+      <!-- Generated lyrics will appear here -->
     </div>
   </div>
+  <div class="input-area">
+    <input type="text" id="user-input" placeholder="Type your prompt here..." />
+    <button onclick="generateLyrics()">Generate</button>
+    <button onclick="copyLyrics()">Copy Lyrics</button>
+  </div>
 
-  <script src="index.js"></script>
+  <script>
+    let lastGenerationTime = 0;
+
+    function generateLyrics() {
+      const now = Date.now();
+      if (now - lastGenerationTime < 30000) {
+        alert("Please wait 30 seconds between generations.");
+        return;
+      }
+      lastGenerationTime = now;
+
+      const input = document.getElementById("user-input").value;
+      const mood = document.getElementById("mood-select").value;
+      const length = document.getElementById("length-select").value;
+
+      // Placeholder generation logic
+      const lyrics = `(${length} bars) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
+      document.getElementById("lyrics-output").textContent = lyrics;
+    }
+
+    function copyLyrics() {
+      const lyrics = document.getElementById("lyrics-output").textContent;
+      navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
+    }
+  </script>
 </body>
 </html>
