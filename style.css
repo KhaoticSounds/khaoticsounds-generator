@@ -1,26 +1,30 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: #000;
+  background-color: #000; /* page background */
+  overflow: hidden; /* prevents entire page scrolling */
+  color: white;
 }
 
-.content {
+.generator-container {
   max-width: 100%;
-  margin: 20px auto;
-  border: 4px solid #00BFFF;
-  background-color: transparent;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #000; /* no outer black box */
+  border: 4px solid #00BFFF;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 .controls {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 10px;
-  background-color: #001f3f;
-  color: white;
+  margin-bottom: 10px;
+  align-items: center;
 }
 
 .controls label {
@@ -28,33 +32,7 @@ body {
   margin-right: 5px;
 }
 
-.output-box {
-  background-color: white;
-  color: black;
-  padding: 10px;
-  height: 200px;
-  overflow-y: auto;
-  border-radius: 4px;
-  margin: 0 10px;
-  white-space: pre-wrap;
-}
-
-.input-area {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  background-color: #001f3f;
-}
-
-input[type="text"] {
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-button, select {
+select, input[type="text"], button {
   padding: 10px;
   font-size: 16px;
   border-radius: 5px;
@@ -64,25 +42,48 @@ button, select {
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #0056b3;
+input[type="text"] {
+  background: white;
+  color: black;
+  border: 1px solid #ccc;
+  flex: 1;
 }
 
-#timer {
-  color: white;
-  font-size: 14px;
-  margin-left: auto;
+textarea {
+  width: 100%;
+  height: 100%;
+  border: none;
+  padding: 10px;
+  resize: none;
+  font-size: 16px;
+  box-sizing: border-box;
+  background: white;
+  color: black;
+  overflow-y: auto;
+}
+
+.output-box {
+  flex: 1;
+  width: 100%;
+  background: white;
+  color: black;
+  border-radius: 5px;
+  overflow-y: auto;
+  padding: 10px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
+  width: 100%;
 }
 
 @media (max-width: 600px) {
-  .controls,
-  .input-area {
+  .controls, .input-area {
     flex-direction: column;
     align-items: stretch;
   }
-
-  #timer {
-    margin-left: 0;
-    text-align: right;
-  }
 }
+
