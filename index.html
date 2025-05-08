@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KhaoticSounds Generator</title>
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -13,19 +17,21 @@
     }
 
     .content {
-      max-width: 900px;
+      max-width: 100%;
       margin: 20px auto;
-      padding: 20px;
+      padding: 15px;
       border: 4px solid #00BFFF;
       background-color: #000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
       align-items: center;
-      margin-bottom: 10px;
+      gap: 10px;
     }
 
     .controls label {
@@ -37,35 +43,30 @@
       color: black;
       padding: 15px;
       border-radius: 5px;
-      min-height: 200px;
-      margin-bottom: 15px;
-      overflow-y: auto;
+      min-height: 150px;
       white-space: pre-wrap;
+      width: 100%;
     }
 
     .input-area {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 10px;
-      align-items: center;
     }
 
     input[type="text"] {
-      flex: 1;
       padding: 10px;
       font-size: 16px;
       border-radius: 5px;
       border: 1px solid #ccc;
-      background-color: white;
-      color: black;
-      min-width: 200px;
+      width: 100%;
     }
 
     button, select {
-      padding: 10px 15px;
+      padding: 10px;
       font-size: 16px;
       border-radius: 5px;
-      border: none;
+      border: 1px solid #007BFF;
       background-color: #007BFF;
       color: white;
       cursor: pointer;
@@ -75,26 +76,24 @@
       background-color: #0056b3;
     }
 
-    #timer {
-      margin-left: auto;
-      font-size: 14px;
-      color: #00BFFF;
-    }
-
-    @media (max-width: 600px) {
-      .controls, .input-area {
-        flex-direction: column;
-        align-items: stretch;
+    @media (min-width: 600px) {
+      .input-area {
+        flex-direction: row;
+        align-items: center;
       }
 
-      #timer {
-        margin-left: 0;
-        text-align: right;
+      input[type="text"] {
+        flex: 1;
+      }
+
+      button {
+        width: auto;
       }
     }
   </style>
 </head>
 <body>
+
   <div class="content">
     <div class="controls">
       <label for="mood-select">Moods:</label>
@@ -109,87 +108,68 @@
       <label for="length-select">Bars:</label>
       <select id="length-select">
         <option value="8">8 Bars</option>
-        <option value="8-hook">8 Bars (Hook)</option>
+        <option value="8h">8 Bars (Hook)</option>
         <option value="16">16 Bars (Verse)</option>
       </select>
 
-      <div id="timer">Ready</div>
+      <span id="timer" style="font-size: 14px;"></span>
     </div>
 
-    <div class="output-box" id="lyrics-output">
-      <!-- Generated lyrics will appear here -->
-    </div>
+    <div class="output-box" id="lyrics-output"></div>
 
     <div class="input-area">
       <input type="text" id="user-input" placeholder="Type your prompt here..." />
-      <button id="generate-btn" onclick="generateLyrics()">Generate</button>
+      <button onclick="generateLyrics()" id="generate-btn">Generate</button>
       <button onclick="copyLyrics()">Copy Lyrics</button>
     </div>
   </div>
 
   <script>
-    let cooldown = 30;
-    let canGenerate = true;
-    let timerInterval;
+    let lastGenerationTime = 0;
+    const cooldown = 10000; // 10 seconds cooldown
+    const timerDisplay = document.getElementById("timer");
 
     function generateLyrics() {
-      if (!canGenerate) return;
+      const now = Date.now();
+      const elapsed = now - lastGenerationTime;
 
-      const prompt = document.getElementById("user-input").value.trim();
+      if (elapsed < cooldown) {
+        const waitSeconds = Math.ceil((cooldown - elapsed) / 1000);
+        timerDisplay.textContent = `Wait ${waitSeconds}s`;
+        return;
+      }
+
+      lastGenerationTime = now;
+      timerDisplay.textContent = "";
+
+      const input = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
       const length = document.getElementById("length-select").value;
-      const output = document.getElementById("lyrics-output");
 
-      if (!prompt) {
+      if (!input) {
         alert("Please enter a prompt.");
         return;
       }
 
-      canGenerate = false;
-      startCooldown();
-      output.textContent = "Generating...";
+      const barText = length === "8" ? "8 bars"
+                    : length === "8h" ? "8 bars (Hook)"
+                    : "16 bars (Verse)";
 
-      fetch("/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, mood, length })
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          output.textContent = data.lyrics || "No lyrics returned.";
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          output.textContent = "Failed to generate lyrics.";
-        });
+      const output = `(${barText}) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
+
+      document.getElementById("lyrics-output").textContent = output;
     }
 
     function copyLyrics() {
       const lyrics = document.getElementById("lyrics-output").textContent;
       if (!lyrics.trim()) {
-        alert("Nothing to copy.");
+        alert("Nothing to copy yet!");
         return;
       }
       navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
     }
-
-    function startCooldown() {
-      const timer = document.getElementById("timer");
-      let remaining = cooldown;
-
-      timer.textContent = `Wait ${remaining}s`;
-      timerInterval = setInterval(() => {
-        remaining--;
-        if (remaining <= 0) {
-          clearInterval(timerInterval);
-          timer.textContent = "Ready";
-          canGenerate = true;
-        } else {
-          timer.textContent = `Wait ${remaining}s`;
-        }
-      }, 1000);
-    }
   </script>
+
 </body>
 </html>
 
