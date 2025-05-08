@@ -1,66 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KhaoticSounds Generator</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <h2>KhaoticSounds <br /><span class="white-title">Generator</span></h2>
-
-  <div class="chat-container">
-    <div class="chat-header">
-      <label for="mood">Mood:</label>
-      <select id="mood">
-        <option value="aggressive">Aggressive</option>
-        <option value="hype">Hype</option>
-        <option value="smooth">Smooth</option>
-        <option value="street">Street</option>
-      </select>
-
-      <label for="type">Type:</label>
-      <select id="type">
-        <option value="hook">Hook (8 bars)</option>
-        <option value="verse">Verse (16 bars)</option>
-      </select>
-    </div>
-
-    <div class="chat-input-area">
-      <input type="text" id="topic" placeholder="Enter your topic..." />
-      <div class="button-group">
-        <button onclick="generateLyrics()">Generate</button>
-        <button onclick="copyLyrics()">Copy Lyrics</button>
-      </div>
-    </div>
-
-    <div id="lyricsOutput" class="chat-output">Your lyrics will appear here...</div>
-  </div>
-
-  <script>
-    async function generateLyrics() {
-      const mood = document.getElementById("mood").value;
-      const topic = document.getElementById("topic").value;
-      const type = document.getElementById("type").value;
-
-      document.getElementById("lyricsOutput").textContent = "Writing lyrics...";
-
-      const response = await fetch("/generate-lyrics", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mood, topic, type }),
-      });
-
-      const data = await response.json();
-      document.getElementById("lyricsOutput").textContent = data.Lyrics || "Error generating lyrics.";
-    }
-
-    function copyLyrics() {
-      const text = document.getElementById("lyricsOutput").textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Lyrics copied to clipboard!");
-      });
-    }
-  </script>
-</body>
+<html>
+  <head>
+    <title>KhaoticSounds Generator</title>
+  </head>
+  <body>
+    <h1>🚀 KhaoticSounds Generator Is LIVE!</h1>
+    <p>If you see this, the server is working!</p>
+  </body>
 </html>
