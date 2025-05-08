@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KhaoticSounds Generator</title>
   <style>
     body {
@@ -11,8 +11,8 @@
       display: flex;
       flex-direction: column;
       height: 100vh;
-      background-color: #001f3f; /* Solid navy blue */
-      border: 4px solid #00BFFF; /* Light blue highlight */
+      background-color: #001f3f;
+      border: 4px solid #00BFFF;
     }
 
     .content {
@@ -20,28 +20,24 @@
       display: flex;
       flex-direction: column;
       padding: 10px;
-      overflow: hidden;
       color: white;
     }
 
     .output-box {
-      flex: 1;
       border: 1px solid #ccc;
       border-radius: 5px;
       padding: 10px;
-      margin-bottom: 10px;
       background: #f9f9f9;
       color: black;
-      height: auto;
-      overflow: visible;
       white-space: pre-wrap;
+      margin-bottom: 10px;
+      height: auto;
     }
 
     .controls {
       display: flex;
       gap: 10px;
       margin-bottom: 10px;
-      flex-wrap: wrap;
       align-items: center;
     }
 
@@ -54,8 +50,8 @@
       display: flex;
       gap: 10px;
       align-items: center;
-      padding: 10px;
       background: #eee;
+      padding: 10px;
     }
 
     input[type="text"] {
@@ -83,7 +79,6 @@
     @media (max-width: 600px) {
       .controls, .input-area {
         flex-direction: column;
-        align-items: stretch;
       }
     }
   </style>
@@ -106,12 +101,12 @@
         <option value="16">16 Bars (Verse)</option>
       </select>
     </div>
-    <div class="output-box" id="lyrics-output">
-      <!-- Generated lyrics will appear here -->
-    </div>
+
+    <div class="output-box" id="lyrics-output">Generated lyrics will appear here...</div>
   </div>
+
   <div class="input-area">
-    <input type="text" id="user-input" placeholder="Type your prompt here..." />
+    <input type="text" id="user-input" placeholder="Type your topic here..." />
     <button onclick="generateLyrics()">Generate</button>
     <button onclick="copyLyrics()">Copy Lyrics</button>
   </div>
@@ -119,34 +114,43 @@
   <script>
     let lastGenerationTime = 0;
 
-    function generateLyrics() {
+    async function generateLyrics() {
       const now = Date.now();
       if (now - lastGenerationTime < 30000) {
-        alert("Please wait 30 seconds between generations.");
+        alert(\"Please wait 30 seconds between generations.\");
         return;
       }
       lastGenerationTime = now;
 
-      const input = document.getElementById("user-input").value.trim();
-      const mood = document.getElementById("mood-select").value;
-      const length = document.getElementById("length-select").value;
+      const input = document.getElementById(\"user-input\").value.trim();
+      const mood = document.getElementById(\"mood-select\").value;
+      const length = document.getElementById(\"length-select\").value;
 
       if (!input) {
-        alert("Please enter a prompt before generating.");
+        alert(\"Please enter a prompt.\");
         return;
       }
 
-      const lyrics = `(${length} bars) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
-      document.getElementById("lyrics-output").textContent = lyrics;
+      try {
+        const res = await fetch(\"/generate\", {
+          method: \"POST\",
+          headers: {
+            \"Content-Type\": \"application/json\"
+          },
+          body: JSON.stringify({ prompt: input, mood, length })
+        });
+
+        const data = await res.json();
+        document.getElementById(\"lyrics-output\").textContent = data.lyrics || \"No response received.\";
+      } catch (error) {
+        document.getElementById(\"lyrics-output\").textContent = \"Failed to generate lyrics.\";
+        console.error(error);
+      }
     }
 
     function copyLyrics() {
-      const lyrics = document.getElementById("lyrics-output").textContent;
-      if (!lyrics.trim()) {
-        alert("Nothing to copy yet!");
-        return;
-      }
-      navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
+      const text = document.getElementById(\"lyrics-output\").textContent;
+      navigator.clipboard.writeText(text).then(() => alert(\"Lyrics copied!\")); 
     }
   </script>
 </body>
