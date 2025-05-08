@@ -1,7 +1,7 @@
 {
   "name": "khaoticsounds-generator",
   "version": "1.0.0",
-  "description": "KhaoticSounds Lyric Generator",
+  "description": "KhaoticSounds AI Lyrics Generator",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
