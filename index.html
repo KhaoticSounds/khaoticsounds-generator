@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+index_html = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -95,64 +95,4 @@
         <option value="inspirational">Inspirational</option>
       </select>
 
-      <label for="length-select">Bars:</label>
-      <select id="length-select">
-        <option value="8">8 Bars (Hook)</option>
-        <option value="16">16 Bars (Verse)</option>
-      </select>
-    </div>
-
-    <div class="output-box" id="lyrics-output">Generated lyrics will appear here...</div>
-  </div>
-
-  <div class="input-area">
-    <input type="text" id="user-input" placeholder="Type your topic here..." />
-    <button onclick="generateLyrics()">Generate</button>
-    <button onclick="copyLyrics()">Copy Lyrics</button>
-  </div>
-
-  <script>
-    let lastGenerationTime = 0;
-
-    async function generateLyrics() {
-      const now = Date.now();
-      if (now - lastGenerationTime < 30000) {
-        alert(\"Please wait 30 seconds between generations.\");
-        return;
-      }
-      lastGenerationTime = now;
-
-      const input = document.getElementById(\"user-input\").value.trim();
-      const mood = document.getElementById(\"mood-select\").value;
-      const length = document.getElementById(\"length-select\").value;
-
-      if (!input) {
-        alert(\"Please enter a prompt.\");
-        return;
-      }
-
-      try {
-        const res = await fetch(\"/generate\", {
-          method: \"POST\",
-          headers: {
-            \"Content-Type\": \"application/json\"
-          },
-          body: JSON.stringify({ prompt: input, mood, length })
-        });
-
-        const data = await res.json();
-        document.getElementById(\"lyrics-output\").textContent = data.lyrics || \"No response received.\";
-      } catch (error) {
-        document.getElementById(\"lyrics-output\").textContent = \"Failed to generate lyrics.\";
-        console.error(error);
-      }
-    }
-
-    function copyLyrics() {
-      const text = document.getElementById(\"lyrics-output\").textContent;
-      navigator.clipboard.writeText(text).then(() => alert(\"Lyrics copied!\")); 
-    }
-  </script>
-</body>
-</html>
-
+      <label for="length
