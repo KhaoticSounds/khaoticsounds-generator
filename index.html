@@ -1,171 +1,87 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KhaoticSounds Generator</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: black;
-      color: white;
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #000; /* Solid black background */
+    color: white;
+  }
+
+  .content {
+    max-width: 900px;
+    margin: auto;
+    padding: 0 15px 20px;
+    border: none; /* Removed blue border */
+    background-color: transparent; /* Makes background invisible */
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .controls label {
+    font-weight: bold;
+  }
+
+  .output-box {
+    background-color: white;
+    color: black;
+    padding: 15px;
+    border-radius: 5px;
+    min-height: 200px;
+    margin-bottom: 15px;
+    overflow-y: auto;
+  }
+
+  .input-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: black;
+    min-width: 200px;
+  }
+
+  button, select {
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007BFF;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  #timer {
+    margin-left: auto;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  @media (max-width: 600px) {
+    .controls, .input-area {
+      flex-direction: column;
+      align-items: stretch;
     }
 
-    .generator-container {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 15px;
-      background-color: transparent;
-      border: 3px solid #00BFFF;
+    #timer {
+      margin-left: 0;
     }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 10px;
-      align-items: center;
-    }
-
-    .controls label {
-      font-weight: bold;
-    }
-
-    .controls select,
-    .controls button,
-    .controls input[type="text"] {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #007BFF;
-    }
-
-    #lyrics-output {
-      background-color: white;
-      color: black;
-      height: 200px;
-      overflow-y: auto;
-      padding: 10px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-    }
-
-    #user-input {
-      width: 100%;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin-bottom: 10px;
-    }
-
-    #buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    #buttons button {
-      flex: 1;
-      padding: 10px;
-      font-size: 16px;
-      background-color: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 600px) {
-      .controls {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      #buttons {
-        flex-direction: column;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="generator-container">
-    <div class="controls">
-      <label for="mood-select">Moods:</label>
-      <select id="mood-select">
-        <option value="chill">Chill</option>
-        <option value="aggressive">Aggressive</option>
-        <option value="dark">Dark</option>
-        <option value="romantic">Romantic</option>
-        <option value="inspirational">Inspirational</option>
-      </select>
-
-      <label for="length-select">Bars:</label>
-      <select id="length-select">
-        <option value="8">8 Bars</option>
-        <option value="8hook">8 Bars (Hook)</option>
-        <option value="16">16 Bars (Verse)</option>
-      </select>
-      <span id="timer" style="margin-left: auto; font-size: 14px;"></span>
-    </div>
-
-    <div id="lyrics-output"></div>
-
-    <input type="text" id="user-input" placeholder="Type your prompt here...">
-
-    <div id="buttons">
-      <button onclick="generateLyrics()">Generate</button>
-      <button onclick="copyLyrics()">Copy Lyrics</button>
-    </div>
-  </div>
-
-  <script>
-    let lastGenerated = 0;
-    let timerInterval;
-
-    function startTimer() {
-      const waitTime = 30;
-      let remaining = waitTime;
-      document.getElementById("timer").textContent = `Wait ${remaining}s`;
-      timerInterval = setInterval(() => {
-        remaining--;
-        if (remaining <= 0) {
-          clearInterval(timerInterval);
-          document.getElementById("timer").textContent = '';
-        } else {
-          document.getElementById("timer").textContent = `Wait ${remaining}s`;
-        }
-      }, 1000);
-    }
-
-    async function generateLyrics() {
-      const now = Date.now();
-      if (now - lastGenerated < 30000) return;
-
-      const prompt = document.getElementById("user-input").value;
-      const mood = document.getElementById("mood-select").value;
-      const bars = document.getElementById("length-select").value;
-
-      try {
-        const res = await fetch("/generate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ prompt, mood, bars })
-        });
-
-        const data = await res.json();
-        document.getElementById("lyrics-output").textContent = data.lyrics || "Failed to generate lyrics.";
-        lastGenerated = Date.now();
-        startTimer();
-      } catch (err) {
-        document.getElementById("lyrics-output").textContent = "Error generating lyrics.";
-      }
-    }
-
-    function copyLyrics() {
-      const text = document.getElementById("lyrics-output").textContent;
-      if (text) navigator.clipboard.writeText(text);
-    }
-  </script>
-</body>
-</html>
+  }
+</style>
