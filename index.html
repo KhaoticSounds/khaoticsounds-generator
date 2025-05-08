@@ -2,26 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KhaoticSounds Generator</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background-color: #000;
-      color: white;
     }
 
     .content {
       max-width: 100%;
       margin: 20px auto;
-      padding: 15px;
       border: 4px solid #00BFFF;
-      background-color: #000;
+      background-color: transparent;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -30,36 +24,41 @@
     .controls {
       display: flex;
       flex-wrap: wrap;
-      align-items: center;
       gap: 10px;
+      padding: 10px;
+      background-color: #001f3f;
+      color: white;
     }
 
     .controls label {
       font-weight: bold;
+      margin-right: 5px;
     }
 
     .output-box {
       background-color: white;
       color: black;
-      padding: 15px;
-      border-radius: 5px;
-      min-height: 150px;
+      padding: 10px;
+      height: 200px;
+      overflow-y: auto;
+      border-radius: 4px;
+      margin: 0 10px;
       white-space: pre-wrap;
-      width: 100%;
     }
 
     .input-area {
       display: flex;
-      flex-direction: column;
       gap: 10px;
+      padding: 10px;
+      background-color: #001f3f;
     }
 
     input[type="text"] {
+      flex: 1;
       padding: 10px;
       font-size: 16px;
       border-radius: 5px;
       border: 1px solid #ccc;
-      width: 100%;
     }
 
     button, select {
@@ -76,24 +75,27 @@
       background-color: #0056b3;
     }
 
-    @media (min-width: 600px) {
+    #timer {
+      color: white;
+      font-size: 14px;
+      margin-left: auto;
+    }
+
+    @media (max-width: 600px) {
+      .controls,
       .input-area {
-        flex-direction: row;
-        align-items: center;
+        flex-direction: column;
+        align-items: stretch;
       }
 
-      input[type="text"] {
-        flex: 1;
-      }
-
-      button {
-        width: auto;
+      #timer {
+        margin-left: 0;
+        text-align: right;
       }
     }
   </style>
 </head>
 <body>
-
   <div class="content">
     <div class="controls">
       <label for="mood-select">Moods:</label>
@@ -108,11 +110,11 @@
       <label for="length-select">Bars:</label>
       <select id="length-select">
         <option value="8">8 Bars</option>
-        <option value="8h">8 Bars (Hook)</option>
+        <option value="8hook">8 Bars (Hook)</option>
         <option value="16">16 Bars (Verse)</option>
       </select>
 
-      <span id="timer" style="font-size: 14px;"></span>
+      <span id="timer"></span>
     </div>
 
     <div class="output-box" id="lyrics-output"></div>
@@ -126,37 +128,43 @@
 
   <script>
     let lastGenerationTime = 0;
-    const cooldown = 10000; // 10 seconds cooldown
-    const timerDisplay = document.getElementById("timer");
+    const timerSpan = document.getElementById("timer");
+
+    function updateTimer(seconds) {
+      if (seconds <= 0) {
+        timerSpan.textContent = '';
+        document.getElementById('generate-btn').disabled = false;
+        return;
+      }
+      timerSpan.textContent = `Wait ${seconds}s`;
+      setTimeout(() => updateTimer(seconds - 1), 1000);
+    }
 
     function generateLyrics() {
       const now = Date.now();
-      const elapsed = now - lastGenerationTime;
-
-      if (elapsed < cooldown) {
-        const waitSeconds = Math.ceil((cooldown - elapsed) / 1000);
-        timerDisplay.textContent = `Wait ${waitSeconds}s`;
+      if (now - lastGenerationTime < 30000) {
+        alert("Please wait 30 seconds between generations.");
         return;
       }
-
       lastGenerationTime = now;
-      timerDisplay.textContent = "";
+      updateTimer(30);
+      document.getElementById('generate-btn').disabled = true;
 
       const input = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
-      const length = document.getElementById("length-select").value;
+      const lengthRaw = document.getElementById("length-select").value;
+
+      let lengthText = '';
+      if (lengthRaw === '8hook') lengthText = '8 Bars (Hook)';
+      else if (lengthRaw === '16') lengthText = '16 Bars (Verse)';
+      else lengthText = '8 Bars';
 
       if (!input) {
-        alert("Please enter a prompt.");
+        alert("Please enter a prompt before generating.");
         return;
       }
 
-      const barText = length === "8" ? "8 bars"
-                    : length === "8h" ? "8 bars (Hook)"
-                    : "16 bars (Verse)";
-
-      const output = `(${barText}) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
-
+      const output = `(${lengthText}) Mood: ${mood}\n\nGenerated lyrics for: "${input}"\n\n[Your lyrics will be generated here...]`;
       document.getElementById("lyrics-output").textContent = output;
     }
 
@@ -169,7 +177,5 @@
       navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
     }
   </script>
-
 </body>
 </html>
-
