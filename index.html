@@ -7,8 +7,10 @@
 </head>
 <body>
   <div class="generator-container">
+    <!-- Output box -->
     <div class="output-box" id="lyrics-output">Your lyrics will appear here.</div>
 
+    <!-- BPM Slider -->
     <div class="form-group">
       <label for="bpm">Select BPM:</label>
       <input type="range" id="bpm" min="70" max="200" value="120">
@@ -19,11 +21,13 @@
       </div>
     </div>
 
+    <!-- Prompt Input -->
     <div class="form-group" id="prompt-group">
       <label for="prompt">Type your theme or idea:</label>
       <input type="text" id="prompt" placeholder="Enter your lyrics theme...">
     </div>
 
+    <!-- Mood Dropdown -->
     <div class="form-group">
       <label for="mood">Select Mood:</label>
       <select id="mood">
@@ -34,6 +38,7 @@
       </select>
     </div>
 
+    <!-- Bars Dropdown -->
     <div class="form-group">
       <label for="bars">Select Bars:</label>
       <select id="bars">
@@ -43,8 +48,11 @@
       </select>
     </div>
 
+    <!-- Button -->
     <button onclick="generateLyrics()">Generate Lyrics</button>
   </div>
+
+  <!-- Link to JS -->
   <script src="script.js"></script>
 </body>
 </html>
