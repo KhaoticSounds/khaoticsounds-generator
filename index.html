@@ -25,15 +25,16 @@
 
     .output-box {
       flex: 1;
-      background-color: white; /* ✅ Changed to white */
-      color: black;             /* ✅ Font changed to black */
+      background-color: white;
+      color: black;
       border: 1px solid #00BFFF;
-      border-radius: 5px;
+      border-radius: 10px;
       padding: 15px;
       margin-bottom: 10px;
       white-space: pre-wrap;
       overflow-y: auto;
       max-height: 350px;
+      font-size: 16px;
     }
 
     .controls {
@@ -87,6 +88,11 @@
       margin-left: 10px;
     }
 
+    ::-webkit-scrollbar {
+      width: 0px;
+      background: transparent;
+    }
+
     @media (max-width: 600px) {
       .controls, .input-area {
         flex-direction: column;
@@ -96,6 +102,10 @@
       #timer {
         margin-left: 0;
         margin-top: 5px;
+      }
+
+      .output-box {
+        font-size: 14px;
       }
     }
   </style>
@@ -122,7 +132,7 @@
     </div>
 
     <div class="output-box" id="lyrics-output">
-      <!-- Generated lyrics will appear here -->
+      <!-- Lyrics will appear here -->
     </div>
   </div>
 
@@ -136,6 +146,10 @@
     let cooldown = 30;
     let canGenerate = true;
     let timerInterval;
+
+    window.onload = () => {
+      document.getElementById("user-input").focus();
+    };
 
     function generateLyrics() {
       if (!canGenerate) return;
@@ -199,3 +213,4 @@
   </script>
 </body>
 </html>
+
