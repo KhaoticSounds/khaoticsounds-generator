@@ -1,3 +1,9 @@
+/* Global Reset */
+* {
+  box-sizing: border-box;
+}
+
+/* Body */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -24,4 +30,89 @@ body {
   background-color: transparent;
   display: flex;
   flex-direction: column;
+}
+
+/* Top Controls */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 15px;
+  background-color: #001f3f;
+  margin: 0;
+}
+
+.controls label {
+  font-weight: bold;
+}
+
+/* Output Area */
+.output-box {
+  background-color: white;
+  color: black;
+  padding: 15px;
+  min-height: 150px;
+  border-radius: 5px;
+  white-space: pre-wrap;
+  margin: 0;
+  overflow: visible;
+  font-size: 16px;
+}
+
+/* Input Area */
+.input-area {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 15px;
+  background-color: #001f3f;
+  margin: 0;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+  color: black;
+}
+
+/* Buttons & Dropdowns */
+button,
+select {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #007BFF;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Timer */
+#timer {
+  color: white;
+  font-size: 14px;
+  margin-left: auto;
+}
+
+/* Mobile Support */
+@media (max-width: 768px) {
+  .controls,
+  .input-area {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #timer {
+    margin-left: 0;
+    text-align: right;
+  }
 }
