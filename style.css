@@ -1,9 +1,7 @@
-/* Global Reset */
 * {
   box-sizing: border-box;
 }
 
-/* Body */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -11,7 +9,6 @@ body {
   color: white;
 }
 
-/* Generator Container */
 .content {
   max-width: 100%;
   margin: 0 auto;
@@ -23,7 +20,6 @@ body {
   padding: 0;
 }
 
-/* Top Controls (Mood + Bars) */
 .controls {
   display: flex;
   flex-wrap: wrap;
@@ -38,7 +34,6 @@ body {
   font-weight: bold;
 }
 
-/* Output Box */
 .output-box {
   background-color: white;
   color: black;
@@ -47,10 +42,9 @@ body {
   border-radius: 5px;
   white-space: pre-wrap;
   margin: 0;
-  overflow: visible;  /* 🚫 No scrollbar */
+  overflow: visible;
 }
 
-/* Input Area (Prompt + Buttons) */
 .input-area {
   display: flex;
   flex-wrap: wrap;
@@ -85,14 +79,12 @@ button:hover {
   background-color: #0056b3;
 }
 
-/* Timer */
 #timer {
   color: white;
   font-size: 14px;
   margin-left: auto;
 }
 
-/* Mobile Styles */
 @media (max-width: 600px) {
   .controls,
   .input-area {
