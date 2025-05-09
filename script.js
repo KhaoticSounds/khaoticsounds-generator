@@ -1,90 +1,34 @@
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #000;
-  color: #fff;
-  font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+document.getElementById("bpm").addEventListener("input", function () {
+  document.getElementById("bpm-display").textContent = this.value;
+});
+
+async function generateLyrics() {
+  const prompt = document.getElementById("prompt").value;
+  const mood = document.getElementById("mood").value;
+  const bars = document.getElementById("bars").value;
+  const bpm = document.getElementById("bpm").value;
+
+  const outputBox = document.getElementById("output");
+  outputBox.textContent = "Generating lyrics...";
+
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt, mood, bars, bpm }),
+    });
+
+    const data = await response.json();
+    outputBox.textContent = data.lyrics || "No lyrics returned.";
+  } catch (error) {
+    outputBox.textContent = "Error generating lyrics.";
+    console.error(error);
+  }
 }
 
-.generator-container {
-  border: 2px solid #007bff;
-  padding: 20px;
-  margin-top: 30px;
-  width: 90%;
-  max-width: 800px;
-  border-radius: 10px;
-}
-
-.output-box {
-  background-color: #fff;
-  color: #000;
-  padding: 15px;
-  border-radius: 5px;
-  height: 200px;
-  overflow-y: auto;
-  margin-bottom: 20px;
-  white-space: pre-wrap;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  color: #ccc;
-}
-
-input[type="text"],
-select,
-button {
-  width: 100%;
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #555;
-  border-radius: 5px;
-  color: #000;
-}
-
-input[type="range"] {
-  width: 100%;
-}
-
-#bpm-display {
-  text-align: right;
-  color: #ccc;
-  margin-top: 5px;
-}
-
-#bpm-message {
-  font-size: 0.9em;
-  color: #999;
-  margin-top: 5px;
-}
-
-.bpm-ruler {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8em;
-  color: #888;
-  margin-top: 5px;
-}
-
-button {
-  background-color: #fff;
-  color: #000;
-  font-weight: bold;
-  border: 2px solid #007bff;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-button:hover {
-  background-color: #007bff;
-  color: #fff;
+function copyLyrics() {
+  const output = document.getElementById("output");
+  navigator.clipboard.writeText(output.textContent);
 }
