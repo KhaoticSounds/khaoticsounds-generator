@@ -125,7 +125,7 @@
     </div>
 
     <div class="output-box" id="lyrics-output">
-      <!-- Lyrics will appear here -->
+      <!-- Generated lyrics will appear here -->
     </div>
 
     <div class="input-area">
@@ -158,20 +158,32 @@
         return;
       }
 
-      // Example dummy response — replace this with your API call if needed
-      output.textContent = `(${length} Bars) Mood: ${mood}\n\nGenerated lyrics for: "${prompt}"\n\n[Your lyrics would appear here...]`;
-
+      output.textContent = "Generating lyrics...";
       lastGenerated = now;
       startCooldown();
+
+      fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, mood, length })
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          output.textContent = data.lyrics || "No lyrics returned.";
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          output.textContent = "Failed to generate lyrics.";
+        });
     }
 
     function copyLyrics() {
-      const text = document.getElementById("lyrics-output").textContent;
-      if (!text.trim()) {
+      const lyrics = document.getElementById("lyrics-output").textContent;
+      if (!lyrics.trim()) {
         alert("Nothing to copy yet!");
         return;
       }
-      navigator.clipboard.writeText(text).then(() => alert("Lyrics copied!"));
+      navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
     }
 
     function startCooldown() {
@@ -193,3 +205,4 @@
 
 </body>
 </html>
+
