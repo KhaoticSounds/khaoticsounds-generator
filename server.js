@@ -28,5 +28,19 @@ app.post('/api/generate', async (req, res) => {
       messages: [
         {
           role: 'user',
-          content
+          content: `Write ${bars} bars of lyrics about "${prompt}" in a "${mood}" mood at ${bpm} BPM.`,
+        },
+      ],
+      temperature: 0.8,
+    });
 
+    res.json({ lyrics: completion.choices[0].message.content });
+  } catch (error) {
+    console.error("OpenAI error:", error);
+    res.status(500).json({ error: 'Failed to generate lyrics.' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
