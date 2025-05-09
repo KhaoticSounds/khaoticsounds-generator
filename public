@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KhaoticSounds Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="generator-container">
+    <div class="form-group">
+      <label for="prompt">Enter your theme or idea:</label>
+      <input type="text" id="prompt" placeholder="Type your idea here..." />
+    </div>
+
+    <div class="form-group">
+      <label for="mood">Select Mood:</label>
+      <select id="mood">
+        <option value="hype">Hype</option>
+        <option value="emotional">Emotional</option>
+        <option value="gritty">Gritty</option>
+        <option value="romantic">Romantic</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="bars">Select Bars:</label>
+      <select id="bars">
+        <option value="8">8 Bars</option>
+        <option value="16">16 Bars</option>
+        <option value="32">32 Bars</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="bpm">BPM: <span id="bpm-display">120</span></label>
+      <input type="range" id="bpm" min="60" max="200" value="120" />
+    </div>
+
+    <div class="form-group">
+      <button onclick="generateLyrics()">Generate Lyrics</button>
+    </div>
+
+    <div class="output-box" id="output">Your lyrics will appear here...</div>
+
+    <div class="form-group">
+      <button onclick="copyLyrics()">Copy Lyrics</button>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
+
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.generator-container {
+  border: 2px solid #007bff;
+  padding: 20px;
+  margin-top: 30px;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 10px;
+}
+
+.output-box {
+  background-color: #fff;
+  color: #000;
+  padding: 15px;
+  border-radius: 5px;
+  height: 200px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ccc;
+}
+
+input[type="text"],
+select,
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #555;
+  border-radius: 5px;
+  color: #000;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+#bpm-display {
+  text-align: right;
+  color: #ccc;
+  margin-top: 5px;
+}
+
+button {
+  background-color: #fff;
+  color: #000;
+  font-weight: bold;
+  border: 2px solid #007bff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+document.getElementById("bpm").addEventListener("input", function () {
+  document.getElementById("bpm-display").textContent = this.value;
+});
+
+async function generateLyrics() {
+  const prompt = document.getElementById("prompt").value;
+  const mood = document.getElementById("mood").value;
+  const bars = document.getElementById("bars").value;
+  const bpm = document.getElementById("bpm").value;
+
+  const outputBox = document.getElementById("output");
+  outputBox.textContent = "Generating lyrics...";
+
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt, mood, bars, bpm }),
+    });
+
+    const data = await response.json();
+    outputBox.textContent = data.lyrics || "No lyrics returned.";
+  } catch (error) {
+    outputBox.textContent = "Error generating lyrics.";
+    console.error(error);
+  }
+}
+
+function copyLyrics() {
+  const output = document.getElementById("output");
+  navigator.clipboard.writeText(output.textContent);
+}
+
