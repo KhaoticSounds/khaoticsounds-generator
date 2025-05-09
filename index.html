@@ -17,12 +17,9 @@
     }
 
     .content {
-      flex: 1;
       padding: 10px;
       color: white;
-      max-width: 100%;
-      display: flex;
-      flex-direction: column;
+      flex-shrink: 0;
     }
 
     .controls {
@@ -42,9 +39,8 @@
       color: black;
       border-radius: 8px;
       padding: 15px;
-      flex-grow: 1;
+      height: 200px;
       overflow-y: auto;
-      white-space: pre-wrap;
       font-size: 16px;
     }
 
@@ -54,6 +50,7 @@
       gap: 10px;
       padding: 10px;
       background: #000;
+      flex-shrink: 0;
     }
 
     input[type="text"],
@@ -84,7 +81,6 @@
     #timer {
       color: #00BFFF;
       font-size: 14px;
-      margin-left: auto;
     }
 
     @media (max-width: 600px) {
@@ -125,7 +121,7 @@
     </div>
 
     <div class="output-box" id="lyrics-output">
-      <!-- Lyrics will show up here -->
+      <!-- Lyrics will show here -->
     </div>
   </div>
 
@@ -187,26 +183,19 @@
       const button = document.getElementById("generate-btn");
 
       button.disabled = true;
-      updateTimerDisplay(remaining);
+      timer.textContent = `Wait ${remaining}s`;
 
       timerInterval = setInterval(() => {
         remaining--;
         if (remaining <= 0) {
           clearInterval(timerInterval);
-          timer.textContent = "Ready";
+          timer.textContent = "";
           canGenerate = true;
           button.disabled = false;
         } else {
-          updateTimerDisplay(remaining);
+          timer.textContent = `Wait ${remaining}s`;
         }
       }, 1000);
-    }
-
-    function updateTimerDisplay(seconds) {
-      const now = new Date();
-      now.setSeconds(now.getSeconds() + seconds);
-      const formatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      document.getElementById("timer").textContent = `Next: ${formatted}`;
     }
   </script>
 </body>
