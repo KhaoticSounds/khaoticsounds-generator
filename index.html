@@ -1,56 +1,138 @@
-<!DOCTYPE html>
+no, its look more like this but the prompt was not coming back fix this <!DOCTYPE html>
+
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KhaoticSounds Generator</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      background-color: #001f3f; /* Solid navy blue */
+      border: 4px solid #00BFFF; /* Light blue highlight */
+    }
+
+```
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  overflow: hidden;
+  color: white;
+}
+
+.output-box {
+  flex: 1;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #f9f9f9;
+  color: black;
+  height: auto;
+  overflow: visible;
+  white-space: pre-wrap;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.controls label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.input-area {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  background: #eee;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button, select {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #007BFF;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 600px) {
+  .controls, .input-area {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+```
+
+  </style>
 </head>
 <body>
   <div class="content">
-    <div class="generator-container">
-      <div class="controls">
-        <label for="mood-select">Moods:</label>
-        <select id="mood-select">
-          <option value="chill">Chill</option>
-          <option value="aggressive">Aggressive</option>
-          <option value="dark">Dark</option>
-          <option value="romantic">Romantic</option>
-          <option value="inspirational">Inspirational</option>
-        </select>
+    <div class="controls">
+      <label for="mood-select">Moods:</label>
+      <select id="mood-select">
+        <option value="chill">Chill</option>
+        <option value="aggressive">Aggressive</option>
+        <option value="dark">Dark</option>
+        <option value="romantic">Romantic</option>
+        <option value="inspirational">Inspirational</option>
+      </select>
 
-        <label for="length-select">Bars:</label>
-        <select id="length-select">
-          <option value="8">8 Bars</option>
-          <option value="8-hook">8 Bars (Hook)</option>
-          <option value="16">16 Bars (Verse)</option>
-        </select>
+```
+  <label for="length-select">Bars:</label>
+  <select id="length-select">
+    <option value="8">8 Bars (Hook)</option>
+    <option value="16">16 Bars (Verse)</option>
+  </select>
+</div>
+<div class="output-box" id="lyrics-output">
+  <!-- Generated lyrics will appear here -->
+</div>
+```
 
-        <span id="cooldown-label">Ready</span>
-      </div>
-
-      <div class="output-box" id="lyrics-output"></div>
-
-      <div class="input-area">
-        <input type="text" id="user-input" placeholder="Type your prompt here..." />
-        <button onclick="generateLyrics()">Generate</button>
-        <button onclick="copyLyrics()">Copy Lyrics</button>
-      </div>
-    </div>
+  </div>
+  <div class="input-area">
+    <input type="text" id="user-input" placeholder="Type your prompt here..." />
+    <button onclick="generateLyrics()">Generate</button>
+    <button onclick="copyLyrics()">Copy Lyrics</button>
   </div>
 
   <script>
     let lastGenerationTime = 0;
-    const cooldownTime = 30 * 1000; // 30 seconds
-    const cooldownLabel = document.getElementById("cooldown-label");
 
     function generateLyrics() {
       const now = Date.now();
-      if (now - lastGenerationTime < cooldownTime) {
-        const secondsLeft = Math.ceil((cooldownTime - (now - lastGenerationTime)) / 1000);
-        cooldownLabel.textContent = `Wait ${secondsLeft}s`;
+      if (now - lastGenerationTime < 30000) {
+        alert("Please wait 30 seconds between generations.");
         return;
       }
+      lastGenerationTime = now;
 
       const input = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
@@ -61,15 +143,8 @@
         return;
       }
 
-      lastGenerationTime = now;
-      cooldownLabel.textContent = "Wait 30s";
-      setTimeout(() => {
-        cooldownLabel.textContent = "Ready";
-      }, cooldownTime);
-
-      const barsLabel = length === "8" ? "8 Bars" : length === "8-hook" ? "8 Bars (Hook)" : "16 Bars (Verse)";
-      const output = `(${barsLabel}) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
-      document.getElementById("lyrics-output").textContent = output;
+      const lyrics = `(${length} bars) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
+      document.getElementById("lyrics-output").textContent = lyrics;
     }
 
     function copyLyrics() {
@@ -81,5 +156,7 @@
       navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
     }
   </script>
+
 </body>
 </html>
+
