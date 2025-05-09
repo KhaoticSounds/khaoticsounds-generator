@@ -1,5 +1,4 @@
-no, its look more like this but the prompt was not coming back fix this <!DOCTYPE html>
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -12,84 +11,93 @@ no, its look more like this but the prompt was not coming back fix this <!DOCTYP
       display: flex;
       flex-direction: column;
       height: 100vh;
-      background-color: #001f3f; /* Solid navy blue */
-      border: 4px solid #00BFFF; /* Light blue highlight */
+      background-color: #001f3f;
+      border: 4px solid #00BFFF;
     }
 
-```
-.content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  overflow: hidden;
-  color: white;
-}
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      color: white;
+    }
 
-.output-box {
-  flex: 1;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
-  background: #f9f9f9;
-  color: black;
-  height: auto;
-  overflow: visible;
-  white-space: pre-wrap;
-}
+    .output-box {
+      flex: 1;
+      background-color: white; /* ✅ Changed to white */
+      color: black;             /* ✅ Font changed to black */
+      border: 1px solid #00BFFF;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+      overflow-y: auto;
+      max-height: 350px;
+    }
 
-.controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-  flex-wrap: wrap;
-  align-items: center;
-}
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
 
-.controls label {
-  font-weight: bold;
-  margin-right: 5px;
-}
+    .controls label {
+      font-weight: bold;
+      margin-right: 5px;
+    }
 
-.input-area {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  padding: 10px;
-  background: #eee;
-}
+    .input-area {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      background: #001f3f;
+    }
 
-input[type="text"] {
-  flex: 1;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
+    input[type="text"] {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      background: white;
+      color: black;
+      border: 1px solid #ccc;
+    }
 
-button, select {
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid #007BFF;
-  background-color: #007BFF;
-  color: white;
-  cursor: pointer;
-}
+    button, select {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #007BFF;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
 
-button:hover {
-  background-color: #0056b3;
-}
+    button:hover {
+      background-color: #0056b3;
+    }
 
-@media (max-width: 600px) {
-  .controls, .input-area {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-```
+    #timer {
+      color: #00BFFF;
+      font-size: 14px;
+      margin-left: 10px;
+    }
 
+    @media (max-width: 600px) {
+      .controls, .input-area {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #timer {
+        margin-left: 0;
+        margin-top: 5px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -104,35 +112,33 @@ button:hover {
         <option value="inspirational">Inspirational</option>
       </select>
 
-```
-  <label for="length-select">Bars:</label>
-  <select id="length-select">
-    <option value="8">8 Bars (Hook)</option>
-    <option value="16">16 Bars (Verse)</option>
-  </select>
-</div>
-<div class="output-box" id="lyrics-output">
-  <!-- Generated lyrics will appear here -->
-</div>
-```
+      <label for="length-select">Bars:</label>
+      <select id="length-select">
+        <option value="8">8 Bars (Hook)</option>
+        <option value="16">16 Bars (Verse)</option>
+      </select>
 
+      <span id="timer"></span>
+    </div>
+
+    <div class="output-box" id="lyrics-output">
+      <!-- Generated lyrics will appear here -->
+    </div>
   </div>
+
   <div class="input-area">
     <input type="text" id="user-input" placeholder="Type your prompt here..." />
-    <button onclick="generateLyrics()">Generate</button>
+    <button id="generate-btn" onclick="generateLyrics()">Generate</button>
     <button onclick="copyLyrics()">Copy Lyrics</button>
   </div>
 
   <script>
-    let lastGenerationTime = 0;
+    let cooldown = 30;
+    let canGenerate = true;
+    let timerInterval;
 
     function generateLyrics() {
-      const now = Date.now();
-      if (now - lastGenerationTime < 30000) {
-        alert("Please wait 30 seconds between generations.");
-        return;
-      }
-      lastGenerationTime = now;
+      if (!canGenerate) return;
 
       const input = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
@@ -143,8 +149,22 @@ button:hover {
         return;
       }
 
-      const lyrics = `(${length} bars) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
-      document.getElementById("lyrics-output").textContent = lyrics;
+      canGenerate = false;
+      startCooldown();
+
+      fetch("/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: input, mood, length })
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("lyrics-output").textContent = data.lyrics || "No lyrics returned.";
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          document.getElementById("lyrics-output").textContent = "Failed to generate lyrics.";
+        });
     }
 
     function copyLyrics() {
@@ -155,8 +175,27 @@ button:hover {
       }
       navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
     }
-  </script>
 
+    function startCooldown() {
+      let remaining = cooldown;
+      const timer = document.getElementById("timer");
+      const button = document.getElementById("generate-btn");
+
+      button.disabled = true;
+      timer.textContent = `Wait ${remaining}s`;
+
+      timerInterval = setInterval(() => {
+        remaining--;
+        if (remaining <= 0) {
+          clearInterval(timerInterval);
+          timer.textContent = "";
+          canGenerate = true;
+          button.disabled = false;
+        } else {
+          timer.textContent = `Wait ${remaining}s`;
+        }
+      }, 1000);
+    }
+  </script>
 </body>
 </html>
-
