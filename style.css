@@ -1,7 +1,7 @@
 body {
   margin: 0;
   padding: 0;
-  background: linear-gradient(to bottom, #000, #111); /* or #0000 for transparent */
+  background-color: #000;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
   display: flex;
@@ -88,5 +88,6 @@ button:hover {
   background-color: #007bff;
   color: #fff;
 }
+
 
 
