@@ -1,216 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>KhaoticSounds Generator</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      background-color: #001f3f;
-      border: 4px solid #00BFFF;
-    }
-
-    .content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 10px;
-      color: white;
-    }
-
-    .output-box {
-      flex: 1;
-      background-color: white;
-      color: black;
-      border: 1px solid #00BFFF;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 10px;
-      white-space: pre-wrap;
-      overflow-y: auto;
-      max-height: 350px;
-      font-size: 16px;
-    }
-
-    .controls {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .controls label {
-      font-weight: bold;
-      margin-right: 5px;
-    }
-
-    .input-area {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      padding: 10px;
-      background: #001f3f;
-    }
-
-    input[type="text"] {
-      flex: 1;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      background: white;
-      color: black;
-      border: 1px solid #ccc;
-    }
-
-    button, select {
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 1px solid #007BFF;
-      background-color: #007BFF;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    #timer {
-      color: #00BFFF;
-      font-size: 14px;
-      margin-left: 10px;
-    }
-
-    ::-webkit-scrollbar {
-      width: 0px;
-      background: transparent;
-    }
-
-    @media (max-width: 600px) {
-      .controls, .input-area {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      #timer {
-        margin-left: 0;
-        margin-top: 5px;
-      }
-
-      .output-box {
-        font-size: 14px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="content">
-    <div class="controls">
-      <label for="mood-select">Moods:</label>
-      <select id="mood-select">
+  <div class="generator-container">
+    <div class="output-box" id="lyrics-output">Your lyrics will appear here.</div>
+
+    <div class="form-group">
+      <label for="bpm">Select BPM:</label>
+      <input type="range" id="bpm" min="70" max="200" value="120">
+      <div id="bpm-display">BPM: 120</div>
+      <div id="bpm-message">Lyrics will be timed to 120 BPM — match this with your beat for sync.</div>
+      <div class="bpm-ruler">
+        <span>70</span><span>90</span><span>110</span><span>130</span><span>150</span><span>170</span><span>190</span><span>200</span>
+      </div>
+    </div>
+
+    <div class="form-group" id="prompt-group">
+      <label for="prompt">Type your theme or idea:</label>
+      <input type="text" id="prompt" placeholder="Enter your lyrics theme...">
+    </div>
+
+    <div class="form-group">
+      <label for="mood">Select Mood:</label>
+      <select id="mood">
+        <option value="hype">Hype</option>
         <option value="chill">Chill</option>
-        <option value="aggressive">Aggressive</option>
-        <option value="dark">Dark</option>
-        <option value="romantic">Romantic</option>
-        <option value="inspirational">Inspirational</option>
+        <option value="gritty">Gritty</option>
+        <option value="emotional">Emotional</option>
       </select>
-
-      <label for="length-select">Bars:</label>
-      <select id="length-select">
-        <option value="8">8 Bars (Hook)</option>
-        <option value="16">16 Bars (Verse)</option>
-      </select>
-
-      <span id="timer"></span>
     </div>
 
-    <div class="output-box" id="lyrics-output">
-      <!-- Lyrics will appear here -->
+    <div class="form-group">
+      <label for="bars">Select Bars:</label>
+      <select id="bars">
+        <option value="8">8 Bars</option>
+        <option value="12">12 Bars</option>
+        <option value="16">16 Bars</option>
+      </select>
     </div>
+
+    <button onclick="generateLyrics()">Generate Lyrics</button>
   </div>
-
-  <div class="input-area">
-    <input type="text" id="user-input" placeholder="Type your prompt here..." />
-    <button id="generate-btn" onclick="generateLyrics()">Generate</button>
-    <button onclick="copyLyrics()">Copy Lyrics</button>
-  </div>
-
-  <script>
-    let cooldown = 30;
-    let canGenerate = true;
-    let timerInterval;
-
-    window.onload = () => {
-      document.getElementById("user-input").focus();
-    };
-
-    function generateLyrics() {
-      if (!canGenerate) return;
-
-      const input = document.getElementById("user-input").value.trim();
-      const mood = document.getElementById("mood-select").value;
-      const length = document.getElementById("length-select").value;
-
-      if (!input) {
-        alert("Please enter a prompt before generating.");
-        return;
-      }
-
-      canGenerate = false;
-      startCooldown();
-
-      fetch("/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: input, mood, length })
-      })
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("lyrics-output").textContent = data.lyrics || "No lyrics returned.";
-        })
-        .catch(error => {
-          console.error("Error:", error);
-          document.getElementById("lyrics-output").textContent = "Failed to generate lyrics.";
-        });
-    }
-
-    function copyLyrics() {
-      const lyrics = document.getElementById("lyrics-output").textContent;
-      if (!lyrics.trim()) {
-        alert("Nothing to copy yet!");
-        return;
-      }
-      navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
-    }
-
-    function startCooldown() {
-      let remaining = cooldown;
-      const timer = document.getElementById("timer");
-      const button = document.getElementById("generate-btn");
-
-      button.disabled = true;
-      timer.textContent = `Wait ${remaining}s`;
-
-      timerInterval = setInterval(() => {
-        remaining--;
-        if (remaining <= 0) {
-          clearInterval(timerInterval);
-          timer.textContent = "";
-          canGenerate = true;
-          button.disabled = false;
-        } else {
-          timer.textContent = `Wait ${remaining}s`;
-        }
-      }, 1000);
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
 
