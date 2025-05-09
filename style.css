@@ -1,31 +1,37 @@
+/* Global Reset */
 * {
   box-sizing: border-box;
 }
 
+/* Body */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #000;
   color: white;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
 }
 
+/* Generator Container */
 .content {
-  max-width: 100%;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 900px;
   border: 4px solid #00BFFF;
   background-color: transparent;
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 0;
 }
 
+/* Top Controls */
 .controls {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
-  padding: 10px;
+  padding: 15px;
   background-color: #001f3f;
   margin: 0;
 }
@@ -34,22 +40,25 @@ body {
   font-weight: bold;
 }
 
+/* Output Area */
 .output-box {
   background-color: white;
   color: black;
-  padding: 10px;
+  padding: 15px;
   min-height: 150px;
   border-radius: 5px;
   white-space: pre-wrap;
   margin: 0;
   overflow: visible;
+  font-size: 16px;
 }
 
+/* Input Area */
 .input-area {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  padding: 10px;
+  padding: 15px;
   background-color: #001f3f;
   margin: 0;
 }
@@ -64,6 +73,7 @@ input[type="text"] {
   color: black;
 }
 
+/* Buttons & Dropdowns */
 button,
 select {
   padding: 10px;
@@ -79,13 +89,15 @@ button:hover {
   background-color: #0056b3;
 }
 
+/* Timer */
 #timer {
   color: white;
   font-size: 14px;
   margin-left: auto;
 }
 
-@media (max-width: 600px) {
+/* Mobile Support */
+@media (max-width: 768px) {
   .controls,
   .input-area {
     flex-direction: column;
