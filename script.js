@@ -1,0 +1,32 @@
+function generateLyrics() {
+  const prompt = document.getElementById('prompt').value;
+  const mood = document.getElementById('mood').value;
+  const bars = document.getElementById('bars').value;
+  const bpm = document.getElementById('bpm').value;
+  const output = document.getElementById('lyrics-output');
+
+  output.textContent = "Generating lyrics...";
+
+  fetch("/api/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt, mood, bars, bpm })
+  })
+    .then(response => response.json())
+    .then(data => {
+      output.textContent = data.lyrics || "No lyrics returned.";
+      document.getElementById('prompt-group').style.display = 'none';
+      document.getElementById('bpm').value = 120;
+      document.getElementById('bpm-display').textContent = 'BPM: 120';
+      document.getElementById('bpm-message').textContent = 'Lyrics will be timed to 120 BPM — match this with your beat for sync.';
+    })
+    .catch(() => {
+      output.textContent = "Something went wrong. Try again.";
+    });
+}
+
+document.getElementById('bpm').addEventListener('input', function () {
+  const bpm = this.value;
+  document.getElementById('bpm-display').textContent = 'BPM: ' + bpm;
+  document.getElementById('bpm-message').textContent = 'Lyrics will be timed to ' + bpm + ' BPM — match this with your beat for sync.';
+});
