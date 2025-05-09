@@ -1,32 +1,90 @@
-function generateLyrics() {
-  const prompt = document.getElementById('prompt').value;
-  const mood = document.getElementById('mood').value;
-  const bars = document.getElementById('bars').value;
-  const bpm = document.getElementById('bpm').value;
-  const output = document.getElementById('lyrics-output');
-
-  output.textContent = "Generating lyrics...";
-
-  fetch("/api/generate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt, mood, bars, bpm })
-  })
-    .then(response => response.json())
-    .then(data => {
-      output.textContent = data.lyrics || "No lyrics returned.";
-      document.getElementById('prompt-group').style.display = 'none';
-      document.getElementById('bpm').value = 120;
-      document.getElementById('bpm-display').textContent = 'BPM: 120';
-      document.getElementById('bpm-message').textContent = 'Lyrics will be timed to 120 BPM — match this with your beat for sync.';
-    })
-    .catch(() => {
-      output.textContent = "Something went wrong. Try again.";
-    });
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
-document.getElementById('bpm').addEventListener('input', function () {
-  const bpm = this.value;
-  document.getElementById('bpm-display').textContent = 'BPM: ' + bpm;
-  document.getElementById('bpm-message').textContent = 'Lyrics will be timed to ' + bpm + ' BPM — match this with your beat for sync.';
-});
+.generator-container {
+  border: 2px solid #007bff;
+  padding: 20px;
+  margin-top: 30px;
+  width: 90%;
+  max-width: 800px;
+  border-radius: 10px;
+}
+
+.output-box {
+  background-color: #fff;
+  color: #000;
+  padding: 15px;
+  border-radius: 5px;
+  height: 200px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #ccc;
+}
+
+input[type="text"],
+select,
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #555;
+  border-radius: 5px;
+  color: #000;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+#bpm-display {
+  text-align: right;
+  color: #ccc;
+  margin-top: 5px;
+}
+
+#bpm-message {
+  font-size: 0.9em;
+  color: #999;
+  margin-top: 5px;
+}
+
+.bpm-ruler {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8em;
+  color: #888;
+  margin-top: 5px;
+}
+
+button {
+  background-color: #fff;
+  color: #000;
+  font-weight: bold;
+  border: 2px solid #007bff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
