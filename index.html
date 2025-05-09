@@ -1,58 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KhaoticSounds Generator</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="generator-container">
-    <!-- Output Box -->
-    <div class="output-box" id="lyrics-output">Your lyrics will appear here.</div>
-
-    <!-- BPM Slider -->
     <div class="form-group">
-      <label for="bpm">Select BPM:</label>
-      <input type="range" id="bpm" min="70" max="200" value="120">
-      <div id="bpm-display">BPM: 120</div>
-      <div id="bpm-message">Lyrics will be timed to 120 BPM — match this with your beat for sync.</div>
-      <div class="bpm-ruler">
-        <span>70</span><span>90</span><span>110</span><span>130</span><span>150</span><span>170</span><span>190</span><span>200</span>
-      </div>
+      <label for="prompt">Enter your theme or idea:</label>
+      <input type="text" id="prompt" placeholder="Type your idea here..." />
     </div>
 
-    <!-- Prompt Input -->
-    <div class="form-group" id="prompt-group">
-      <label for="prompt">Type your theme or idea:</label>
-      <input type="text" id="prompt" placeholder="Enter your lyrics theme...">
-    </div>
-
-    <!-- Mood Dropdown -->
     <div class="form-group">
       <label for="mood">Select Mood:</label>
       <select id="mood">
         <option value="hype">Hype</option>
-        <option value="chill">Chill</option>
-        <option value="gritty">Gritty</option>
         <option value="emotional">Emotional</option>
+        <option value="gritty">Gritty</option>
+        <option value="romantic">Romantic</option>
       </select>
     </div>
 
-    <!-- Bars Dropdown -->
     <div class="form-group">
       <label for="bars">Select Bars:</label>
       <select id="bars">
         <option value="8">8 Bars</option>
-        <option value="12">12 Bars</option>
         <option value="16">16 Bars</option>
+        <option value="32">32 Bars</option>
       </select>
     </div>
 
-    <!-- Generate Button -->
-    <button onclick="generateLyrics()">Generate Lyrics</button>
+    <div class="form-group">
+      <label for="bpm">BPM: <span id="bpm-display">120</span></label>
+      <input type="range" id="bpm" min="60" max="200" value="120" />
+    </div>
+
+    <div class="form-group">
+      <button onclick="generateLyrics()">Generate Lyrics</button>
+    </div>
+
+    <div class="output-box" id="output">Your lyrics will appear here...</div>
+
+    <div class="form-group">
+      <button onclick="copyLyrics()">Copy Lyrics</button>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
-
