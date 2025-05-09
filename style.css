@@ -29,15 +29,22 @@
   }
 
   .output-box {
-    background-color: white;
-    color: black;
-    border-radius: 8px;
-    padding: 15px;
-    max-height: 250px;      /* limit height */
-    overflow-y: auto;       /* scroll only output */
-    white-space: pre-wrap;
-    font-size: 16px;
-  }
+  background-color: white;
+  color: black;
+  border-radius: 8px;
+  padding: 15px;
+  min-height: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  font-size: 16px;
+  scrollbar-width: none; /* Firefox */
+}
+
+.output-box::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
 
   .input-area {
     display: flex;
