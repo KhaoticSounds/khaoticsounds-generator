@@ -6,28 +6,19 @@ const { Configuration, OpenAIApi } = require('openai');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// OpenAI setup
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAIApi(configuration);
 
-// Route: Frontend
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Route: Lyrics Generator
 app.post('/api/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
-
   if (!prompt || !mood || !bars || !bpm) {
     return res.status(400).json({ error: 'Missing input fields.' });
   }
@@ -38,15 +29,14 @@ app.post('/api/generate', async (req, res) => {
       messages: [
         {
           role: 'user',
-          content: `Generate a ${bars}-bar rap verse about "${prompt}" in a "${mood}" mood, matching a BPM of ${bpm}.`,
+          content: `Write ${bars} bars of lyrics about "${prompt}" in a "${mood}" mood at ${bpm} BPM.`,
         },
       ],
-      temperature: 0.8,
     });
 
     res.json({ lyrics: completion.data.choices[0].message.content });
   } catch (error) {
-    console.error('Error generating lyrics:', error.message);
+    console.error("OpenAI error:", error);
     res.status(500).json({ error: 'Failed to generate lyrics.' });
   }
 });
