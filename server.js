@@ -5,7 +5,7 @@ const { Configuration, OpenAIApi } = require('openai');
 require('dotenv').config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // ✅ THIS FIXES RAILWAY DEPLOYMENT
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -14,7 +14,7 @@ const openai = new OpenAIApi(configuration);
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static('public'));
+app.use(express.static('public')); // Serve frontend files
 
 app.post('/api/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
@@ -37,5 +37,6 @@ app.post('/api/generate', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`✅ Server is live on port ${port}`);
 });
+
