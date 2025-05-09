@@ -1,42 +1,23 @@
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const { Configuration, OpenAIApi } = require('openai');
-require('dotenv').config();
-
 const app = express();
-const port = process.env.PORT || 3000; // ✅ THIS FIXES RAILWAY DEPLOYMENT
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
-
-app.use(cors());
-app.use(bodyParser.json());
-app.use(express.static('public')); // Serve frontend files
-
-app.post('/api/generate', async (req, res) => {
-  const { prompt, mood, bars, bpm } = req.body;
-
-  const finalPrompt = `Write ${bars} bars of ${mood} rap lyrics at ${bpm} BPM. Theme: ${prompt}`;
-
-  try {
-    const response = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: finalPrompt,
-      max_tokens: 200,
-      temperature: 0.8,
-    });
-
-    res.json({ lyrics: response.data.choices[0].text.trim() });
-  } catch (error) {
-    console.error("OpenAI error:", error.message);
-    res.status(500).json({ error: "Failed to generate lyrics." });
-  }
+// Middleware to enable CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
 });
 
-app.listen(port, () => {
-  console.log(`✅ Server is live on port ${port}`);
+// Your existing routes and other middleware go here
+// For example:
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
+});
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
 
