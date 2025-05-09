@@ -13,10 +13,10 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
     .content {
-      flex: 1;
       padding: 10px;
       color: white;
       max-width: 100%;
@@ -42,13 +42,8 @@
       min-height: 200px;
       max-height: 300px;
       overflow-y: auto;
-      white-space: pre-wrap;
       font-size: 16px;
-      scrollbar-width: none; /* Firefox */
-    }
-
-    .output-box::-webkit-scrollbar {
-      display: none; /* Chrome, Safari */
+      box-sizing: border-box;
     }
 
     .input-area {
@@ -57,6 +52,7 @@
       gap: 10px;
       padding: 10px;
       background: #000;
+      box-sizing: border-box;
     }
 
     input[type="text"],
@@ -66,6 +62,7 @@
       padding: 10px;
       border-radius: 5px;
       border: 1px solid #007BFF;
+      box-sizing: border-box;
     }
 
     input[type="text"] {
@@ -129,12 +126,12 @@
     <div class="output-box" id="lyrics-output">
       <!-- Lyrics will show up here -->
     </div>
-  </div>
 
-  <div class="input-area">
-    <input type="text" id="user-input" placeholder="Type your prompt here..." />
-    <button id="generate-btn" onclick="generateLyrics()">Generate</button>
-    <button onclick="copyLyrics()">Copy Lyrics</button>
+    <div class="input-area">
+      <input type="text" id="user-input" placeholder="Type your prompt here..." />
+      <button id="generate-btn" onclick="generateLyrics()">Generate</button>
+      <button onclick="copyLyrics()">Copy Lyrics</button>
+    </div>
   </div>
 
   <script>
