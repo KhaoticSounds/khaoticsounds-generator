@@ -2,83 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KhaoticSounds Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
   <div class="content">
-    <div class="controls">
-      <label for="mood-select">Moods:</label>
-      <select id="mood-select">
-        <option value="chill">Chill</option>
-        <option value="aggressive">Aggressive</option>
-        <option value="dark">Dark</option>
-        <option value="romantic">Romantic</option>
-        <option value="inspirational">Inspirational</option>
-      </select>
+    <div class="generator-container">
+      <div class="controls">
+        <label for="mood-select">Moods:</label>
+        <select id="mood-select">
+          <option value="chill">Chill</option>
+          <option value="aggressive">Aggressive</option>
+          <option value="dark">Dark</option>
+          <option value="romantic">Romantic</option>
+          <option value="inspirational">Inspirational</option>
+        </select>
 
-      <label for="length-select">Bars:</label>
-      <select id="length-select">
-        <option value="8">8 Bars</option>
-        <option value="16">16 Bars (Verse)</option>
-      </select>
+        <label for="length-select">Bars:</label>
+        <select id="length-select">
+          <option value="8">8 Bars</option>
+          <option value="8-hook">8 Bars (Hook)</option>
+          <option value="16">16 Bars (Verse)</option>
+        </select>
 
-      <span id="timer">Ready</span>
-    </div>
+        <span id="cooldown-label">Ready</span>
+      </div>
 
-    <div class="output-box" id="lyrics-output">
-      <!-- Lyrics appear here -->
-    </div>
+      <div class="output-box" id="lyrics-output"></div>
 
-    <div class="input-area">
-      <input type="text" id="user-input" placeholder="Type your prompt here..." />
-      <button id="generate-btn" onclick="generateLyrics()">Generate</button>
-      <button onclick="copyLyrics()">Copy Lyrics</button>
+      <div class="input-area">
+        <input type="text" id="user-input" placeholder="Type your prompt here..." />
+        <button onclick="generateLyrics()">Generate</button>
+        <button onclick="copyLyrics()">Copy Lyrics</button>
+      </div>
     </div>
   </div>
 
   <script>
-    let lastGenerated = 0;
-    const cooldown = 30;
-    const timer = document.getElementById("timer");
-    let interval;
+    let lastGenerationTime = 0;
+    const cooldownTime = 30 * 1000; // 30 seconds
+    const cooldownLabel = document.getElementById("cooldown-label");
 
     function generateLyrics() {
       const now = Date.now();
-      if (now - lastGenerated < cooldown * 1000) {
-        alert("Please wait until the timer finishes.");
+      if (now - lastGenerationTime < cooldownTime) {
+        const secondsLeft = Math.ceil((cooldownTime - (now - lastGenerationTime)) / 1000);
+        cooldownLabel.textContent = `Wait ${secondsLeft}s`;
         return;
       }
 
-      const prompt = document.getElementById("user-input").value.trim();
+      const input = document.getElementById("user-input").value.trim();
       const mood = document.getElementById("mood-select").value;
       const length = document.getElementById("length-select").value;
-      const output = document.getElementById("lyrics-output");
 
-      if (!prompt) {
-        alert("Please enter a prompt.");
+      if (!input) {
+        alert("Please enter a prompt before generating.");
         return;
       }
 
-      output.textContent = "Generating lyrics...";
-      lastGenerated = now;
-      startCooldown();
+      lastGenerationTime = now;
+      cooldownLabel.textContent = "Wait 30s";
+      setTimeout(() => {
+        cooldownLabel.textContent = "Ready";
+      }, cooldownTime);
 
-      fetch("/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt, mood, length })
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          output.textContent = data.lyrics || "No lyrics returned.";
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          output.textContent = "Failed to generate lyrics.";
-        });
+      const barsLabel = length === "8" ? "8 Bars" : length === "8-hook" ? "8 Bars (Hook)" : "16 Bars (Verse)";
+      const output = `(${barsLabel}) Mood: ${mood}\n\nGenerated lyrics for: "${input}"`;
+      document.getElementById("lyrics-output").textContent = output;
     }
 
     function copyLyrics() {
@@ -89,23 +80,6 @@
       }
       navigator.clipboard.writeText(lyrics).then(() => alert("Lyrics copied!"));
     }
-
-    function startCooldown() {
-      let remaining = cooldown;
-      document.getElementById("generate-btn").disabled = true;
-      timer.textContent = `Wait ${remaining}s`;
-
-      interval = setInterval(() => {
-        remaining--;
-        timer.textContent = `Wait ${remaining}s`;
-        if (remaining <= 0) {
-          clearInterval(interval);
-          document.getElementById("generate-btn").disabled = false;
-          timer.textContent = "Ready";
-        }
-      }, 1000);
-    }
   </script>
 </body>
 </html>
-
