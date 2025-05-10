@@ -1,4 +1,3 @@
-/* Base layout */
 html, body {
   margin: 0;
   padding: 0;
@@ -9,7 +8,6 @@ html, body {
   overflow-x: hidden;
 }
 
-/* Wrapper centers and trims space */
 .generator-wrapper {
   display: flex;
   justify-content: center;
@@ -17,7 +15,6 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Main container */
 .generator-container {
   width: 100%;
   max-width: 860px;
@@ -29,7 +26,6 @@ html, body {
   margin-bottom: 0;
 }
 
-/* Output box */
 .output-box {
   background-color: #fff;
   color: #000;
@@ -41,12 +37,22 @@ html, body {
   white-space: pre-wrap;
 }
 
-/* Copy button spacing */
 #copy-btn {
   margin-bottom: 15px;
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
-/* BPM display */
+#copy-btn:hover {
+  background-color: #005bb5;
+}
+
 .bpm-centered {
   text-align: center;
   font-size: 1.2rem;
@@ -55,7 +61,6 @@ html, body {
   margin-bottom: 10px;
 }
 
-/* Label and form elements */
 .form-group {
   margin-bottom: 15px;
 }
@@ -87,14 +92,12 @@ input[type="range"] {
   width: 100%;
 }
 
-/* BPM message */
 #bpm-message {
   font-size: 0.9em;
   color: #999;
   margin-top: 5px;
 }
 
-/* Buttons */
 button {
   background-color: #007bff;
   color: #fff;
@@ -105,10 +108,9 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #005bb5;
 }
 
-/* Mood and Bars layout */
 .form-row {
   display: flex;
   justify-content: space-between;
@@ -119,7 +121,6 @@ button:hover {
   width: 50%;
 }
 
-/* Mobile responsive adjustments */
 @media (max-width: 600px) {
   .form-row {
     flex-direction: column;
@@ -137,5 +138,6 @@ button:hover {
     padding: 15px;
   }
 }
+
 
 
