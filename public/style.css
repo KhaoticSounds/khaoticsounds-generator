@@ -1,26 +1,27 @@
-body {
+* {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
   background-color: #000;
   font-family: 'Segoe UI', sans-serif;
   color: #fff;
-  width: 100%;
-  overflow-x: hidden;
 }
 
 .generator-wrapper {
-  padding: 0;
-  width: 100%;
   display: flex;
   justify-content: center;
+  padding: 40px 15px;
 }
 
 .generator-container {
   width: 100%;
-  max-width: 660px;
-  background: transparent;
-  padding: 10px;
-  box-sizing: border-box;
+  max-width: 860px;
+  padding: 20px;
   border: 2px solid #007bff;
   border-radius: 10px;
 }
@@ -32,12 +33,19 @@ body {
   border-radius: 5px;
   height: 200px;
   overflow-y: auto;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
   white-space: pre-wrap;
 }
 
 #copy-btn {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 5px;
   margin-bottom: 15px;
+  cursor: pointer;
   width: 100%;
 }
 
@@ -69,7 +77,6 @@ button {
   border-radius: 6px;
   font-size: 1rem;
   color: #000;
-  box-sizing: border-box;
 }
 
 input[type="text"]::placeholder {
@@ -91,18 +98,13 @@ button {
   color: #fff;
   font-weight: bold;
   border: none;
-  border-radius: 6px;
-  padding: 12px;
-  font-size: 1rem;
+  border-radius: 5px;
   cursor: pointer;
-  width: 100%;
-  margin-top: 10px;
   transition: background 0.3s ease;
 }
 
 button:hover {
   background-color: #0056b3;
-  color: #fff;
 }
 
 .form-row {
@@ -124,10 +126,13 @@ button:hover {
     width: 100%;
   }
 
+  .generator-wrapper {
+    padding: 20px 10px;
+  }
+
   .generator-container {
-    padding: 10px;
+    padding: 15px;
   }
 }
-
 
 
