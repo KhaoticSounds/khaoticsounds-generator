@@ -14,7 +14,7 @@ body {
 
 .generator-container {
   width: 100%;
-  max-width: 1080px;
+  max-width: 1280px;
   background: transparent;
   padding: 30px;
   box-sizing: border-box;
@@ -107,7 +107,7 @@ button:hover {
   width: 50%;
 }
 
-/* Mobile friendly */
+/* Mobile responsive */
 @media (max-width: 600px) {
   .form-row {
     flex-direction: column;
@@ -125,3 +125,4 @@ button:hover {
     padding: 15px;
   }
 }
+
