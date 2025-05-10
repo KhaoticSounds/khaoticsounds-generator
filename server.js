@@ -1,16 +1,16 @@
-require('dotenv').config();
 const express = require('express');
 const path = require('path');
+require('dotenv').config(); // <== This loads the .env file
 const { OpenAI } = require('openai');
 
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Initialize OpenAI
+// OpenAI initialization
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Endpoint to generate lyrics
+// API endpoint
 app.post('/api/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
   const fullPrompt = `Generate ${bars} bars of ${mood} rap lyrics at ${bpm} BPM based on: ${prompt}`;
@@ -23,14 +23,14 @@ app.post('/api/generate', async (req, res) => {
 
     const lyrics = chatCompletion.choices[0].message.content;
     res.json({ lyrics });
-  } catch (error) {
-    console.error('OpenAI Error:', error);
+  } catch (err) {
+    console.error('OpenAI Error:', err);
     res.status(500).json({ error: 'Failed to generate lyrics' });
   }
 });
 
-// Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
