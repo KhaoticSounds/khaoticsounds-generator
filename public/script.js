@@ -1,37 +1,32 @@
-// Update BPM display as the slider changes
-document.getElementById("bpm").addEventListener("input", function () {
-  document.getElementById("bpm-display").textContent = this.value;
-});
+function generateLyrics() {
+  const prompt = document.getElementById('prompt').value;
+  const mood = document.getElementById('mood').value;
+  const bars = document.getElementById('bars').value;
+  const bpm = document.getElementById('bpm').value;
+  const output = document.getElementById('lyrics-output');
 
-// Handle Generate Lyrics button
-async function generateLyrics() {
-  const prompt = document.getElementById("prompt").value;
-  const mood = document.getElementById("mood").value;
-  const bars = document.getElementById("bars").value;
-  const bpm = document.getElementById("bpm").value;
+  output.textContent = "Generating lyrics...";
 
-  const outputBox = document.getElementById("output");
-  outputBox.textContent = "Generating lyrics...";
-
-  try {
-    const response = await fetch("https://khaoticsounds-generator-production.up.railway.app/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ prompt, mood, bars, bpm }),
+  fetch("/api/generate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt, mood, bars, bpm })
+  })
+    .then(response => response.json())
+    .then(data => {
+      output.textContent = data.lyrics || "No lyrics returned.";
+      document.getElementById('prompt-group').style.display = 'none';
+      document.getElementById('bpm').value = 120;
+      document.getElementById('bpm-display').textContent = 'BPM: 120';
+      document.getElementById('bpm-message').textContent = 'Lyrics will be timed to 120 BPM — match this with your beat for sync.';
+    })
+    .catch(() => {
+      output.textContent = "Something went wrong. Try again.";
     });
-
-    const data = await response.json();
-    outputBox.textContent = data.lyrics || "No lyrics returned.";
-  } catch (error) {
-    outputBox.textContent = "Error generating lyrics.";
-    console.error("Error:", error);
-  }
 }
 
-// Handle Copy Lyrics button
-function copyLyrics() {
-  const output = document.getElementById("output");
-  navigator.clipboard.writeText(output.textContent);
-}
+document.getElementById('bpm').addEventListener('input', function () {
+  const bpm = this.value;
+  document.getElementById('bpm-display').textContent = 'BPM: ' + bpm;
+  document.getElementById('bpm-message').textContent = 'Lyrics will be timed to ' + bpm + ' BPM — match this with your beat for sync.';
+});
