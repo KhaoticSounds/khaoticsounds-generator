@@ -89,3 +89,14 @@ button:hover {
   color: #fff;
 }
 
+/* NEW: Side-by-side mood and bars */
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.form-row .half {
+  width: 50%;
+}
+
