@@ -4,19 +4,19 @@ body {
   background-color: #000;
   font-family: 'Segoe UI', sans-serif;
   color: #fff;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .generator-wrapper {
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
+  padding: 20px 10px;
+  width: 100%;
 }
 
 .generator-container {
   width: 100%;
-  max-width: 1280px;
   background: transparent;
-  padding: 30px;
+  padding: 15px;
   box-sizing: border-box;
   border: 2px solid #007bff;
   border-radius: 10px;
@@ -35,6 +35,7 @@ body {
 
 #copy-btn {
   margin-bottom: 15px;
+  width: 100%;
 }
 
 .bpm-centered {
@@ -96,7 +97,6 @@ button:hover {
   color: #fff;
 }
 
-/* Mood + Bars side-by-side */
 .form-row {
   display: flex;
   justify-content: space-between;
@@ -107,7 +107,6 @@ button:hover {
   width: 50%;
 }
 
-/* Mobile responsive */
 @media (max-width: 600px) {
   .form-row {
     flex-direction: column;
@@ -116,13 +115,6 @@ button:hover {
   .form-row .half {
     width: 100%;
   }
-
-  .generator-wrapper {
-    padding: 20px 10px;
-  }
-
-  .generator-container {
-    padding: 15px;
-  }
 }
+
 
