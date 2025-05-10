@@ -14,9 +14,9 @@ body {
 
 .generator-container {
   width: 100%;
-  max-width: 860px;
+  max-width: 1080px;
   background: transparent;
-  padding: 20px;
+  padding: 30px;
   box-sizing: border-box;
   border: 2px solid #007bff;
   border-radius: 10px;
@@ -125,4 +125,3 @@ button:hover {
     padding: 15px;
   }
 }
-
