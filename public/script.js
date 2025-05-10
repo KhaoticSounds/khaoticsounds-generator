@@ -1,4 +1,4 @@
-// Update BPM display
+// Update BPM display as the slider changes
 document.getElementById("bpm").addEventListener("input", function () {
   document.getElementById("bpm-display").textContent = this.value;
 });
@@ -14,25 +14,24 @@ async function generateLyrics() {
   outputBox.textContent = "Generating lyrics...";
 
   try {
-    const response = await fetch("/api/generate", {
+    const response = await fetch("https://khaoticsounds-generator-production.up.railway.app/api/generate", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ prompt, mood, bars, bpm })
+      body: JSON.stringify({ prompt, mood, bars, bpm }),
     });
 
     const data = await response.json();
     outputBox.textContent = data.lyrics || "No lyrics returned.";
   } catch (error) {
     outputBox.textContent = "Error generating lyrics.";
-    console.error(error);
+    console.error("Error:", error);
   }
 }
 
-// Copy to clipboard
+// Handle Copy Lyrics button
 function copyLyrics() {
   const output = document.getElementById("output");
   navigator.clipboard.writeText(output.textContent);
 }
-Create script.js
