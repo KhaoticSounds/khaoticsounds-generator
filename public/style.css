@@ -26,8 +26,17 @@ body {
   border-radius: 5px;
   height: 200px;
   overflow-y: auto;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   white-space: pre-wrap;
+}
+
+/* BPM display centered under output box */
+.bpm-centered {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ccc;
+  margin-bottom: 10px;
 }
 
 .form-group {
@@ -57,15 +66,8 @@ input[type="text"]::placeholder {
   color: #666;
 }
 
-
 input[type="range"] {
   width: 100%;
-}
-
-#bpm-display {
-  text-align: right;
-  color: #ccc;
-  margin-top: 5px;
 }
 
 #bpm-message {
@@ -74,13 +76,7 @@ input[type="range"] {
   margin-top: 5px;
 }
 
-.bpm-ruler {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.8em;
-  color: #888;
-  margin-top: 5px;
-}
+/* Remove bpm ruler block — we’re not using it anymore */
 
 button {
   background-color: #fff;
@@ -96,7 +92,7 @@ button:hover {
   color: #fff;
 }
 
-/* NEW: Side-by-side mood and bars */
+/* Mood + Bars side by side */
 .form-row {
   display: flex;
   justify-content: space-between;
