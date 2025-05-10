@@ -60,6 +60,23 @@
   </div>
 
   <script src="script.js"></script>
+  <script>
+    function copyLyrics() {
+      const output = document.getElementById("lyrics-output").textContent;
+      if (output.trim()) {
+        navigator.clipboard.writeText(output);
+        alert("Lyrics copied to clipboard!");
+      } else {
+        alert("No lyrics to copy yet.");
+      }
+    }
+
+    document.getElementById('bpm').addEventListener('input', function () {
+      const bpm = this.value;
+      document.getElementById('bpm-display').textContent = 'BPM: ' + bpm;
+      document.getElementById('bpm-message').textContent = 'Lyrics will be timed to ' + bpm + ' BPM — match this with your beat for sync.';
+    });
+  </script>
 </body>
 </html>
 
