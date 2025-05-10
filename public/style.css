@@ -4,19 +4,17 @@ body {
   background-color: #000;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+  display: block;
 }
 
 .generator-container {
-  margin: 30px auto;
-  width: 90%;
+  width: 100%;
   max-width: 800px;
-  border: 2px solid #007bff;
+  margin: 0 auto;
   padding: 20px;
+  border: 2px solid #007bff;
   border-radius: 10px;
+  box-sizing: border-box;
 }
 
 .output-box {
@@ -96,7 +94,22 @@ button:hover {
 }
 
 .form-row .half {
-  width: 50%;
+  width: 48%;
 }
 
+/* 📱 Mobile styles */
+@media (max-width: 600px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-row .half {
+    width: 100%;
+  }
+
+  .generator-container {
+    padding: 15px;
+    border-radius: 0;
+  }
+}
 
