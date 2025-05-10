@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KhaoticSounds Generator</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="generator-wrapper">
     <div class="generator-container">
-      
       <!-- Output Box -->
       <div class="output-box" id="lyrics-output">Your lyrics will appear here.</div>
+
+      <!-- Copy Button -->
       <button id="copy-btn" onclick="copyLyrics()">Copy Lyrics</button>
 
       <!-- BPM Display -->
@@ -29,7 +31,7 @@
         <input type="text" id="prompt" placeholder="Enter your lyrics theme...">
       </div>
 
-      <!-- Mood & Bars Side by Side -->
+      <!-- Mood & Bars -->
       <div class="form-row">
         <div class="form-group half">
           <label for="mood">Select Mood:</label>
@@ -40,7 +42,6 @@
             <option value="emotional">Emotional</option>
           </select>
         </div>
-
         <div class="form-group half">
           <label for="bars">Select Bars:</label>
           <select id="bars">
@@ -55,6 +56,7 @@
       <button onclick="generateLyrics()">Generate Lyrics</button>
     </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
