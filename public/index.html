@@ -17,13 +17,13 @@
 
       <div class="form-group">
         <label for="bpm">Select BPM:</label>
-        <input type="range" id="bpm" min="70" max="200" value="120">
+        <input type="range" id="bpm" min="70" max="200" value="120" />
         <div id="bpm-message">Lyrics will be timed to 120 BPM — match this with your beat for sync.</div>
       </div>
 
       <div class="form-group" id="prompt-group">
         <label for="prompt">Type your theme or idea:</label>
-        <input type="text" id="prompt" placeholder="Enter your lyrics theme...">
+        <input type="text" id="prompt" placeholder="Enter your lyrics theme..." />
       </div>
 
       <div class="form-row">
@@ -50,24 +50,9 @@
     </div>
   </div>
 
-  <script>
-    function copyLyrics() {
-      const output = document.getElementById("lyrics-output").textContent;
-      if (output.trim()) {
-        navigator.clipboard.writeText(output);
-        alert("Lyrics copied to clipboard!");
-      } else {
-        alert("No lyrics to copy yet.");
-      }
-    }
-
-    document.getElementById('bpm').addEventListener('input', function () {
-      const bpm = this.value;
-      document.getElementById('bpm-display').textContent = 'BPM: ' + bpm;
-      document.getElementById('bpm-message').textContent = 'Lyrics will be timed to ' + bpm + ' BPM — match this with your beat for sync.';
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
+
 
 
