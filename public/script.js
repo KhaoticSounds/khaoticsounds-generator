@@ -35,3 +35,4 @@ function copyLyrics() {
   const output = document.getElementById("output");
   navigator.clipboard.writeText(output.textContent);
 }
+Create script.js
