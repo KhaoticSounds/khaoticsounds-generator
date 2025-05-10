@@ -1,16 +1,18 @@
 const express = require('express');
 const path = require('path');
-require('dotenv').config(); // <== This loads the .env file
+require('dotenv').config(); // Load environment variables
 const { OpenAI } = require('openai');
 
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// OpenAI initialization
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Initialize OpenAI with API key from .env
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
-// API endpoint
+// API endpoint for generating lyrics
 app.post('/api/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
   const fullPrompt = `Generate ${bars} bars of ${mood} rap lyrics at ${bpm} BPM based on: ${prompt}`;
