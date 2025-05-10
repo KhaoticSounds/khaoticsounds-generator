@@ -1,38 +1,28 @@
-/* === Body === */
-/* Sets dark background, font, and prevents horizontal scroll */
 body {
   margin: 0;
   padding: 0;
   background-color: #000;
   font-family: 'Segoe UI', sans-serif;
   color: #fff;
-  width: 100vw;              /* Ensures full screen use */
-  overflow-x: hidden;        /* Prevents layout from overflowing horizontally */
-}
-
-/* === Wrapper for generator === */
-/* Centers the generator box on page */
-.generator-wrapper {
   width: 100%;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
+  overflow-x: hidden;
 }
 
-/* === Generator Container === */
-/* This is the blue bordered box */
+.generator-wrapper {
+  padding: 20px 10px;
+  width: 100%;
+}
+
 .generator-container {
   width: 100%;
-  max-width: 900px;            /* Prevents it from being too wide on desktop */
   background: transparent;
   padding: 20px;
-  margin: 0 auto;              /* Centers it horizontally */
+  padding-bottom: 40px;
   box-sizing: border-box;
-  border: 2px solid #007bff;   /* Blue border */
+  border: 2px solid #007bff;
   border-radius: 10px;
 }
 
-/* === Output box for generated lyrics === */
 .output-box {
   background-color: #fff;
   color: #000;
@@ -41,16 +31,14 @@ body {
   height: 200px;
   overflow-y: auto;
   margin-bottom: 10px;
-  white-space: pre-wrap;     /* Keeps line breaks */
+  white-space: pre-wrap;
 }
 
-/* === Copy Lyrics Button === */
 #copy-btn {
   margin-bottom: 15px;
   width: 100%;
 }
 
-/* === Centered BPM Display (BPM: 120) === */
 .bpm-centered {
   text-align: center;
   font-size: 1.2rem;
@@ -59,19 +47,16 @@ body {
   margin-bottom: 10px;
 }
 
-/* === Group of inputs === */
 .form-group {
   margin-bottom: 15px;
 }
 
-/* === Field Labels === */
 label {
   display: block;
   margin-bottom: 5px;
   color: #ccc;
 }
 
-/* === Inputs, dropdowns, and buttons styling === */
 input[type="text"],
 select,
 button {
@@ -85,51 +70,49 @@ button {
   box-sizing: border-box;
 }
 
-/* === Placeholder text inside input === */
 input[type="text"]::placeholder {
   color: #666;
 }
 
-/* === BPM slider style === */
 input[type="range"] {
   width: 100%;
 }
 
-/* === Text under slider === */
 #bpm-message {
   font-size: 0.9em;
   color: #999;
   margin-top: 5px;
 }
 
-/* === Buttons hover effect === */
 button {
-  background-color: #fff;
-  color: #000;
+  background-color: #007bff;
+  color: #fff;
   font-weight: bold;
-  border: 2px solid #007bff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 1rem;
   cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
   transition: background 0.3s ease;
 }
 
 button:hover {
-  background-color: #007bff;
+  background-color: #0056b3;
   color: #fff;
 }
 
-/* === Mood & Bars Dropdowns Side-by-Side === */
 .form-row {
   display: flex;
   justify-content: space-between;
   gap: 10px;
 }
 
-/* === Each dropdown takes up 50% of the row === */
 .form-row .half {
   width: 50%;
 }
 
-/* === Mobile adjustments === */
 @media (max-width: 600px) {
   .form-row {
     flex-direction: column;
@@ -139,12 +122,9 @@ button:hover {
     width: 100%;
   }
 
-  .generator-wrapper {
-    padding: 10px;
-  }
-
   .generator-container {
     padding: 15px;
   }
 }
+
 
