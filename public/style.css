@@ -9,23 +9,21 @@ body {
 }
 
 .generator-wrapper {
+  padding: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
-  padding: 20px;
-  width: 100%;
-  box-sizing: border-box;
 }
 
 .generator-container {
   width: 100%;
-  max-width: 1080px;
+  max-width: 660px;
   background: transparent;
-  padding: 20px;
+  padding: 10px;
   box-sizing: border-box;
   border: 2px solid #007bff;
   border-radius: 10px;
 }
-
 
 .output-box {
   background-color: #fff;
@@ -127,8 +125,9 @@ button:hover {
   }
 
   .generator-container {
-    padding: 15px;
+    padding: 10px;
   }
 }
+
 
 
