@@ -1,30 +1,35 @@
-body {
+/* Base layout */
+html, body {
   margin: 0;
   padding: 0;
   background-color: #000;
   font-family: 'Segoe UI', sans-serif;
   color: #fff;
+  height: 100%;
+  overflow-x: hidden;
 }
 
+/* Wrapper centers and trims space */
 .generator-wrapper {
   display: flex;
   justify-content: center;
   padding: 20px 10px;
-  min-height: 100vh;
   box-sizing: border-box;
 }
 
+/* Main container */
 .generator-container {
   width: 100%;
   max-width: 860px;
   background: transparent;
   padding: 20px;
-  box-sizing: border-box;
   border: 2px solid #007bff;
   border-radius: 10px;
-  margin-bottom: 0; /* No extra space below */
+  box-sizing: border-box;
+  margin-bottom: 0;
 }
 
+/* Output box */
 .output-box {
   background-color: #fff;
   color: #000;
@@ -36,10 +41,12 @@ body {
   white-space: pre-wrap;
 }
 
+/* Copy button spacing */
 #copy-btn {
   margin-bottom: 15px;
 }
 
+/* BPM display */
 .bpm-centered {
   text-align: center;
   font-size: 1.2rem;
@@ -48,6 +55,7 @@ body {
   margin-bottom: 10px;
 }
 
+/* Label and form elements */
 .form-group {
   margin-bottom: 15px;
 }
@@ -79,12 +87,14 @@ input[type="range"] {
   width: 100%;
 }
 
+/* BPM message */
 #bpm-message {
   font-size: 0.9em;
   color: #999;
   margin-top: 5px;
 }
 
+/* Buttons */
 button {
   background-color: #007bff;
   color: #fff;
@@ -98,7 +108,7 @@ button:hover {
   background-color: #0056b3;
 }
 
-/* Mood + Bars side-by-side */
+/* Mood and Bars layout */
 .form-row {
   display: flex;
   justify-content: space-between;
@@ -109,7 +119,7 @@ button:hover {
   width: 50%;
 }
 
-/* Mobile friendly */
+/* Mobile responsive adjustments */
 @media (max-width: 600px) {
   .form-row {
     flex-direction: column;
@@ -119,8 +129,13 @@ button:hover {
     width: 100%;
   }
 
+  .generator-wrapper {
+    padding: 15px 10px;
+  }
+
   .generator-container {
     padding: 15px;
   }
 }
+
 
