@@ -1,35 +1,42 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
-const { OpenAI } = require('openai');
-require('dotenv').config();
+const { Configuration, OpenAIApi } = require('openai');
 
 const app = express();
 app.use(express.json());
+
+// Serve static files from the public folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Setup OpenAI API
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
+// API route to generate lyrics
 app.post('/api/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
+  const fullPrompt = `Generate ${bars} bars of ${mood} rap lyrics at ${bpm} BPM based on: ${prompt}`;
+
   try {
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'user',
-          content: `Write a ${bars}-bar hip-hop verse with a ${mood} mood at ${bpm} BPM. Theme: ${prompt}`
-        }
-      ],
+    const completion = await openai.createChatCompletion({
+      model: "gpt-4",
+      messages: [{ role: "user", content: fullPrompt }],
     });
 
-    res.json({ lyrics: completion.choices[0].message.content });
+    const lyrics = completion.data.choices[0].message.content;
+    res.json({ lyrics });
   } catch (error) {
-    console.error('OpenAI error:', error);
+    console.error('Error generating lyrics:', error.message);
     res.status(500).json({ error: 'Failed to generate lyrics' });
   }
 });
 
+// Start the server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
