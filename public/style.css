@@ -4,12 +4,14 @@ body {
   background-color: #000;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
 }
 
-/* Generator Container Floated */
 .generator-container {
-  float: left;
-  margin: 30px;
+  margin: 30px auto;
   width: 90%;
   max-width: 800px;
   border: 2px solid #007bff;
@@ -28,7 +30,6 @@ body {
   white-space: pre-wrap;
 }
 
-/* BPM display centered under output box */
 .bpm-centered {
   text-align: center;
   font-size: 1.2rem;
@@ -88,7 +89,6 @@ button:hover {
   color: #fff;
 }
 
-/* Mood + Bars side by side */
 .form-row {
   display: flex;
   justify-content: space-between;
@@ -98,4 +98,5 @@ button:hover {
 .form-row .half {
   width: 50%;
 }
+
 
