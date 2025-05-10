@@ -4,18 +4,16 @@ body {
   background-color: #000;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
 }
 
+/* Generator Container Floated */
 .generator-container {
-  border: 2px solid #007bff;
-  padding: 20px;
-  margin-top: 30px;
+  float: left;
+  margin: 30px;
   width: 90%;
   max-width: 800px;
+  border: 2px solid #007bff;
+  padding: 20px;
   border-radius: 10px;
 }
 
@@ -75,8 +73,6 @@ input[type="range"] {
   color: #999;
   margin-top: 5px;
 }
-
-/* Remove bpm ruler block — we’re not using it anymore */
 
 button {
   background-color: #fff;
