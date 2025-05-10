@@ -7,18 +7,18 @@
 </head>
 <body>
   <div class="generator-container">
+    
     <!-- Output Box -->
     <div class="output-box" id="lyrics-output">Your lyrics will appear here.</div>
 
-    <!-- BPM Slider -->
+    <!-- BPM Display centered under output -->
+    <div id="bpm-display" class="bpm-centered">BPM: 120</div>
+
+    <!-- BPM Fader -->
     <div class="form-group">
       <label for="bpm">Select BPM:</label>
       <input type="range" id="bpm" min="70" max="200" value="120">
-      <div id="bpm-display">BPM: 120</div>
       <div id="bpm-message">Lyrics will be timed to 120 BPM — match this with your beat for sync.</div>
-      <div class="bpm-ruler">
-        <span>70</span><span>90</span><span>110</span><span>130</span><span>150</span><span>170</span><span>190</span><span>200</span>
-      </div>
     </div>
 
     <!-- Prompt Input -->
@@ -27,7 +27,7 @@
       <input type="text" id="prompt" placeholder="Enter your lyrics theme...">
     </div>
 
-    <!-- Mood & Bars Dropdowns Side by Side -->
+    <!-- Mood & Bars Side by Side -->
     <div class="form-row">
       <div class="form-group half">
         <label for="mood">Select Mood:</label>
@@ -56,3 +56,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+
