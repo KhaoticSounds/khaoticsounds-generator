@@ -2,19 +2,24 @@ body {
   margin: 0;
   padding: 0;
   background-color: #000;
-  color: #fff;
   font-family: 'Segoe UI', sans-serif;
-  display: block;
+  color: #fff;
+}
+
+.generator-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
 }
 
 .generator-container {
   width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
+  max-width: 860px;
+  background: transparent;
   padding: 20px;
+  box-sizing: border-box;
   border: 2px solid #007bff;
   border-radius: 10px;
-  box-sizing: border-box;
 }
 
 .output-box {
@@ -26,6 +31,10 @@ body {
   overflow-y: auto;
   margin-bottom: 10px;
   white-space: pre-wrap;
+}
+
+#copy-btn {
+  margin-bottom: 15px;
 }
 
 .bpm-centered {
@@ -87,6 +96,7 @@ button:hover {
   color: #fff;
 }
 
+/* Mood + Bars side-by-side */
 .form-row {
   display: flex;
   justify-content: space-between;
@@ -94,10 +104,10 @@ button:hover {
 }
 
 .form-row .half {
-  width: 48%;
+  width: 50%;
 }
 
-/* 📱 Mobile styles */
+/* Mobile friendly */
 @media (max-width: 600px) {
   .form-row {
     flex-direction: column;
@@ -107,9 +117,12 @@ button:hover {
     width: 100%;
   }
 
+  .generator-wrapper {
+    padding: 20px 10px;
+  }
+
   .generator-container {
     padding: 15px;
-    border-radius: 0;
   }
 }
 
