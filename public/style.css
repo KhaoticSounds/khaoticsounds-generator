@@ -1,27 +1,36 @@
+/* === Body === */
+/* Sets black background, base font, and prevents horizontal overflow */
 body {
   margin: 0;
   padding: 0;
   background-color: #000;
   font-family: 'Segoe UI', sans-serif;
   color: #fff;
-  width: 100%;
-  overflow-x: hidden;
+  width: 100vw;              /* Use full viewport width */
+  overflow-x: hidden;        /* Prevent scrolling past the right edge */
 }
 
+/* === Wrapper for the whole generator === */
+/* Ensures proper padding and full width fit */
 .generator-wrapper {
   padding: 20px 10px;
   width: 100%;
+  max-width: 100%;           /* Never go wider than the screen */
+  overflow: hidden;
 }
 
+/* === Main container box with border === */
+/* This is the blue-bordered box holding everything */
 .generator-container {
-  width: 100%;
+  width: 100%;               /* Full width inside iframe */
   background: transparent;
   padding: 15px;
-  box-sizing: border-box;
-  border: 2px solid #007bff;
+  box-sizing: border-box;    /* Include border/padding in total width */
+  border: 2px solid #007bff; /* Blue border */
   border-radius: 10px;
 }
 
+/* === Output box where lyrics appear === */
 .output-box {
   background-color: #fff;
   color: #000;
@@ -30,14 +39,16 @@ body {
   height: 200px;
   overflow-y: auto;
   margin-bottom: 10px;
-  white-space: pre-wrap;
+  white-space: pre-wrap;     /* Keep line breaks */
 }
 
+/* === Copy Lyrics Button === */
 #copy-btn {
   margin-bottom: 15px;
   width: 100%;
 }
 
+/* === Centered BPM Display === */
 .bpm-centered {
   text-align: center;
   font-size: 1.2rem;
@@ -46,16 +57,19 @@ body {
   margin-bottom: 10px;
 }
 
+/* === Input Group Styling === */
 .form-group {
   margin-bottom: 15px;
 }
 
+/* === Labels for each field === */
 label {
   display: block;
   margin-bottom: 5px;
   color: #ccc;
 }
 
+/* === Input, Select, Button base styling === */
 input[type="text"],
 select,
 button {
@@ -69,20 +83,24 @@ button {
   box-sizing: border-box;
 }
 
+/* === Input placeholder color === */
 input[type="text"]::placeholder {
   color: #666;
 }
 
+/* === BPM Slider styling === */
 input[type="range"] {
   width: 100%;
 }
 
+/* === Slider BPM message === */
 #bpm-message {
   font-size: 0.9em;
   color: #999;
   margin-top: 5px;
 }
 
+/* === Button Hover Effect === */
 button {
   background-color: #fff;
   color: #000;
@@ -97,16 +115,19 @@ button:hover {
   color: #fff;
 }
 
+/* === Dropdown Row: Mood + Bars side-by-side === */
 .form-row {
   display: flex;
   justify-content: space-between;
   gap: 10px;
 }
 
+/* === Half width for each dropdown inside row === */
 .form-row .half {
   width: 50%;
 }
 
+/* === Mobile Styling for Narrow Screens === */
 @media (max-width: 600px) {
   .form-row {
     flex-direction: column;
@@ -115,5 +136,12 @@ button:hover {
   .form-row .half {
     width: 100%;
   }
-}
 
+  .generator-wrapper {
+    padding: 20px 10px;
+  }
+
+  .generator-container {
+    padding: 15px;
+  }
+}
