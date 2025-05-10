@@ -4,45 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KhaoticSounds Generator</title>
-
-  <!-- Link to your updated stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <!-- Wrapper to help center the content -->
   <div class="generator-wrapper">
-
-    <!-- Main generator box with blue border -->
     <div class="generator-container">
+      <!-- Output Box -->
+      <div class="output-box" id="lyrics-output">Your lyrics will appear here.</div>
 
-      <!-- Where generated lyrics appear -->
-      <div class="output-box" id="lyrics-output">
-        Your lyrics will appear here.
-      </div>
-
-      <!-- Button to copy lyrics -->
+      <!-- Copy Button -->
       <button id="copy-btn" onclick="copyLyrics()">Copy Lyrics</button>
 
-      <!-- BPM display -->
+      <!-- BPM Display -->
       <div id="bpm-display" class="bpm-centered">BPM: 120</div>
 
-      <!-- BPM slider -->
+      <!-- BPM Fader -->
       <div class="form-group">
         <label for="bpm">Select BPM:</label>
-        <input type="range" id="bpm" min="70" max="200" value="120" />
-        <div id="bpm-message">
-          Lyrics will be timed to 120 BPM — match this with your beat for sync.
-        </div>
+        <input type="range" id="bpm" min="70" max="200" value="120">
+        <div id="bpm-message">Lyrics will be timed to 120 BPM — match this with your beat for sync.</div>
       </div>
 
-      <!-- Input box for lyrics prompt -->
+      <!-- Prompt Input -->
       <div class="form-group" id="prompt-group">
         <label for="prompt">Type your theme or idea:</label>
-        <input type="text" id="prompt" placeholder="Enter your lyrics theme..." />
+        <input type="text" id="prompt" placeholder="Enter your lyrics theme...">
       </div>
 
-      <!-- Mood and Bars dropdowns -->
+      <!-- Mood & Bars -->
       <div class="form-row">
         <div class="form-group half">
           <label for="mood">Select Mood:</label>
@@ -53,7 +42,6 @@
             <option value="emotional">Emotional</option>
           </select>
         </div>
-
         <div class="form-group half">
           <label for="bars">Select Bars:</label>
           <select id="bars">
@@ -64,17 +52,12 @@
         </div>
       </div>
 
-      <!-- Generate Lyrics button -->
+      <!-- Generate Button -->
       <button onclick="generateLyrics()">Generate Lyrics</button>
+    </div>
+  </div>
 
-    </div> <!-- End .generator-container -->
-
-  </div> <!-- End .generator-wrapper -->
-
-  <!-- External script file for generation (if used) -->
   <script src="script.js"></script>
-
-  <!-- Copy + BPM logic -->
   <script>
     function copyLyrics() {
       const output = document.getElementById("lyrics-output").textContent;
@@ -85,16 +68,7 @@
         alert("No lyrics to copy yet.");
       }
     }
-
-    document.getElementById('bpm').addEventListener('input', function () {
-      const bpm = this.value;
-      document.getElementById('bpm-display').textContent = 'BPM: ' + bpm;
-      document.getElementById('bpm-message').textContent =
-        'Lyrics will be timed to ' + bpm + ' BPM — match this with your beat for sync.';
-    });
   </script>
-
 </body>
 </html>
-
 
