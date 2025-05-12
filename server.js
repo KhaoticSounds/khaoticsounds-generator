@@ -5,7 +5,7 @@ const { OpenAI } = require('openai');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -23,7 +23,7 @@ app.post('/api/generate', async (req, res) => {
       model: 'dall-e-3',
       prompt: prompt,
       n: 1,
-      size: '1024x1024'
+      size: '1024x1024',
     });
 
     const imageUrl = response.data[0].url;
