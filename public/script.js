@@ -1,45 +1,46 @@
-async function generateCover() {
-  const prompt = document.getElementById("prompt").value.trim();
-  const image = document.getElementById("cover-output");
-  const spinner = document.getElementById("loading-spinner");
-  const saveBtn = document.getElementById("save-btn");
+const generateBtn = document.getElementById("generate-btn");
+const saveBtn = document.getElementById("save-btn");
+const promptInput = document.getElementById("prompt");
+const image = document.getElementById("generated-image");
+const spinner = document.getElementById("loading-spinner");
+
+generateBtn.addEventListener("click", async () => {
+  const prompt = promptInput.value.trim();
+  if (!prompt) return;
 
   image.src = "";
-  image.alt = "Generating...";
-  spinner.style.display = "block";
-  saveBtn.style.display = "none";
+  spinner.classList.remove("hidden");
+  saveBtn.classList.add("hidden");
 
   try {
-    const response = await fetch("/api/generate", {
+    const res = await fetch("/api/generate", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt })
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
     });
 
-    const data = await response.json();
-    if (data && data.imageUrl) {
+    const data = await res.json();
+    if (data.imageUrl) {
       image.src = data.imageUrl;
-      image.onload = () => {
-        spinner.style.display = "none";
-        saveBtn.style.display = "inline-block";
-      };
+      saveBtn.classList.remove("hidden");
     } else {
-      throw new Error("No image URL received.");
+      image.alt = "Failed to generate image.";
     }
   } catch (err) {
-    console.error(err);
-    spinner.style.display = "none";
-    image.alt = "Failed to load the image.";
+    image.alt = "Error loading image.";
+  } finally {
+    spinner.classList.add("hidden");
   }
-}
+});
 
-function saveImage() {
-  const img = document.getElementById("cover-output");
-  if (!img.src.startsWith("data:image")) return;
-
+saveBtn.addEventListener("click", () => {
   const link = document.createElement("a");
-  link.href = img.src;
+  link.href = image.src;
   link.download = "album_cover.png";
+  document.body.appendChild(link);
   link.click();
-}
+  document.body.removeChild(link);
+});
 
