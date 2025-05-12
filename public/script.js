@@ -55,7 +55,6 @@ document.getElementById('save-btn').addEventListener('click', () => {
   }
 });
 
-// Optional: unlock manually if user clicks after payment
 window.addEventListener('message', (event) => {
   if (event.data === 'unlock_paid') {
     isPaidUser = true;
