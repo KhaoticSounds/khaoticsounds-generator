@@ -11,13 +11,16 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
   saveBtn.style.display = 'none';
 
   try {
-    const response = await fetch('/api/generate', {
+    const response = await fetch('https://khaoticsounds-generator-production-775c.up.railway.app/api/generate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ prompt })
     });
 
     const data = await response.json();
+
     if (data.imageUrl) {
       image.src = data.imageUrl;
       image.style.display = 'block';
