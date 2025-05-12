@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  padding: 0;
   background-color: #000;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
@@ -7,6 +8,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 .generator-box {
@@ -14,6 +16,7 @@ body {
   border-radius: 10px;
   width: 100%;
   max-width: 650px;
+  height: auto;
   padding: 20px;
   box-sizing: border-box;
   background-color: #111;
@@ -76,3 +79,27 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
+
+#paywall {
+  margin-top: 20px;
+  background-color: #000;
+  padding: 20px;
+  border: 2px dashed #007bff;
+  text-align: center;
+}
+
+#paywall h2 {
+  margin: 0 0 10px;
+  color: #00f0ff;
+}
+
+.pay-btn {
+  background: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
