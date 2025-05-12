@@ -2,81 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KhaoticSounds Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KhaoticSounds Album Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="generator-wrapper">
-    <div class="generator-container">
-      <!-- Output Box -->
-      <div class="output-box" id="lyrics-output">Your lyrics will appear here.</div>
-
-      <!-- Copy Button -->
-      <button id="copy-btn" onclick="copyLyrics()">Copy Lyrics</button>
-
-      <!-- BPM Display -->
-      <div id="bpm-display" class="bpm-centered">BPM: 120</div>
-
-      <!-- BPM Fader -->
-      <div class="form-group">
-        <label for="bpm">Select BPM:</label>
-        <input type="range" id="bpm" min="70" max="200" value="120">
-        <div id="bpm-message">Lyrics will be timed to 120 BPM — match this with your beat for sync.</div>
-      </div>
-
-      <!-- Prompt Input -->
-      <div class="form-group" id="prompt-group">
-        <label for="prompt">Type your theme or idea:</label>
-        <input type="text" id="prompt" placeholder="Enter your lyrics theme...">
-      </div>
-
-      <!-- Mood & Bars Dropdown -->
-      <div class="form-row">
-        <div class="form-group half">
-          <label for="mood">Select Mood:</label>
-          <select id="mood">
-            <option value="hype">Hype</option>
-            <option value="chill">Chill</option>
-            <option value="gritty">Gritty</option>
-            <option value="emotional">Emotional</option>
-          </select>
-        </div>
-        <div class="form-group half">
-          <label for="bars">Select Bars:</label>
-          <select id="bars">
-            <option value="" disabled selected>Bars</option>
-            <option value="8hook">8 Bar Hook</option>
-            <option value="8">8 Bars</option>
-            <option value="12">12 Bars</option>
-            <option value="16">16 Bars</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Generate Button -->
-      <button onclick="generateLyrics()">Generate Lyrics</button>
+  <div class="generator-container">
+    <div id="image-output" class="output-box">
+      <span class="placeholder-text">Your album cover will appear here.</span>
     </div>
+
+    <div id="spinner" class="spinner" style="display: none;"></div>
+
+    <div class="controls">
+      <input type="text" id="prompt" placeholder="Describe your album cover idea..." />
+      <button id="generate-btn">Generate</button>
+    </div>
+
+    <button id="save-btn" style="display: none;">Save</button>
   </div>
 
   <script src="script.js"></script>
-  <script>
-    function copyLyrics() {
-      const output = document.getElementById("lyrics-output").textContent;
-      if (output.trim()) {
-        navigator.clipboard.writeText(output);
-        alert("Lyrics copied to clipboard!");
-      } else {
-        alert("No lyrics to copy yet.");
-      }
-    }
-
-    document.getElementById('bpm').addEventListener('input', function () {
-      const bpm = this.value;
-      document.getElementById('bpm-display').textContent = 'BPM: ' + bpm;
-      document.getElementById('bpm-message').textContent = 'Lyrics will be timed to ' + bpm + ' BPM — match this with your beat for sync.';
-    });
-  </script>
 </body>
 </html>
+
 
