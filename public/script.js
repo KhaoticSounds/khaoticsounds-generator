@@ -35,12 +35,11 @@ async function generateCover() {
 
 function saveImage() {
   const img = document.getElementById("cover-output");
-  if (!img.src) return;
+  if (!img.src.startsWith("data:image")) return;
 
   const link = document.createElement("a");
   link.href = img.src;
   link.download = "album_cover.png";
   link.click();
 }
-
 
