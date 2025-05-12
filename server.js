@@ -5,21 +5,16 @@ import OpenAI from "openai";
 import axios from "axios";
 import { fileURLToPath } from "url";
 
-// Setup paths
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load .env
 dotenv.config();
-
-// Express app and OpenAI client
 const app = express();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-// === ROUTE: Generate image prompt ===
 app.post("/api/cover", async (req, res) => {
   const { prompt } = req.body;
   if (!prompt || prompt.length < 3) {
@@ -27,7 +22,6 @@ app.post("/api/cover", async (req, res) => {
   }
 
   try {
-    console.log("🧠 Generating for prompt:", prompt);
     const response = await openai.images.generate({
       model: "dall-e-3",
       prompt,
@@ -36,18 +30,13 @@ app.post("/api/cover", async (req, res) => {
     });
 
     const imageUrl = response.data[0]?.url;
-    if (!imageUrl) throw new Error("No image URL received.");
-
-    console.log("✅ Image URL returned:", imageUrl);
     res.json({ imageUrl });
-
   } catch (error) {
-    console.error("❌ Error generating image:", error.message);
+    console.error("Error generating image:", error.message);
     res.status(500).json({ error: "Image generation failed." });
   }
 });
 
-// === ROUTE: Proxy image to bypass CORS ===
 app.get("/api/image", async (req, res) => {
   const imageUrl = req.query.url;
   if (!imageUrl) return res.status(400).send("Missing image URL");
@@ -57,15 +46,13 @@ app.get("/api/image", async (req, res) => {
     res.set("Content-Type", "image/png");
     res.send(imageResponse.data);
   } catch (err) {
-    console.error("❌ Image proxy failed:", err.message);
     res.status(500).send("Could not fetch image");
   }
 });
 
-// === START SERVER ===
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
 
 
