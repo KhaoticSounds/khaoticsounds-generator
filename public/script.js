@@ -11,7 +11,7 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
   saveBtn.style.display = 'none';
 
   try {
-    const response = await fetch('https://khaoticsounds-generator-production-775c.up.railway.app/api/generate', {
+    const response = await fetch('/api/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -41,9 +41,7 @@ document.getElementById('save-btn').addEventListener('click', () => {
     const link = document.createElement('a');
     link.href = img.src;
     link.download = 'album-cover.png';
-    document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
   }
 });
 
