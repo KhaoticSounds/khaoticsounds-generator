@@ -1,78 +1,58 @@
-const generateBtn = document.getElementById("generate-btn");
-const promptInput = document.getElementById("prompt");
-const imageOutput = document.getElementById("image-output");
-const spinner = document.getElementById("spinner");
-const saveBtn = document.getElementById("save-btn");
+document.getElementById("generateBtn").addEventListener("click", async () => {
+  const prompt = document.getElementById("prompt").value;
+  const output = document.getElementById("output");
+  const spinner = document.getElementById("loading-spinner");
+  const saveBtn = document.getElementById("saveBtn");
 
-generateBtn.onclick = async () => {
-  const prompt = promptInput.value.trim();
-  if (!prompt) {
-    alert("Please enter a prompt.");
+  if (!prompt.trim()) {
+    output.innerHTML = "Please enter an album cover idea.";
     return;
   }
 
+  output.innerHTML = "";
   spinner.style.display = "block";
-  imageOutput.innerHTML = "";
-  imageOutput.appendChild(spinner);
   saveBtn.style.display = "none";
 
   try {
-    const response = await fetch("/api/cover", {
+    const response = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt }),
     });
 
     const data = await response.json();
-    if (!data.imageUrl) throw new Error("No image URL returned.");
+
+    if (!data.imageUrl) throw new Error("No image returned");
 
     const img = new Image();
-    img.crossOrigin = "anonymous";
     img.src = `/api/image?url=${encodeURIComponent(data.imageUrl)}`;
-
+    img.alt = prompt;
     img.onload = () => {
       spinner.style.display = "none";
-      imageOutput.innerHTML = "";
+      output.innerHTML = "";
       img.style.width = "100%";
       img.style.height = "100%";
       img.style.objectFit = "cover";
-      imageOutput.appendChild(img);
+      output.appendChild(img);
       saveBtn.style.display = "block";
     };
 
     img.onerror = () => {
       spinner.style.display = "none";
-      imageOutput.innerHTML = "<span class='placeholder-text'>⚠️ Failed to load the image.</span>";
+      output.innerHTML = "<span style='color:yellow;'>⚠️ Failed to load the image.</span>";
     };
   } catch (err) {
-    console.error("Error generating image:", err);
     spinner.style.display = "none";
-    imageOutput.innerHTML = "<span class='placeholder-text'>⚠️ Something went wrong. Try again later.</span>";
+    output.innerHTML = "❌ Error generating image.";
   }
-};
+});
 
-saveBtn.onclick = () => {
-  const img = imageOutput.querySelector("img");
+document.getElementById("saveBtn").addEventListener("click", () => {
+  const img = document.querySelector("#output img");
   if (!img) return;
+  const link = document.createElement("a");
+  link.href = img.src;
+  link.download = "album_cover.png";
+  link.click();
+});
 
-  const canvas = document.createElement("canvas");
-  canvas.width = img.naturalWidth;
-  canvas.height = img.naturalHeight;
-  const ctx = canvas.getContext("2d");
-
-  const tempImg = new Image();
-  tempImg.crossOrigin = "anonymous";
-  tempImg.src = img.src;
-
-  tempImg.onload = () => {
-    ctx.drawImage(tempImg, 0, 0);
-    const link = document.createElement("a");
-    link.href = canvas.toDataURL("image/png");
-    link.download = "album-cover.png";
-    link.click();
-  };
-
-  tempImg.onerror = () => {
-    alert("Download failed.");
-  };
-};
