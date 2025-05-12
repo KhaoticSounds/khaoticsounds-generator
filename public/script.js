@@ -1,15 +1,11 @@
-document.getElementById("generateBtn").addEventListener("click", async () => {
-  const prompt = document.getElementById("prompt").value;
-  const output = document.getElementById("output");
+async function generateCover() {
+  const prompt = document.getElementById("prompt").value.trim();
+  const image = document.getElementById("cover-output");
   const spinner = document.getElementById("loading-spinner");
-  const saveBtn = document.getElementById("saveBtn");
+  const saveBtn = document.getElementById("save-btn");
 
-  if (!prompt.trim()) {
-    output.innerHTML = "Please enter an album cover idea.";
-    return;
-  }
-
-  output.innerHTML = "";
+  image.src = "";
+  image.alt = "Generating...";
   spinner.style.display = "block";
   saveBtn.style.display = "none";
 
@@ -17,43 +13,34 @@ document.getElementById("generateBtn").addEventListener("click", async () => {
     const response = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt }),
+      body: JSON.stringify({ prompt })
     });
 
     const data = await response.json();
-
-    if (!data.imageUrl) throw new Error("No image returned");
-
-    const img = new Image();
-    img.src = `/api/image?url=${encodeURIComponent(data.imageUrl)}`;
-    img.alt = prompt;
-    img.onload = () => {
-      spinner.style.display = "none";
-      output.innerHTML = "";
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectFit = "cover";
-      output.appendChild(img);
-      saveBtn.style.display = "block";
-    };
-
-    img.onerror = () => {
-      spinner.style.display = "none";
-      output.innerHTML = "<span style='color:yellow;'>⚠️ Failed to load the image.</span>";
-    };
+    if (data && data.imageUrl) {
+      image.src = data.imageUrl;
+      image.onload = () => {
+        spinner.style.display = "none";
+        saveBtn.style.display = "inline-block";
+      };
+    } else {
+      throw new Error("No image URL received.");
+    }
   } catch (err) {
+    console.error(err);
     spinner.style.display = "none";
-    output.innerHTML = "❌ Error generating image.";
+    image.alt = "Failed to load the image.";
   }
-});
+}
 
-document.getElementById("saveBtn").addEventListener("click", () => {
-  const img = document.querySelector("#output img");
-  if (!img) return;
+function saveImage() {
+  const img = document.getElementById("cover-output");
+  if (!img.src) return;
+
   const link = document.createElement("a");
   link.href = img.src;
   link.download = "album_cover.png";
   link.click();
-});
+}
 
 
