@@ -2,23 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KhaoticSounds Album Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KhaoticSounds Cover Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="generator-container">
-    <div class="image-box">
-      <img id="generated-image" src="" alt="Your album cover will appear here." />
-      <div id="loading-spinner" class="spinner hidden"></div>
+  <div class="generator-box">
+    <div id="image-box">
+      <div class="loading-spinner" id="spinner" style="display:none;"></div>
+      <img id="cover-image" src="" alt="Your album cover will appear here." />
     </div>
 
-    <div class="button-row">
+    <div class="controls">
+      <input id="prompt" type="text" placeholder="Describe your album cover idea..." />
       <button id="generate-btn">Generate</button>
-      <button id="save-btn" class="hidden">Save</button>
+      <button id="save-btn" style="display:none;">Save</button>
     </div>
-
-    <input type="text" id="prompt" placeholder="Describe your album cover idea..." />
   </div>
 
   <script src="script.js"></script>
