@@ -1,32 +1,78 @@
-function generateLyrics() {
-  const prompt = document.getElementById('prompt').value;
-  const mood = document.getElementById('mood').value;
-  const bars = document.getElementById('bars').value;
-  const bpm = document.getElementById('bpm').value;
-  const output = document.getElementById('lyrics-output');
+const generateBtn = document.getElementById("generate-btn");
+const promptInput = document.getElementById("prompt");
+const imageOutput = document.getElementById("image-output");
+const spinner = document.getElementById("spinner");
+const saveBtn = document.getElementById("save-btn");
 
-  output.textContent = "Generating lyrics...";
+generateBtn.onclick = async () => {
+  const prompt = promptInput.value.trim();
+  if (!prompt) {
+    alert("Please enter a prompt.");
+    return;
+  }
 
-  fetch("/api/generate", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt, mood, bars, bpm })
-  })
-    .then(response => response.json())
-    .then(data => {
-      output.textContent = data.lyrics || "No lyrics returned.";
-      document.getElementById('prompt-group').style.display = 'none';
-      document.getElementById('bpm').value = 120;
-      document.getElementById('bpm-display').textContent = 'BPM: 120';
-      document.getElementById('bpm-message').textContent = 'Lyrics will be timed to 120 BPM — match this with your beat for sync.';
-    })
-    .catch(() => {
-      output.textContent = "Something went wrong. Try again.";
+  spinner.style.display = "block";
+  imageOutput.innerHTML = "";
+  imageOutput.appendChild(spinner);
+  saveBtn.style.display = "none";
+
+  try {
+    const response = await fetch("/api/cover", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt }),
     });
-}
 
-document.getElementById('bpm').addEventListener('input', function () {
-  const bpm = this.value;
-  document.getElementById('bpm-display').textContent = 'BPM: ' + bpm;
-  document.getElementById('bpm-message').textContent = 'Lyrics will be timed to ' + bpm + ' BPM — match this with your beat for sync.';
-});
+    const data = await response.json();
+    if (!data.imageUrl) throw new Error("No image URL returned.");
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.src = `/api/image?url=${encodeURIComponent(data.imageUrl)}`;
+
+    img.onload = () => {
+      spinner.style.display = "none";
+      imageOutput.innerHTML = "";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
+      imageOutput.appendChild(img);
+      saveBtn.style.display = "block";
+    };
+
+    img.onerror = () => {
+      spinner.style.display = "none";
+      imageOutput.innerHTML = "<span class='placeholder-text'>⚠️ Failed to load the image.</span>";
+    };
+  } catch (err) {
+    console.error("Error generating image:", err);
+    spinner.style.display = "none";
+    imageOutput.innerHTML = "<span class='placeholder-text'>⚠️ Something went wrong. Try again later.</span>";
+  }
+};
+
+saveBtn.onclick = () => {
+  const img = imageOutput.querySelector("img");
+  if (!img) return;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = img.naturalWidth;
+  canvas.height = img.naturalHeight;
+  const ctx = canvas.getContext("2d");
+
+  const tempImg = new Image();
+  tempImg.crossOrigin = "anonymous";
+  tempImg.src = img.src;
+
+  tempImg.onload = () => {
+    ctx.drawImage(tempImg, 0, 0);
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png");
+    link.download = "album-cover.png";
+    link.click();
+  };
+
+  tempImg.onerror = () => {
+    alert("Download failed.");
+  };
+};
