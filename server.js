@@ -1,38 +1,55 @@
-const express = require('express');
-const path = require('path');
-require('dotenv').config(); // Load environment variables
-const { OpenAI } = require('openai');
+import express from "express";
+import path from "path";
+import dotenv from "dotenv";
+import OpenAI from "openai";
+import { fileURLToPath } from "url";
 
+// Load environment variables
+dotenv.config();
+
+// Setup __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Initialize Express and OpenAI
 const app = express();
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
-// Initialize OpenAI with API key from .env
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Handle POST requests to generate album covers
+app.post("/api/cover", async (req, res) => {
+  const { prompt } = req.body;
 
-// API endpoint for generating lyrics
-app.post('/api/generate', async (req, res) => {
-  const { prompt, mood, bars, bpm } = req.body;
-  const fullPrompt = `Generate ${bars} bars of ${mood} rap lyrics at ${bpm} BPM based on: ${prompt}`;
+  if (!prompt || prompt.length < 3) {
+    return res.status(400).json({ error: "Prompt is too short." });
+  }
 
   try {
-    const chatCompletion = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: fullPrompt }],
+    console.log("🧠 Generating image for prompt:", prompt);
+
+    const response = await openai.images.generate({
+      model: "dall-e-3",
+      prompt,
+      size: "1024x1024",
+      n: 1,
     });
 
-    const lyrics = chatCompletion.choices[0].message.content;
-    res.json({ lyrics });
+    const imageUrl = response.data[0]?.url;
+    console.log("✅ Image generated:", imageUrl);
+    res.json({ imageUrl });
+
   } catch (err) {
-    console.error('OpenAI Error:', err);
-    res.status(500).json({ error: 'Failed to generate lyrics' });
+    console.error("❌ OpenAI generation error:", err.message);
+    res.status(500).json({ error: "Image generation failed." });
   }
 });
 
+// Start server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+
 
