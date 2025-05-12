@@ -5,13 +5,15 @@ const { OpenAI } = require('openai');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 8080; // fallback for local dev
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-app.use(cors());
+app.use(cors({
+  origin: ['https://www.khaoticsounds.com', 'http://localhost:3000']
+}));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
