@@ -1,7 +1,6 @@
 body {
   margin: 0;
-  padding: 0;
-  background: #000;
+  background-color: #000;
   color: #fff;
   font-family: 'Segoe UI', sans-serif;
   display: flex;
@@ -10,79 +9,77 @@ body {
   min-height: 100vh;
 }
 
-.generator-container {
+.generator-box {
   border: 2px solid #007bff;
-  padding: 10px;
   border-radius: 10px;
   width: 100%;
-  max-width: 800px;
+  max-width: 650px;
+  padding: 20px;
   box-sizing: border-box;
+  background-color: #111;
 }
 
-.image-box {
-  position: relative;
+#image-box {
+  background: #1a1a1a;
   width: 100%;
   height: 500px;
-  background: #111;
+  border: 2px dashed #444;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
   overflow: hidden;
-  margin-bottom: 10px;
 }
 
-.image-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.spinner {
-  position: absolute;
-  width: 40px;
-  height: 40px;
-  border: 4px solid #fff;
-  border-top: 4px solid #007bff;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-.hidden {
+#cover-image {
+  max-width: 100%;
+  max-height: 100%;
   display: none;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+.loading-spinner {
+  border: 6px solid #333;
+  border-top: 6px solid #007bff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  position: absolute;
 }
 
-.button-row {
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.controls {
   display: flex;
   gap: 10px;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-button {
-  padding: 10px 16px;
-  background: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  flex: 1;
+  margin-top: 15px;
+  flex-direction: column;
 }
 
 input[type="text"] {
-  width: 100%;
+  flex: 1;
   padding: 12px;
-  border-radius: 6px;
   font-size: 1rem;
   border: 1px solid #007bff;
-  box-sizing: border-box;
+  border-radius: 6px;
+}
+
+button {
+  padding: 12px;
+  font-weight: bold;
+  border: 1px solid #007bff;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
 }
 
 
