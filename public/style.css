@@ -89,8 +89,14 @@ button {
 }
 
 #paywall h2 {
-  margin: 0 0 10px;
+  margin: 10px 0;
   color: #00f0ff;
+}
+
+.cta-image {
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 15px;
 }
 
 .pay-btn {
