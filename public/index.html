@@ -3,25 +3,64 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Album Cover Generator</title>
+  <title>KhaoticSounds Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="generator-container">
-    <div class="output-box">
-      <img id="cover-output" src="" alt="Your album cover will appear here." />
-      <div class="loader" id="loading-spinner" style="display: none;"></div>
+  <h2>KhaoticSounds <br /><span class="white-title">Generator</span></h2>
+
+  <div class="chat-container">
+    <div class="chat-header">
+      <label for="mood">Mood:</label>
+      <select id="mood">
+        <option value="aggressive">Aggressive</option>
+        <option value="hype">Hype</option>
+        <option value="smooth">Smooth</option>
+        <option value="street">Street</option>
+      </select>
+
+      <label for="type">Type:</label>
+      <select id="type">
+        <option value="hook">Hook (8 bars)</option>
+        <option value="verse">Verse (16 bars)</option>
+      </select>
     </div>
 
-    <div class="form-section">
-      <input type="text" id="prompt" placeholder="Describe your album cover idea..." />
-      <div class="button-row">
-        <button id="generate-btn" onclick="generateCover()">Generate</button>
-        <button id="save-btn" onclick="saveImage()" style="display: none;">Save</button>
+    <div class="chat-input-area">
+      <input type="text" id="topic" placeholder="Enter your topic..." />
+      <div class="button-group">
+        <button onclick="generateLyrics()">Generate</button>
+        <button onclick="copyLyrics()">Copy Lyrics</button>
       </div>
     </div>
+
+    <div id="lyricsOutput" class="chat-output">Your lyrics will appear here...</div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    async function generateLyrics() {
+      const mood = document.getElementById("mood").value;
+      const topic = document.getElementById("topic").value;
+      const type = document.getElementById("type").value;
+
+      document.getElementById("lyricsOutput").textContent = "Writing lyrics...";
+
+      const response = await fetch("/generate-lyrics", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mood, topic, type }),
+      });
+
+      const data = await response.json();
+      document.getElementById("lyricsOutput").textContent = data.Lyrics || "Error generating lyrics.";
+    }
+
+    function copyLyrics() {
+      const text = document.getElementById("lyricsOutput").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Lyrics copied to clipboard!");
+      });
+    }
+  </script>
 </body>
 </html>
