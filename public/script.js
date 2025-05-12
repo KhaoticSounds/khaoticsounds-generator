@@ -1,10 +1,19 @@
+let usageCount = 0;
+let isPaidUser = false;
+
 document.getElementById('generate-btn').addEventListener('click', async () => {
   const prompt = document.getElementById('prompt').value.trim();
   const image = document.getElementById('cover-image');
   const spinner = document.getElementById('spinner');
   const saveBtn = document.getElementById('save-btn');
+  const paywall = document.getElementById('paywall');
 
   if (!prompt) return;
+
+  if (usageCount >= 1 && !isPaidUser) {
+    paywall.style.display = 'block';
+    return;
+  }
 
   image.style.display = 'none';
   spinner.style.display = 'block';
@@ -13,9 +22,7 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
   try {
     const response = await fetch('/api/generate', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt })
     });
 
@@ -24,7 +31,10 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
     if (data.imageUrl) {
       image.src = data.imageUrl;
       image.style.display = 'block';
-      saveBtn.style.display = 'inline-block';
+      if (isPaidUser) {
+        saveBtn.style.display = 'inline-block';
+      }
+      usageCount++;
     } else {
       image.alt = 'No image returned.';
     }
@@ -44,3 +54,13 @@ document.getElementById('save-btn').addEventListener('click', () => {
     link.click();
   }
 });
+
+// Optional: unlock manually if user clicks after payment
+window.addEventListener('message', (event) => {
+  if (event.data === 'unlock_paid') {
+    isPaidUser = true;
+    document.getElementById('save-btn').style.display = 'inline-block';
+    document.getElementById('paywall').style.display = 'none';
+  }
+});
+
