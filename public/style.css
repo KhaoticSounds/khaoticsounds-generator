@@ -35,7 +35,7 @@ html, body {
 #image-box {
   background: #1a1a1a;
   width: 100%;
-  height: 949px;
+  height: 500px;
   border: 2px dashed #444;
   display: flex;
   justify-content: center;
@@ -46,7 +46,7 @@ html, body {
 
 #cover-image {
   width: 1221px;
-  height: 949px;
+  height: 500px;
   object-fit: contain;
   display: block;
   opacity: 0.3;
