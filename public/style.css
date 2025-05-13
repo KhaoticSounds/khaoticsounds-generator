@@ -1,15 +1,12 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   background: #000;
   font-family: 'Segoe UI', sans-serif;
   color: #fff;
   overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .generator-container {
@@ -18,11 +15,14 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+  box-sizing: border-box;
+  padding: 0;
 }
 
 .generator-box {
   width: 100%;
   max-width: 720px;
+  height: auto;
   padding: 20px;
   background-color: rgba(17, 17, 17, 0.85);
   border: 2px solid #007bff;
@@ -30,12 +30,13 @@ html, body {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
 }
 
 #image-box {
+  background: #1a1a1a;
   width: 100%;
   height: 500px;
-  background: #1a1a1a;
   border: 2px dashed #444;
   display: flex;
   justify-content: center;
@@ -74,10 +75,11 @@ html, body {
   flex-wrap: wrap;
 }
 
-input#prompt {
+input#prompt,
+input#image-upload {
   flex: 1;
   padding: 10px;
-  font-size: 16px;
+  font-size: 14px;
   background-color: #222;
   color: #fff;
   border-radius: 5px;
@@ -132,5 +134,4 @@ button {
   border-radius: 6px;
   cursor: pointer;
 }
-
 
