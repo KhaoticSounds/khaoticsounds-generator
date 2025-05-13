@@ -3,66 +3,65 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100%;
-  background-color: #000;
-  color: #fff;
+  background: #0a0a0a;
   font-family: 'Segoe UI', sans-serif;
+  color: #fff;
   overflow: hidden;
 }
 
 .generator-container {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-sizing: border-box;
   padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 .generator-box {
-  width: 100%;
-  max-width: 100%;
-  padding: 20px;
   background-color: #111;
   border: 2px solid #007bff;
-  border-radius: 10px;
+  border-radius: 16px;
+  padding: 20px;
+  width: 100%;
+  max-width: 700px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: start;
 }
 
 #image-box {
-  background: #1a1a1a;
-  width: 1005px;
-  height: 478px;
-  border: 5px solid #007bff;
+  width: 645px;
+  height: 645px;
+  background-color: #1a1a1a;
+  border: 4px solid #007bff;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   position: relative;
-  margin: 0 auto 15px auto;
-  overflow: hidden;
+  margin-bottom: 15px;
 }
 
 #cover-image {
-  width: 645px;
-  height: 478px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   display: block;
-  opacity: 0.3;
+  opacity: 0.4;
 }
-
 
 .loading-spinner {
   position: absolute;
-  width: 50px;
-  height: 50px;
-  border: 6px solid #333;
-  border-top: 6px solid #007bff;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #444;
+  border-top: 4px solid #007bff;
   border-radius: 50%;
   animation: spin 1s linear infinite;
-  z-index: 2;
 }
 
 @keyframes spin {
@@ -72,32 +71,42 @@ html, body {
 
 .controls {
   width: 100%;
-  max-width: 700px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 input#prompt,
 input#image-upload {
-  flex: 1;
   padding: 10px;
   font-size: 14px;
   background-color: #222;
   color: #fff;
-  border-radius: 5px;
+  border-radius: 6px;
   border: 1px solid #444;
+  flex: 1;
+  min-width: 240px;
   outline: none;
 }
 
 button {
-  padding: 10px 16px;
-  font-size: 16px;
+  padding: 10px 20px;
+  font-size: 15px;
   background-color: #007bff;
-  color: white;
+  color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background-color: #005fcc;
+}
+
+#save-btn {
+  display: none;
 }
 
 .popup-paywall {
