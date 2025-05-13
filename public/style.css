@@ -75,11 +75,11 @@ html, body {
   justify-content: space-between;
   width: 500px;
   margin-top: 10px;
-  gap: 4px; /* tighter spacing */
+  gap: 4px;
 }
 
 #generate-btn,
-#advisor-toggle,
+#load-btn,
 #image-upload-label {
   flex: 1;
   padding: 10px;
@@ -152,5 +152,4 @@ html, body {
 .hidden {
   display: none;
 }
-
 
