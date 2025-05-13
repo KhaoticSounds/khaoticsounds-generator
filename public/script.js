@@ -1,26 +1,22 @@
-let loadHelp = false;
+let advisorOn = false;
 let generationCount = 0;
-let isOwner = true; // set to false for public use
-let paidUser = false;
+let isOwner = true; // Change to false for general users
 
 const generateBtn = document.getElementById("generate-btn");
-const loadBtn = document.getElementById("load-btn");
+const advisorToggle = document.getElementById("advisor-toggle");
 const saveBtn = document.getElementById("save-btn");
 const popup = document.getElementById("popup");
 const promptInput = document.getElementById("prompt-input");
 const loader = document.getElementById("loader");
 const outputImg = document.getElementById("generated-image");
 const placeholder = document.getElementById("placeholder-text");
-const progressBar = document.getElementById("progress-bar");
-const progressFill = document.querySelector("#progress-bar .bar");
 const imageUpload = document.getElementById("image-upload");
-const payConfirm = document.getElementById("confirm-pay");
 
 let uploadedImage = null;
 
-loadBtn.addEventListener("click", () => {
-  loadHelp = !loadHelp;
-  loadBtn.textContent = loadHelp ? "Load: On" : "Load";
+advisorToggle.addEventListener("click", () => {
+  advisorOn = !advisorOn;
+  advisorToggle.textContent = `Advisor: ${advisorOn ? "On" : "Off"}`;
 });
 
 imageUpload.addEventListener("change", (e) => {
@@ -35,7 +31,7 @@ imageUpload.addEventListener("change", (e) => {
 });
 
 generateBtn.addEventListener("click", async () => {
-  if (!isOwner && generationCount >= 1 && !paidUser) {
+  if (!isOwner && generationCount >= 1) {
     popup.classList.remove("hidden");
     return;
   }
@@ -44,10 +40,6 @@ generateBtn.addEventListener("click", async () => {
   if (!prompt) return;
 
   loader.classList.remove("hidden");
-  progressBar.classList.remove("hidden");
-  progressFill.style.width = "0%";
-  progressFill.style.animation = "load 3s linear forwards";
-
   outputImg.style.display = "none";
   placeholder.style.display = "none";
 
@@ -59,7 +51,7 @@ generateBtn.addEventListener("click", async () => {
       },
       body: JSON.stringify({
         prompt,
-        loadHelp,
+        advisor: advisorOn,
         image: uploadedImage
       })
     });
@@ -69,25 +61,17 @@ generateBtn.addEventListener("click", async () => {
     outputImg.style.display = "block";
 
     loader.classList.add("hidden");
-    progressBar.classList.add("hidden");
 
-    if (isOwner || paidUser) {
+    if (isOwner) {
       saveBtn.classList.remove("hidden");
     }
 
     generationCount++;
   } catch (err) {
     loader.classList.add("hidden");
-    progressBar.classList.add("hidden");
     placeholder.textContent = "Something went wrong. Try again.";
     placeholder.style.display = "block";
   }
-});
-
-payConfirm.addEventListener("click", () => {
-  paidUser = true;
-  popup.classList.add("hidden");
-  saveBtn.classList.remove("hidden");
 });
 
 saveBtn.addEventListener("click", () => {
