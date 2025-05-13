@@ -1,9 +1,10 @@
-let advisorOn = false;
+let loadHelp = false;
 let generationCount = 0;
-let isOwner = true; // Change to false for regular users
+let isOwner = true; // set to false for public use
+let paidUser = false;
 
 const generateBtn = document.getElementById("generate-btn");
-const advisorToggle = document.getElementById("advisor-toggle");
+const loadBtn = document.getElementById("load-btn");
 const saveBtn = document.getElementById("save-btn");
 const popup = document.getElementById("popup");
 const promptInput = document.getElementById("prompt-input");
@@ -13,12 +14,13 @@ const placeholder = document.getElementById("placeholder-text");
 const progressBar = document.getElementById("progress-bar");
 const progressFill = document.querySelector("#progress-bar .bar");
 const imageUpload = document.getElementById("image-upload");
+const payConfirm = document.getElementById("confirm-pay");
 
 let uploadedImage = null;
 
-advisorToggle.addEventListener("click", () => {
-  advisorOn = !advisorOn;
-  advisorToggle.textContent = `Advisor: ${advisorOn ? "On" : "Off"}`;
+loadBtn.addEventListener("click", () => {
+  loadHelp = !loadHelp;
+  loadBtn.textContent = loadHelp ? "Load: On" : "Load";
 });
 
 imageUpload.addEventListener("change", (e) => {
@@ -33,7 +35,7 @@ imageUpload.addEventListener("change", (e) => {
 });
 
 generateBtn.addEventListener("click", async () => {
-  if (!isOwner && generationCount >= 1) {
+  if (!isOwner && generationCount >= 1 && !paidUser) {
     popup.classList.remove("hidden");
     return;
   }
@@ -57,7 +59,7 @@ generateBtn.addEventListener("click", async () => {
       },
       body: JSON.stringify({
         prompt,
-        advisor: advisorOn,
+        loadHelp,
         image: uploadedImage
       })
     });
@@ -69,7 +71,7 @@ generateBtn.addEventListener("click", async () => {
     loader.classList.add("hidden");
     progressBar.classList.add("hidden");
 
-    if (isOwner) {
+    if (isOwner || paidUser) {
       saveBtn.classList.remove("hidden");
     }
 
@@ -82,6 +84,12 @@ generateBtn.addEventListener("click", async () => {
   }
 });
 
+payConfirm.addEventListener("click", () => {
+  paidUser = true;
+  popup.classList.add("hidden");
+  saveBtn.classList.remove("hidden");
+});
+
 saveBtn.addEventListener("click", () => {
   const link = document.createElement("a");
   link.href = outputImg.src;
@@ -90,3 +98,4 @@ saveBtn.addEventListener("click", () => {
   link.click();
   document.body.removeChild(link);
 });
+
