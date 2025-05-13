@@ -1,58 +1,66 @@
 let advisorOn = false;
 let generationCount = 0;
-const isOwner = true; // Set to false for regular users
+let isOwner = true; // Set this to false for normal users
 
-document.getElementById("advisor-btn").addEventListener("click", () => {
+const generateBtn = document.getElementById("generate-btn");
+const advisorToggle = document.getElementById("advisor-toggle");
+const saveBtn = document.getElementById("save-btn");
+const popup = document.getElementById("popup");
+const promptInput = document.getElementById("prompt-input");
+const loader = document.getElementById("loader");
+const outputImg = document.getElementById("generated-image");
+const placeholder = document.getElementById("placeholder-text");
+
+advisorToggle.addEventListener("click", () => {
   advisorOn = !advisorOn;
-  document.getElementById("advisor-btn").innerText = `Advisor: ${advisorOn ? "On" : "Off"}`;
+  advisorToggle.textContent = `Advisor: ${advisorOn ? "On" : "Off"}`;
 });
 
-document.getElementById("generate-btn").addEventListener("click", async () => {
-  const prompt = document.getElementById("prompt-input").value.trim();
-  const fileInput = document.getElementById("image-upload");
-  const file = fileInput.files[0];
-
-  if (!prompt) return alert("Please enter a description.");
-
+generateBtn.addEventListener("click", async () => {
   if (!isOwner && generationCount >= 1) {
-    document.getElementById("subscription-popup").style.display = "flex";
+    popup.classList.remove("hidden");
     return;
   }
 
-  document.getElementById("loading-spinner").style.display = "block";
-  document.getElementById("placeholder-text").style.display = "none";
-  document.getElementById("generated-image").style.display = "none";
+  const prompt = promptInput.value.trim();
+  if (!prompt) return;
 
-  const formData = new FormData();
-  formData.append("prompt", prompt);
-  if (file) formData.append("image", file);
+  loader.classList.remove("hidden");
+  outputImg.style.display = "none";
+  placeholder.style.display = "none";
 
-  const res = await fetch("/generate-image", {
-    method: "POST",
-    body: formData
-  });
+  try {
+    const response = await fetch("/generate-image", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ prompt, advisor: advisorOn })
+    });
 
-  const data = await res.json();
-  const imageUrl = data?.image_url;
+    const data = await response.json();
+    outputImg.src = data.image;
+    outputImg.style.display = "block";
+    loader.classList.add("hidden");
 
-  if (imageUrl) {
-    const img = document.getElementById("generated-image");
-    img.src = imageUrl;
-    img.style.display = "block";
+    if (isOwner) {
+      saveBtn.classList.remove("hidden");
+    }
+
+    generationCount++;
+  } catch (err) {
+    loader.classList.add("hidden");
+    placeholder.textContent = "Something went wrong. Try again.";
+    placeholder.style.display = "block";
   }
-
-  document.getElementById("loading-spinner").style.display = "none";
-  generationCount++;
-  if (isOwner) document.getElementById("save-btn").style.display = "block";
 });
 
-document.getElementById("save-btn").addEventListener("click", () => {
-  const image = document.getElementById("generated-image");
-  if (!image.src) return;
-
+saveBtn.addEventListener("click", () => {
   const link = document.createElement("a");
-  link.href = image.src;
-  link.download = "album_cover.png";
+  link.href = outputImg.src;
+  link.download = "album-cover.png";
+  document.body.appendChild(link);
   link.click();
+  document.body.removeChild(link);
 });
 
