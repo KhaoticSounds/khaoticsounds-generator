@@ -7,28 +7,33 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="generator-box">
-    <div id="image-box">
-      <div class="loading-spinner" id="spinner" style="display:none;"></div>
-      <img id="cover-image" src="" alt="Image will appear here..." />
+  <div class="generator-container">
+    <div class="generator-box">
+      <div id="image-box">
+        <div class="loading-spinner" id="spinner" style="display:none;"></div>
+        <img id="cover-image" src="" alt="Image will appear here..." />
+      </div>
+
+      <div class="controls">
+        <input id="prompt" type="text" placeholder="Describe your album cover idea..." />
+        <button id="generate-btn">Generate</button>
+        <button id="save-btn" style="display:none;">Save</button>
+      </div>
     </div>
 
-    <div class="controls">
-      <input id="prompt" type="text" placeholder="Describe your album cover idea..." />
-      <button id="generate-btn">Generate</button>
-      <button id="save-btn" style="display:none;">Save</button>
-    </div>
-
-    <div id="paywall" class="paywall" style="display:none;">
-      <img src="https://i.imgur.com/rlczPBe.png" alt="Unlock Access" class="cta-image"/>
-      <h2>🔥 Unlock Full Access</h2>
-      <p>You’ve used your free generation.<br>Subscribe to unlock Save and get unlimited access.</p>
-      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">
-        <button class="pay-btn">Subscribe for $5.99</button>
-      </a>
+    <!-- Pop-up CTA -->
+    <div id="popup-paywall" class="popup-paywall" style="display:none;">
+      <div class="popup-content">
+        <img src="https://i.imgur.com/rlczPBe.png" alt="Unlock Access" class="cta-image"/>
+        <h2>🔥 Unlock Full Access</h2>
+        <p>You’ve used your free generation.<br>Subscribe to unlock Save and get unlimited access.</p>
+        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">
+          <button class="pay-btn">Subscribe for $5.99</button>
+        </a>
+      </div>
     </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
+
