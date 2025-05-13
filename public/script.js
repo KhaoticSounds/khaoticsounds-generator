@@ -1,6 +1,6 @@
 let advisorOn = false;
 let generationCount = 0;
-let isOwner = true; // Set this to false for normal users
+let isOwner = true; // Set to false for normal users
 
 const generateBtn = document.getElementById("generate-btn");
 const advisorToggle = document.getElementById("advisor-toggle");
