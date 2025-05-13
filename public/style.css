@@ -34,9 +34,9 @@ html, body {
 
 #image-box {
   background: #1a1a1a;
-  width: 560px;
-  height: 560px;
-  border: 5px solid #007bff;
+  width: autopx;
+  height: autopx;
+  border: 2px solid #007bff;
   display: flex;
   justify-content: center;
   align-items: center;
