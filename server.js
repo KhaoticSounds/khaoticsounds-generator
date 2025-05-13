@@ -16,7 +16,7 @@ app.post("/generate-image", async (req, res) => {
 
   try {
     const fullPrompt = advisor
-      ? `Album cover concept: ${prompt}. Add extra detail and creative depth.`
+      ? `Album cover idea: ${prompt}. Add depth and visual creativity.`
       : prompt;
 
     const response = await fetch("https://api.openai.com/v1/images/generations", {
@@ -34,6 +34,11 @@ app.post("/generate-image", async (req, res) => {
     });
 
     const data = await response.json();
+
+    if (!data || !data.data || !data.data[0] || !data.data[0].url) {
+      return res.status(500).json({ error: "No image returned by OpenAI." });
+    }
+
     const imageUrl = data.data[0].url;
     res.json({ image: imageUrl });
   } catch (error) {
@@ -43,6 +48,7 @@ app.post("/generate-image", async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
+  console.log(`✅ Server running at http://localhost:${PORT}`);
 });
+
 
