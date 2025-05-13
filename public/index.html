@@ -13,18 +13,25 @@
       <img id="generated-image" src="" alt="Generated Album Cover" />
       <div id="loader" class="hidden"></div>
     </div>
+
     <div id="button-row">
       <button id="generate-btn">Generate</button>
       <button id="advisor-toggle">Advisor: Off</button>
+      <input type="file" id="image-upload" accept="image/*" />
     </div>
+
     <textarea id="prompt-input" placeholder="Describe your album cover… (e.g. futuristic city, neon lights, rap mood)"></textarea>
+
+    <div id="progress-bar" class="hidden"><div class="bar"></div></div>
+
     <button id="save-btn" class="hidden">Save Cover</button>
+
     <div id="popup" class="hidden">
       <p>Subscribe to unlock unlimited covers</p>
       <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
     </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
-
