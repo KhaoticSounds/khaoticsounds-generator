@@ -67,3 +67,4 @@ window.addEventListener('message', (event) => {
     document.getElementById('popup-paywall').style.display = 'none';
   }
 });
+
