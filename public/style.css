@@ -90,11 +90,10 @@ button {
   text-align: center;
 }
 
-#paywall h2 {
-  margin: 10px 0;
-  color: #00f0ff;
+#paywall {
+  margin-top: 10px;
+  padding: 15px;
 }
-
 .cta-image {
   width: 100%;
   max-width: 300px;
