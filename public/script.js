@@ -6,12 +6,12 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
   const image = document.getElementById('cover-image');
   const spinner = document.getElementById('spinner');
   const saveBtn = document.getElementById('save-btn');
-  const paywall = document.getElementById('paywall');
+  const popup = document.getElementById('popup-paywall');
 
   if (!prompt) return;
 
   if (usageCount >= 1 && !isPaidUser) {
-    paywall.style.display = 'block';
+    popup.style.display = 'flex';
     return;
   }
 
@@ -60,6 +60,7 @@ window.addEventListener('message', (event) => {
   if (event.data === 'unlock_paid') {
     isPaidUser = true;
     document.getElementById('save-btn').style.display = 'inline-block';
-    document.getElementById('paywall').style.display = 'none';
+    document.getElementById('popup-paywall').style.display = 'none';
   }
 });
+
