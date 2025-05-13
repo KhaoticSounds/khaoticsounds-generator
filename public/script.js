@@ -3,12 +3,13 @@ let isPaidUser = false;
 
 document.getElementById('generate-btn').addEventListener('click', async () => {
   const prompt = document.getElementById('prompt').value.trim();
+  const imageUpload = document.getElementById('image-upload').files[0];
   const image = document.getElementById('cover-image');
   const spinner = document.getElementById('spinner');
   const saveBtn = document.getElementById('save-btn');
   const popup = document.getElementById('popup-paywall');
 
-  if (!prompt) return;
+  if (!prompt && !imageUpload) return;
 
   if (usageCount >= 1 && !isPaidUser) {
     popup.style.display = 'flex';
@@ -19,11 +20,14 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
   spinner.style.display = 'block';
   saveBtn.style.display = 'none';
 
+  const formData = new FormData();
+  formData.append("prompt", prompt);
+  if (imageUpload) formData.append("image", imageUpload);
+
   try {
     const response = await fetch('/api/generate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
+      body: formData
     });
 
     const data = await response.json();
@@ -63,4 +67,3 @@ window.addEventListener('message', (event) => {
     document.getElementById('popup-paywall').style.display = 'none';
   }
 });
-
