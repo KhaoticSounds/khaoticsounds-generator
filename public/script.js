@@ -30,6 +30,7 @@ document.getElementById('generate-btn').addEventListener('click', async () => {
 
     if (data.imageUrl) {
       image.src = data.imageUrl;
+      image.style.opacity = 1;
       image.style.display = 'block';
       if (isPaidUser) {
         saveBtn.style.display = 'inline-block';
