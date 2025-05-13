@@ -2,40 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Test02 Album Cover Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Album Cover Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="generator-container">
+  <div id="generator-container">
     <div id="output-box">
-      <div id="placeholder-text">Your album cover will appear here.</div>
-      <img id="generated-image" src="" alt="" style="display:none;" />
-      <div class="loading-spinner" id="loading-spinner" style="display: none;"></div>
+      <span id="placeholder-text">Your album cover will appear here.</span>
+      <img id="generated-image" src="" alt="Generated Album Cover" />
+      <div id="loader" class="hidden"></div>
     </div>
-
-    <div class="button-row">
+    <div id="button-row">
       <button id="generate-btn">Generate</button>
-      <button id="advisor-btn">Advisor: Off</button>
-      <input type="file" id="image-upload" accept="image/*" />
+      <button id="advisor-toggle">Advisor: Off</button>
     </div>
-
     <textarea
       id="prompt-input"
       placeholder="Describe your album cover… (e.g. futuristic city, neon lights, rap mood)"
     ></textarea>
-
-    <button id="save-btn" style="display: none;">Save Cover</button>
-
-    <div id="subscription-popup" class="popup" style="display: none;">
-      <div class="popup-content">
-        <h3>Unlock Unlimited Album Covers</h3>
-        <p>Subscribe for unlimited generations and the ability to save your covers.</p>
-        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="subscribe-btn">Subscribe via PayPal</a>
-      </div>
+    <button id="save-btn" class="hidden">Save Cover</button>
+    <div id="popup" class="hidden">
+      <p>Subscribe to unlock unlimited covers</p>
+      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
     </div>
   </div>
   <script src="script.js"></script>
 </body>
 </html>
+
 
