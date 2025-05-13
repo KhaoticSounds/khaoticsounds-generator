@@ -1,70 +1,49 @@
-let usageCount = 0;
-let isPaidUser = false;
+const generateBtn = document.getElementById('generateBtn');
+const promptInput = document.getElementById('prompt');
+const output = document.getElementById('output');
+const bpmSlider = document.getElementById('bpmSlider');
+const bpmDisplay = document.getElementById('bpmDisplay');
+const moodSelect = document.getElementById('mood');
+const barsSelect = document.getElementById('bars');
+const spinner = document.getElementById('spinner');
+const copyBtn = document.getElementById('copyBtn');
 
-document.getElementById('generate-btn').addEventListener('click', async () => {
-  const prompt = document.getElementById('prompt').value.trim();
-  const imageUpload = document.getElementById('image-upload').files[0];
-  const image = document.getElementById('cover-image');
-  const spinner = document.getElementById('spinner');
-  const saveBtn = document.getElementById('save-btn');
-  const popup = document.getElementById('popup-paywall');
+bpmSlider.addEventListener('input', () => {
+  bpmDisplay.textContent = `BPM: ${bpmSlider.value}`;
+});
 
-  if (!prompt && !imageUpload) return;
+generateBtn.addEventListener('click', async () => {
+  const prompt = promptInput.value.trim();
+  const mood = moodSelect.value;
+  const bars = barsSelect.value;
+  const bpm = bpmSlider.value;
 
-  if (usageCount >= 1 && !isPaidUser) {
-    popup.style.display = 'flex';
-    return;
-  }
+  if (!prompt) return;
 
-  image.style.display = 'none';
   spinner.style.display = 'block';
-  saveBtn.style.display = 'none';
-
-  const formData = new FormData();
-  formData.append("prompt", prompt);
-  if (imageUpload) formData.append("image", imageUpload);
+  output.textContent = '';
 
   try {
-    const response = await fetch('/api/generate', {
+    const response = await fetch('/generate-lyrics', {
       method: 'POST',
-      body: formData
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: `Mood: ${mood || "None"}, Bars: ${bars || "None"}, BPM: ${bpm}. Topic: ${prompt}`,
+      }),
     });
 
     const data = await response.json();
-
-    if (data.imageUrl) {
-      image.src = data.imageUrl;
-      image.style.opacity = 1;
-      image.style.display = 'block';
-      if (isPaidUser) {
-        saveBtn.style.display = 'inline-block';
-      }
-      usageCount++;
-    } else {
-      image.alt = 'No image returned.';
-    }
+    output.textContent = data.lyrics || 'No lyrics generated.';
   } catch (err) {
-    console.error('Error:', err);
+    output.textContent = 'Error generating lyrics.';
   } finally {
     spinner.style.display = 'none';
   }
 });
 
-document.getElementById('save-btn').addEventListener('click', () => {
-  const img = document.getElementById('cover-image');
-  if (img.src) {
-    const link = document.createElement('a');
-    link.href = img.src;
-    link.download = 'album-cover.png';
-    link.click();
-  }
-});
-
-window.addEventListener('message', (event) => {
-  if (event.data === 'unlock_paid') {
-    isPaidUser = true;
-    document.getElementById('save-btn').style.display = 'inline-block';
-    document.getElementById('popup-paywall').style.display = 'none';
-  }
+copyBtn.addEventListener('click', () => {
+  navigator.clipboard.writeText(output.textContent);
 });
 
