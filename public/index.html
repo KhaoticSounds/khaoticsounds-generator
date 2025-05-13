@@ -3,49 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KhaoticSounds Lyrics Generator</title>
+  <title>Test02 Album Cover Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>KhaoticSounds Lyrics Generator</h1>
-
-    <div class="controls">
-      <select id="mood">
-        <option value="">None</option>
-        <option value="Happy">Happy</option>
-        <option value="Sad">Sad</option>
-        <option value="Angry">Angry</option>
-        <option value="Love">Love</option>
-        <option value="Turnt">Turnt</option>
-      </select>
-
-      <select id="bars">
-        <option value="">None</option>
-        <option value="8">8 Bars</option>
-        <option value="12">12 Bars</option>
-        <option value="16">16 Bars</option>
-      </select>
+  <div class="generator-container">
+    <div id="output-box">
+      <div id="placeholder-text">Your album cover will appear here.</div>
+      <img id="generated-image" src="" alt="" style="display:none;" />
+      <div class="loading-spinner" id="loading-spinner" style="display: none;"></div>
     </div>
 
-    <textarea id="prompt" placeholder="Enter a lyric topic or idea..."></textarea>
-
-    <button id="generateBtn">Generate Lyrics</button>
-
-    <div id="outputContainer">
-      <div id="output">Your lyrics will appear here.</div>
-      <div class="spinner" id="spinner" style="display: none;"></div>
+    <div class="button-row">
+      <button id="generate-btn">Generate</button>
+      <button id="advisor-btn">Advisor: Off</button>
+      <input type="file" id="image-upload" accept="image/*" />
     </div>
 
-    <div class="bpm-display" id="bpmDisplay">BPM: 120</div>
-    <input type="range" min="60" max="180" value="120" class="slider" id="bpmSlider">
-    <div class="tickmarks" id="tickmarks">
-      <span>60</span><span>90</span><span>120</span><span>150</span><span>180</span>
-    </div>
+    <textarea
+      id="prompt-input"
+      placeholder="Describe your album cover… (e.g. futuristic city, neon lights, rap mood)"
+    ></textarea>
 
-    <button id="copyBtn">Copy Lyrics</button>
+    <button id="save-btn" style="display: none;">Save Cover</button>
+
+    <div id="subscription-popup" class="popup" style="display: none;">
+      <div class="popup-content">
+        <h3>Unlock Unlimited Album Covers</h3>
+        <p>Subscribe for unlimited generations and the ability to save your covers.</p>
+        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="subscribe-btn">Subscribe via PayPal</a>
+      </div>
+    </div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
+
