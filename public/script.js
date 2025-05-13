@@ -1,6 +1,6 @@
 let advisorOn = false;
 let generationCount = 0;
-let isOwner = true; // Change to false for general users
+let isOwner = false; // ✅ Set to true if you're the owner
 
 const generateBtn = document.getElementById("generate-btn");
 const advisorToggle = document.getElementById("advisor-toggle");
@@ -31,6 +31,7 @@ imageUpload.addEventListener("change", (e) => {
 });
 
 generateBtn.addEventListener("click", async () => {
+  // 👇 Block second generation for non-owners
   if (!isOwner && generationCount >= 1) {
     popup.classList.remove("hidden");
     return;
@@ -59,9 +60,9 @@ generateBtn.addEventListener("click", async () => {
     const data = await response.json();
     outputImg.src = data.image;
     outputImg.style.display = "block";
-
     loader.classList.add("hidden");
 
+    // ✅ Only show save button for owner
     if (isOwner) {
       saveBtn.classList.remove("hidden");
     }
