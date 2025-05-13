@@ -1,20 +1,24 @@
+let advisorOn = false;
 let generationCount = 0;
-let isOwner = true; // Change to false for public use
-let paidUser = false;
+let isOwner = false; // ✅ Set to true for yourself
+let lastGenerationTime = null;
 
 const generateBtn = document.getElementById("generate-btn");
+const advisorToggle = document.getElementById("advisor-toggle");
 const saveBtn = document.getElementById("save-btn");
 const popup = document.getElementById("popup");
 const promptInput = document.getElementById("prompt-input");
 const loader = document.getElementById("loader");
 const outputImg = document.getElementById("generated-image");
 const placeholder = document.getElementById("placeholder-text");
-const progressBar = document.getElementById("progress-bar");
-const progressFill = document.querySelector("#progress-bar .bar");
 const imageUpload = document.getElementById("image-upload");
-const payConfirm = document.getElementById("confirm-pay");
 
 let uploadedImage = null;
+
+advisorToggle.addEventListener("click", () => {
+  advisorOn = !advisorOn;
+  advisorToggle.textContent = `Advisor: ${advisorOn ? "On" : "Off"}`;
+});
 
 imageUpload.addEventListener("change", (e) => {
   const file = e.target.files[0];
@@ -27,20 +31,30 @@ imageUpload.addEventListener("change", (e) => {
   }
 });
 
+function isCooldownActive() {
+  if (!lastGenerationTime) return false;
+  const now = Date.now();
+  const timePassed = now - lastGenerationTime;
+  return timePassed < 30 * 60 * 1000; // 30 minutes
+}
+
 generateBtn.addEventListener("click", async () => {
-  if (!isOwner && generationCount >= 1 && !paidUser) {
-    popup.classList.remove("hidden");
-    return;
+  // 🔒 For free users, check generation limit + cooldown
+  if (!isOwner) {
+    if (generationCount >= 1 && isCooldownActive()) {
+      popup.classList.remove("hidden");
+      return;
+    }
+
+    if (generationCount >= 1 && !isCooldownActive()) {
+      generationCount = 0; // Reset after 30 min
+    }
   }
 
   const prompt = promptInput.value.trim();
   if (!prompt) return;
 
   loader.classList.remove("hidden");
-  progressBar.classList.remove("hidden");
-  progressFill.style.width = "0%";
-  progressFill.style.animation = "load 3s linear forwards";
-
   outputImg.style.display = "none";
   placeholder.style.display = "none";
 
@@ -52,6 +66,7 @@ generateBtn.addEventListener("click", async () => {
       },
       body: JSON.stringify({
         prompt,
+        advisor: advisorOn,
         image: uploadedImage
       })
     });
@@ -61,24 +76,27 @@ generateBtn.addEventListener("click", async () => {
     outputImg.style.display = "block";
 
     loader.classList.add("hidden");
-    progressBar.classList.add("hidden");
 
-    if (isOwner || paidUser) {
+    if (isOwner) {
       saveBtn.classList.remove("hidden");
     }
 
     generationCount++;
+    if (!isOwner && generationCount === 1) {
+      lastGenerationTime = Date.now(); // Start cooldown
+    }
   } catch (err) {
     loader.classList.add("hidden");
-    progressBar.classList.add("hidden");
     placeholder.textContent = "Something went wrong. Try again.";
     placeholder.style.display = "block";
   }
 });
 
-// Simulated payment confirmation
-payConfirm.addEventListener("click", () => {
-  paidUser = true;
-  popup.classList.add("hidden");
-  saveBtn.classList.remove("hidden");
+saveBtn.addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = outputImg.src;
+  link.download = "album-cover.png";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 });
