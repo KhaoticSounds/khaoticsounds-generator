@@ -75,16 +75,24 @@ html, body {
   justify-content: space-between;
   width: 500px;
   margin-top: 10px;
+  gap: 4px; /* tighter spacing */
 }
 
-#generate-btn, #advisor-toggle {
-  width: 48%;
+#generate-btn,
+#advisor-toggle,
+#image-upload-label {
+  flex: 1;
   padding: 10px;
   font-size: 16px;
   border: 2px solid blue;
   background: blue;
   color: white;
+  text-align: center;
   cursor: pointer;
+}
+
+#image-upload {
+  display: none;
 }
 
 #prompt-input {
@@ -116,9 +124,33 @@ html, body {
   color: white;
   text-align: center;
   width: 300px;
+  z-index: 10;
+}
+
+#progress-bar {
+  width: 500px;
+  height: 10px;
+  background: #444;
+  margin-top: 10px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#progress-bar .bar {
+  width: 0%;
+  height: 100%;
+  background: blue;
+  animation: load 3s linear forwards;
+}
+
+@keyframes load {
+  to {
+    width: 100%;
+  }
 }
 
 .hidden {
   display: none;
 }
+
 
