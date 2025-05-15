@@ -56,4 +56,3 @@ window.addEventListener('DOMContentLoaded', () => {
   window.generationCount = 0;
 });
 
-
