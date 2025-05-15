@@ -2,19 +2,195 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KhaoticSounds Lyrics Generator</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KhaoticSounds Generator</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #0a0f1c;
+      font-family: Arial, sans-serif;
+      color: #00aaff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .generator-container {
+      width: 100%;
+      max-width: 420px;
+      border: 2px solid #00aaff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #00aaff;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .output-box {
+      background: white;
+      color: black;
+      border-radius: 6px;
+      height: 150px;
+      padding: 10px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+      white-space: pre-wrap;
+    }
+
+    .bpm-label {
+      text-align: left;
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+
+    .bpm-wrapper {
+      margin-bottom: 10px;
+    }
+
+    #bpm {
+      width: 100%;
+    }
+
+    .bpm-ticks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .dropdown-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .dropdown-block {
+      flex: 1;
+    }
+
+    label {
+      font-size: 14px;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 2px solid #00aaff;
+      background: transparent;
+      color: #00aaff;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 6px;
+      background: white;
+      color: black;
+      resize: none;
+      height: 50px;
+      margin-bottom: 10px;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      background: transparent;
+      color: #00aaff;
+      border: 2px solid #00aaff;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      color: #555;
+      border-color: #555;
+      cursor: not-allowed;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .popup-screen {
+      background: #111;
+      border: 2px solid #00aaff;
+      border-radius: 12px;
+      padding: 30px;
+      text-align: center;
+      color: white;
+      max-width: 300px;
+      box-shadow: 0 0 15px #00aaff;
+    }
+
+    .popup-screen h2 {
+      color: #00aaff;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .popup-screen p {
+      font-size: 14px;
+      margin-bottom: 15px;
+      color: #ccc;
+    }
+
+    .popup-screen a {
+      display: inline-block;
+      margin-top: 8px;
+      padding: 10px 20px;
+      color: white;
+      background: #00aaff;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 6px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
 </head>
 <body>
   <div class="generator-container">
     <h1>LYRICS GENERATOR</h1>
-    <div id="output" class="output-box">Your lyrics will appear here...</div>
+    <div class="output-box" id="output">Your lyrics will appear here...</div>
+
+    <div class="bpm-label">BPM</div>
     <div class="bpm-wrapper">
       <input type="range" min="60" max="180" value="120" id="bpm" />
-      <div class="bpm-ticks"><span>|</span><span>|</span><span>|</span><span>|</span><span>|</span><span>|</span><span>120</span></div>
-      <div id="bpm-value">120</div>
+      <div class="bpm-ticks">
+        <span>60</span><span>80</span><span>100</span><span>120</span><span>140</span><span>160</span><span>180</span>
+      </div>
     </div>
+
     <div class="dropdown-row">
       <div class="dropdown-block">
         <label for="bars">BARS</label>
@@ -39,10 +215,12 @@
         </select>
       </div>
     </div>
+
     <textarea id="prompt" placeholder="Type your idea here..."></textarea>
+
     <div class="button-row">
       <button id="generate">GENERATE LYRICS</button>
-      <button id="copy" disabled>COPY LYRIC</button>
+      <button id="copy" disabled>COPY LYRICS</button>
     </div>
   </div>
 
@@ -53,7 +231,5 @@
       <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
     </div>
   </div>
-
-  <script src="script.js"></script>
 </body>
 </html>
