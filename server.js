@@ -20,21 +20,28 @@ app.post('/generate-lyrics', async (req, res) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
         model: 'gpt-4',
         messages: [
-          { role: 'system', content: 'You are a rap lyric generator that creates catchy, punchy, and creative lyrics based on user input. Keep it within the selected bar count and reflect the mood and BPM style if mentioned.' },
-          { role: 'user', content: prompt },
+          {
+            role: 'system',
+            content: 'You are a rap lyric generator that creates catchy, punchy, and creative lyrics based on user input. Keep it within the selected bar count and reflect the mood and BPM style if mentioned.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
         ],
         temperature: 0.8,
-        max_tokens: 300,
+        max_tokens: 300
       })
     });
 
     const openaiData = await openaiRes.json();
     const lyrics = openaiData.choices?.[0]?.message?.content || '';
+
     res.json({ lyrics });
   } catch (error) {
     console.error('Error generating lyrics:', error);
@@ -42,4 +49,4 @@ app.post('/generate-lyrics', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
