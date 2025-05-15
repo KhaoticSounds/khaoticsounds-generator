@@ -3,43 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Album Cover Generator</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>KhaoticSounds Lyrics Generator</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div id="generator-container">
-    <div id="output-box">
-      <span id="placeholder-text">Your album cover will appear here.</span>
-      <img id="generated-image" src="" alt="Generated Album Cover" />
-      <div id="loader" class="hidden"></div>
+  <div class="generator-container">
+    <h1 class="title">LYRICS GENERATOR</h1>
+    <div class="output-box" id="outputBox">Your lyrics will appear here...</div>
+
+    <div class="bpm-section">
+      <input type="range" min="60" max="180" value="120" class="slider" id="bpmSlider">
+      <div class="tick-marks">
+        <span>60</span><span>80</span><span>100</span><span>120</span><span>140</span><span>160</span><span>180</span>
+      </div>
     </div>
 
-    <div id="button-row">
-      <button id="generate-btn">Generate</button>
-      <button id="advisor-toggle">Advisor: Off</button>
-      <label for="image-upload" id="image-upload-label">Upload</label>
-      <input type="file" id="image-upload" accept="image/*" />
+    <div class="dropdowns">
+      <div class="dropdown">
+        <label for="bars">BARS</label>
+        <select id="bars">
+          <option value="">None</option>
+          <option value="8">8 Bars</option>
+          <option value="16">16 Bars</option>
+        </select>
+      </div>
+      <div class="dropdown">
+        <label for="mood">MOOD</label>
+        <select id="mood">
+          <option value="">None</option>
+          <option value="Happy">Happy</option>
+          <option value="Dark">Dark</option>
+          <option value="Hype">Hype</option>
+        </select>
+      </div>
     </div>
 
-    <textarea id="prompt-input" placeholder="Describe your album cover… (e.g. futuristic city, neon lights, rap mood)"></textarea>
+    <textarea id="promptInput" placeholder="Type your idea..."></textarea>
 
-    <button id="save-btn" class="hidden">Save Cover</button>
+    <div class="button-row">
+      <button id="generateBtn">Generate Lyrics</button>
+      <button id="copyBtn" disabled>Copy Lyric</button>
+    </div>
 
-    <div id="popup" class="hidden">
-      <h2>🔥 Unlock Unlimited Covers</h2>
-      <ul>
-        <li>Unlimited AI Album Cover Generations</li>
-        <li>Save Your Artwork Anytime</li>
-        <li>Instant Access – No Wait Time</li>
-      </ul>
-      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="subscribe-btn">
-        Subscribe Now – $5.99/month
-      </a>
+    <div id="paypalPopup" class="popup hidden">
+      <p>Subscribe to unlock full access</p>
+      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="paypal-button">Subscribe for $5.99/month</a>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
-
