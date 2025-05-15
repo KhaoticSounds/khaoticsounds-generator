@@ -1,30 +1,29 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
-  background: #050d18 url('background.jpg') no-repeat center center fixed;
-  background-size: cover;
-  color: white;
+  background: #0a0f1c;
+  font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
 }
 
 .generator-container {
-  max-width: 600px;
-  width: 100%;
+  width: 90%;
+  max-width: 420px;
   padding: 20px;
-  margin: 40px auto;
   border: 2px solid #00aaff;
-  background: #0b1220;
-  box-shadow: 0 0 10px #00aaff;
+  background-color: #050d18;
   border-radius: 12px;
+  margin: 40px auto;
+  box-shadow: 0 0 10px #00aaff;
+  color: white;
   text-align: center;
 }
 
 h1 {
-  font-size: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   color: #00aaff;
+  font-size: 20px;
 }
 
 .output-box {
@@ -37,7 +36,7 @@ h1 {
   margin-bottom: 10px;
 }
 
-.bpm-wrapper {
+.bpm-section {
   margin: 10px 0;
 }
 
@@ -50,50 +49,62 @@ h1 {
   justify-content: space-between;
   font-size: 12px;
   color: #ccc;
-  margin-top: 4px;
+  margin-top: 5px;
 }
 
 #bpm-value {
-  margin-top: 4px;
-  font-size: 14px;
   color: #00aaff;
+  font-size: 14px;
+  margin-top: 4px;
 }
 
-.dropdowns {
+.dropdown-row {
   display: flex;
   justify-content: space-between;
   gap: 10px;
   margin: 10px 0;
 }
 
-.dropdowns select {
+.dropdown-block {
+  flex: 1;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 2px;
+  text-align: left;
+}
+
+select {
   width: 100%;
-  padding: 5px;
+  padding: 6px;
   border-radius: 4px;
 }
 
 textarea {
   width: 100%;
-  border-radius: 4px;
   padding: 10px;
-  margin-top: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
   resize: none;
+  background: white;
+  color: black;
 }
 
-.buttons {
+.button-row {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  gap: 10px;
 }
 
 button {
   flex: 1;
-  margin: 5px;
   padding: 10px;
   background: #00aaff;
-  color: white;
   border: none;
   border-radius: 6px;
+  color: white;
   cursor: pointer;
 }
 
@@ -103,14 +114,16 @@ button:disabled {
 }
 
 .popup {
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 15px;
-  background: #111;
   border: 2px solid #00aaff;
-  border-radius: 8px;
+  background: #111;
+  border-radius: 10px;
 }
 
 .popup a {
+  display: inline-block;
+  margin-top: 8px;
   color: #00aaff;
   font-weight: bold;
   text-decoration: none;
@@ -119,4 +132,5 @@ button:disabled {
 .hidden {
   display: none;
 }
+
 
