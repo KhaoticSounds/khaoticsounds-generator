@@ -6,23 +6,21 @@ window.addEventListener('DOMContentLoaded', () => {
   const bpmValue = document.getElementById('bpm-value');
   const ctaPopup = document.getElementById('cta-popup');
 
-  const isOwner = true; // Set to true only for your account
-  let isPaidUser = false; // Change to true after PayPal payment is confirmed
+  const isOwner = true;
+  let isPaidUser = false;
   let generationCount = 0;
 
-  // Display BPM value while sliding
   bpmSlider.addEventListener('input', () => {
     bpmValue.textContent = bpmSlider.value;
   });
 
-  // Generate lyrics
   generateBtn.addEventListener('click', async () => {
     const prompt = document.getElementById('prompt').value;
     const mood = document.getElementById('mood').value;
     const bars = document.getElementById('bars').value;
     const bpm = bpmSlider.value;
 
-    const input = `Mood: ${mood}, Bars: ${bars}, BPM: ${bpm}, Prompt: ${prompt}`;
+    const input = `Mood: ${mood}, Bars: ${bars}, Prompt: ${prompt}. Use a tempo that feels like ${bpm} BPM but do not mention BPM in the lyrics.`;
     outputBox.textContent = 'Loading...';
 
     try {
@@ -35,11 +33,9 @@ window.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
       outputBox.textContent = data.lyrics || 'Error: No lyrics generated';
 
-      // Reset BPM slider to default after generating
       bpmSlider.value = 120;
       bpmValue.textContent = 120;
 
-      // Track generations and show CTA popup if unpaid
       if (!isOwner && !isPaidUser) {
         generationCount++;
         if (generationCount > 1) {
@@ -50,17 +46,16 @@ window.addEventListener('DOMContentLoaded', () => {
           copyBtn.disabled = false;
         }
       }
-
     } catch (error) {
       outputBox.textContent = 'An error occurred while generating.';
       console.error('Fetch error:', error);
     }
   });
 
-  // Copy lyrics to clipboard
   copyBtn.addEventListener('click', () => {
     if (copyBtn.disabled) return;
     navigator.clipboard.writeText(outputBox.textContent);
   });
 });
+
 
