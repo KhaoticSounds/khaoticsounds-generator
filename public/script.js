@@ -6,6 +6,9 @@ window.addEventListener('DOMContentLoaded', () => {
   const bpmValue = document.getElementById('bpm-value');
   const ctaPopup = document.getElementById('cta-popup');
 
+  const isOwner = true; // <- Set to true only for you
+  let isPaidUser = false; // <- Change this to true after user pays
+
   bpmSlider.addEventListener('input', () => {
     bpmValue.textContent = bpmSlider.value;
   });
@@ -29,11 +32,15 @@ window.addEventListener('DOMContentLoaded', () => {
       const data = await response.json();
       outputBox.textContent = data.lyrics || 'Error: No lyrics generated';
 
-      if (++window.generationCount > 1) {
-        ctaPopup.classList.remove('hidden');
-        copyBtn.disabled = true;
-      } else {
-        copyBtn.disabled = false;
+      // Count and limit free users only
+      if (!isOwner && !isPaidUser) {
+        if (++window.generationCount > 1) {
+          ctaPopup.classList.remove('hidden');
+          copyBtn.disabled = true;
+          generateBtn.disabled = true;
+        } else {
+          copyBtn.disabled = false;
+        }
       }
     } catch (error) {
       outputBox.textContent = 'An error occurred';
