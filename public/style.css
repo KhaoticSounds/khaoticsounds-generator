@@ -1,46 +1,52 @@
-body {
+html, body {
   margin: 0;
   padding: 0;
   background: #0a0f1c;
   font-family: Arial, sans-serif;
+  color: #00aaff;
   display: flex;
   justify-content: center;
-  min-height: 100vh;
+  align-items: center;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .generator-container {
   width: 100%;
   max-width: 420px;
-  padding: 20px;
-  background: #050d18;
   border: 2px solid #00aaff;
   border-radius: 12px;
   box-shadow: 0 0 10px #00aaff;
-  text-align: center;
-  color: #00aaff;
-  margin-top: 30px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 h1 {
-  margin-bottom: 10px;
+  text-align: center;
   font-size: 24px;
+  margin-bottom: 10px;
   color: #00aaff;
 }
 
 .output-box {
   background: white;
   color: black;
-  padding: 10px;
-  height: 150px;
   border-radius: 6px;
-  margin-bottom: 10px;
+  height: 150px;
+  padding: 10px;
   overflow-y: auto;
+  margin-bottom: 10px;
   white-space: pre-wrap;
+}
+
+.bpm-label {
+  text-align: left;
   font-size: 14px;
+  margin-bottom: 5px;
 }
 
 .bpm-wrapper {
-  margin: 10px 0;
+  margin-bottom: 10px;
 }
 
 #bpm {
@@ -50,41 +56,33 @@ h1 {
 .bpm-ticks {
   display: flex;
   justify-content: space-between;
-  font-size: 16px;
-  color: #00aaff;
+  font-size: 12px;
   margin-top: 5px;
-}
-
-#bpm-value {
-  color: #00aaff;
-  font-size: 14px;
-  margin-top: 4px;
 }
 
 .dropdown-row {
   display: flex;
   justify-content: space-between;
-  margin: 10px 0;
   gap: 10px;
+  margin-bottom: 10px;
 }
 
 .dropdown-block {
   flex: 1;
-  text-align: left;
 }
 
 label {
-  display: block;
   font-size: 14px;
   margin-bottom: 4px;
+  display: block;
   color: #00aaff;
 }
 
 select {
   width: 100%;
   padding: 8px;
-  border: 2px solid #00aaff;
   border-radius: 6px;
+  border: 2px solid #00aaff;
   background: transparent;
   color: #00aaff;
   font-size: 16px;
@@ -93,13 +91,13 @@ select {
 textarea {
   width: 100%;
   padding: 10px;
-  margin: 10px 0;
   border-radius: 6px;
   background: white;
   color: black;
-  font-size: 14px;
   resize: none;
   height: 50px;
+  margin-bottom: 10px;
+  font-size: 14px;
 }
 
 .button-row {
@@ -116,63 +114,4 @@ button {
   border: 2px solid #00aaff;
   border-radius: 6px;
   font-weight: bold;
-  cursor: pointer;
-}
-
-button:disabled {
-  color: #555;
-  border-color: #555;
-  cursor: not-allowed;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.95);
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.popup-screen {
-  background: #111;
-  border: 2px solid #00aaff;
-  border-radius: 12px;
-  padding: 30px;
-  text-align: center;
-  color: white;
-  max-width: 300px;
-  box-shadow: 0 0 15px #00aaff;
-}
-
-.popup-screen h2 {
-  color: #00aaff;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.popup-screen p {
-  font-size: 14px;
-  margin-bottom: 15px;
-  color: #ccc;
-}
-
-.popup-screen a {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 10px 20px;
-  color: white;
-  background: #00aaff;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 6px;
-}
-
-.hidden {
-  display: none;
-}
-
+  cursor: pointer
