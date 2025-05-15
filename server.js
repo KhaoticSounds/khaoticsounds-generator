@@ -8,47 +8,40 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.post("/generate-image", async (req, res) => {
-  const { prompt, advisor, image } = req.body;
+app.post("/generate-lyrics", async (req, res) => {
+  const { prompt, bpm, bars, mood } = req.body;
+
+  const systemPrompt = `You are a creative rap lyrics generator. Write ${bars || "16"} bars in a ${mood || "flex"} mood at ${bpm} BPM.`;
 
   try {
-    const fullPrompt = advisor
-      ? `Album cover idea: ${prompt}. Add depth and visual creativity.`
-      : prompt;
-
-    const response = await fetch("https://api.openai.com/v1/images/generations", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: "dall-e-3",
-        prompt: fullPrompt,
-        n: 1,
-        size: "1024x1024"
+        model: "gpt-4",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: prompt }
+        ]
       })
     });
 
     const data = await response.json();
+    const lyrics = data.choices[0]?.message?.content || "No lyrics returned.";
 
-    if (!data || !data.data || !data.data[0] || !data.data[0].url) {
-      return res.status(500).json({ error: "No image returned by OpenAI." });
-    }
-
-    const imageUrl = data.data[0].url;
-    res.json({ image: imageUrl });
+    res.json({ lyrics });
   } catch (error) {
-    console.error("Image generation error:", error);
-    res.status(500).json({ error: "Image generation failed" });
+    console.error("Error:", error);
+    res.status(500).json({ error: "Failed to generate lyrics." });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`✅ Server running at http://localhost:${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
 
