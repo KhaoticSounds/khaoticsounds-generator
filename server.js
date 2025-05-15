@@ -44,4 +44,3 @@ app.post("/generate-lyrics", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`KhaoticSounds Generator is live on port ${PORT}`);
 });
-
