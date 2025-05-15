@@ -2,52 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KhaoticSounds Lyrics Generator</title>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="generator-container">
     <h1 class="title">LYRICS GENERATOR</h1>
-    <div class="output-box" id="outputBox">Your lyrics will appear here...</div>
 
-    <div class="bpm-section">
-      <input type="range" min="60" max="180" value="120" class="slider" id="bpmSlider">
-      <div class="tick-marks">
+    <div class="output-box" id="output">Your lyrics will appear here...</div>
+
+    <div id="bpm-container">
+      <input type="range" id="bpm" min="60" max="180" value="120" />
+      <label for="bpm">BPM: <span id="bpm-value">120</span></label>
+      <div class="bpm-ticks">
         <span>60</span><span>80</span><span>100</span><span>120</span><span>140</span><span>160</span><span>180</span>
       </div>
     </div>
 
     <div class="dropdowns">
-      <div class="dropdown">
-        <label for="bars">BARS</label>
-        <select id="bars">
-          <option value="">None</option>
-          <option value="8">8 Bars</option>
-          <option value="16">16 Bars</option>
-        </select>
-      </div>
-      <div class="dropdown">
-        <label for="mood">MOOD</label>
-        <select id="mood">
-          <option value="">None</option>
-          <option value="Happy">Happy</option>
-          <option value="Dark">Dark</option>
-          <option value="Hype">Hype</option>
-        </select>
-      </div>
+      <label for="bars">BARS</label>
+      <select id="bars">
+        <option value="None">None</option>
+        <option value="8">8 Bars</option>
+        <option value="8_hook">8 Bar Hook</option>
+        <option value="16">16 Bars</option>
+        <option value="32">32 Bars</option>
+      </select>
+
+      <label for="mood">MOOD</label>
+      <select id="mood">
+        <option value="None">None</option>
+        <option value="Aggressive">Aggressive</option>
+        <option value="Emotional">Emotional</option>
+        <option value="Hype">Hype</option>
+        <option value="Chill">Chill</option>
+      </select>
     </div>
 
-    <textarea id="promptInput" placeholder="Type your idea..."></textarea>
+    <textarea id="prompt" placeholder="Type your idea here..."></textarea>
 
     <div class="button-row">
-      <button id="generateBtn">Generate Lyrics</button>
-      <button id="copyBtn" disabled>Copy Lyric</button>
+      <button id="generate">Generate Lyrics</button>
+      <button id="copy" disabled>Copy Lyrics</button>
     </div>
 
-    <div id="paypalPopup" class="popup hidden">
+    <div class="cta">
       <p>Subscribe to unlock full access</p>
-      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="paypal-button">Subscribe for $5.99/month</a>
+      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe for $5.99/month</a>
+    </div>
+
+    <div id="cta-popup" class="hidden">
+      <div class="cta-box">
+        <h2>Unlock Unlimited Access</h2>
+        <p>Subscribe for $5.99/month to unlock the Copy button and unlimited generations.</p>
+        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
+      </div>
     </div>
   </div>
 
