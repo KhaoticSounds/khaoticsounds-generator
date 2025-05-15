@@ -1,102 +1,60 @@
-let advisorOn = false;
-let generationCount = 0;
-let isOwner = false; // ✅ Set to true for yourself
-let lastGenerationTime = null;
+let hasGeneratedOnce = false;
+let isPaid = false;
 
-const generateBtn = document.getElementById("generate-btn");
-const advisorToggle = document.getElementById("advisor-toggle");
-const saveBtn = document.getElementById("save-btn");
-const popup = document.getElementById("popup");
-const promptInput = document.getElementById("prompt-input");
-const loader = document.getElementById("loader");
-const outputImg = document.getElementById("generated-image");
-const placeholder = document.getElementById("placeholder-text");
-const imageUpload = document.getElementById("image-upload");
-
-let uploadedImage = null;
-
-advisorToggle.addEventListener("click", () => {
-  advisorOn = !advisorOn;
-  advisorToggle.textContent = `Advisor: ${advisorOn ? "On" : "Off"}`;
-});
-
-imageUpload.addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      uploadedImage = reader.result;
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
-function isCooldownActive() {
-  if (!lastGenerationTime) return false;
-  const now = Date.now();
-  const timePassed = now - lastGenerationTime;
-  return timePassed < 30 * 60 * 1000; // 30 minutes
-}
+const generateBtn = document.getElementById("generateBtn");
+const copyBtn = document.getElementById("copyBtn");
+const promptInput = document.getElementById("promptInput");
+const outputBox = document.getElementById("outputBox");
+const bpmSlider = document.getElementById("bpmSlider");
+const barsSelect = document.getElementById("bars");
+const moodSelect = document.getElementById("mood");
+const paypalPopup = document.getElementById("paypalPopup");
 
 generateBtn.addEventListener("click", async () => {
-  // 🔒 For free users, check generation limit + cooldown
-  if (!isOwner) {
-    if (generationCount >= 1 && isCooldownActive()) {
-      popup.classList.remove("hidden");
-      return;
-    }
-
-    if (generationCount >= 1 && !isCooldownActive()) {
-      generationCount = 0; // Reset after 30 min
-    }
+  if (hasGeneratedOnce && !isPaid) {
+    paypalPopup.classList.remove("hidden");
+    return;
   }
 
   const prompt = promptInput.value.trim();
-  if (!prompt) return;
+  const bpm = bpmSlider.value;
+  const bars = barsSelect.value;
+  const mood = moodSelect.value;
 
-  loader.classList.remove("hidden");
-  outputImg.style.display = "none";
-  placeholder.style.display = "none";
+  if (!prompt) {
+    outputBox.textContent = "Please enter a prompt.";
+    return;
+  }
+
+  outputBox.textContent = "Generating lyrics...";
 
   try {
-    const response = await fetch("/generate-image", {
+    const response = await fetch("/generate-lyrics", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        prompt,
-        advisor: advisorOn,
-        image: uploadedImage
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt, bpm, bars, mood }),
     });
 
     const data = await response.json();
-    outputImg.src = data.image;
-    outputImg.style.display = "block";
+    outputBox.textContent = data.lyrics;
+    hasGeneratedOnce = true;
 
-    loader.classList.add("hidden");
-
-    if (isOwner) {
-      saveBtn.classList.remove("hidden");
+    if (isPaid) {
+      copyBtn.disabled = false;
     }
 
-    generationCount++;
-    if (!isOwner && generationCount === 1) {
-      lastGenerationTime = Date.now(); // Start cooldown
-    }
   } catch (err) {
-    loader.classList.add("hidden");
-    placeholder.textContent = "Something went wrong. Try again.";
-    placeholder.style.display = "block";
+    outputBox.textContent = "Something went wrong. Try again.";
+    console.error(err);
   }
 });
 
-saveBtn.addEventListener("click", () => {
-  const link = document.createElement("a");
-  link.href = outputImg.src;
-  link.download = "album-cover.png";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+copyBtn.addEventListener("click", () => {
+  const text = outputBox.textContent;
+  navigator.clipboard.writeText(text);
+  copyBtn.textContent = "Copied!";
+  setTimeout(() => {
+    copyBtn.textContent = "Copy Lyric";
+  }, 1500);
 });
+
