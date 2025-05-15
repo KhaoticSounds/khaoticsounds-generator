@@ -37,6 +37,7 @@ h1 {
   overflow-y: auto;
   margin-bottom: 10px;
   white-space: pre-wrap;
+  font-size: 14px;
 }
 
 .bpm-label {
@@ -114,4 +115,65 @@ button {
   border: 2px solid #00aaff;
   border-radius: 6px;
   font-weight: bold;
-  cursor: pointer
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:disabled {
+  color: #555;
+  border-color: #555;
+  cursor: not-allowed;
+}
+
+/* 🔒 Overlay CTA */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup-screen {
+  background: #111;
+  border: 2px solid #00aaff;
+  border-radius: 12px;
+  padding: 30px;
+  text-align: center;
+  color: white;
+  max-width: 300px;
+  box-shadow: 0 0 15px #00aaff;
+}
+
+.popup-screen h2 {
+  color: #00aaff;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.popup-screen p {
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: #ccc;
+}
+
+.popup-screen a {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 10px 20px;
+  color: white;
+  background: #00aaff;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.hidden {
+  display: none;
+}
+
