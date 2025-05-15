@@ -17,7 +17,6 @@
       height: 100vh;
       overflow: hidden;
     }
-
     .generator-container {
       width: 100%;
       max-width: 420px;
@@ -27,14 +26,11 @@
       padding: 20px;
       box-sizing: border-box;
     }
-
     h1 {
       text-align: center;
       font-size: 24px;
       margin-bottom: 10px;
-      color: #00aaff;
     }
-
     .output-box {
       background: white;
       color: black;
@@ -46,46 +42,38 @@
       white-space: pre-wrap;
       font-size: 14px;
     }
-
     .bpm-label {
       text-align: left;
       font-size: 14px;
       margin-bottom: 5px;
     }
-
     .bpm-wrapper {
       margin-bottom: 10px;
     }
-
     #bpm {
       width: 100%;
     }
-
     .bpm-ticks {
       display: flex;
       justify-content: space-between;
       font-size: 12px;
       margin-top: 5px;
     }
-
     .dropdown-row {
       display: flex;
       justify-content: space-between;
       gap: 10px;
       margin-bottom: 10px;
     }
-
     .dropdown-block {
       flex: 1;
     }
-
     label {
       font-size: 14px;
       margin-bottom: 4px;
       display: block;
       color: #00aaff;
     }
-
     select {
       width: 100%;
       padding: 8px;
@@ -95,7 +83,6 @@
       color: #00aaff;
       font-size: 16px;
     }
-
     textarea {
       width: 100%;
       padding: 10px;
@@ -107,13 +94,11 @@
       margin-bottom: 10px;
       font-size: 14px;
     }
-
     .button-row {
       display: flex;
       justify-content: space-between;
       gap: 10px;
     }
-
     button {
       flex: 1;
       padding: 12px;
@@ -125,26 +110,23 @@
       cursor: pointer;
       font-size: 14px;
     }
-
     button:disabled {
       color: #555;
       border-color: #555;
       cursor: not-allowed;
     }
-
     .overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.95);
       z-index: 9999;
       display: flex;
       justify-content: center;
       align-items: center;
     }
-
     .popup-screen {
       background: #111;
       border: 2px solid #00aaff;
@@ -155,19 +137,16 @@
       max-width: 300px;
       box-shadow: 0 0 15px #00aaff;
     }
-
     .popup-screen h2 {
       color: #00aaff;
       font-size: 20px;
       margin-bottom: 10px;
     }
-
     .popup-screen p {
       font-size: 14px;
       margin-bottom: 15px;
       color: #ccc;
     }
-
     .popup-screen a {
       display: inline-block;
       margin-top: 8px;
@@ -178,7 +157,6 @@
       font-weight: bold;
       border-radius: 6px;
     }
-
     .hidden {
       display: none;
     }
@@ -188,7 +166,6 @@
   <div class="generator-container">
     <h1>LYRICS GENERATOR</h1>
     <div class="output-box" id="output">Your lyrics will appear here...</div>
-
     <div class="bpm-label">BPM</div>
     <div class="bpm-wrapper">
       <input type="range" min="60" max="180" value="120" id="bpm" />
@@ -196,7 +173,6 @@
         <span>60</span><span>80</span><span>100</span><span>120</span><span>140</span><span>160</span><span>180</span>
       </div>
     </div>
-
     <div class="dropdown-row">
       <div class="dropdown-block">
         <label for="bars">BARS</label>
@@ -221,16 +197,13 @@
         </select>
       </div>
     </div>
-
     <textarea id="prompt" placeholder="Type your idea here..."></textarea>
-
     <div class="button-row">
       <button id="generate">GENERATE LYRICS</button>
       <button id="copy" disabled>COPY LYRICS</button>
     </div>
   </div>
 
-  <!-- CALL TO ACTION OVERLAY -->
   <div id="cta-popup" class="overlay hidden">
     <div class="popup-screen">
       <h2>🔥 Subscribe to Unlock</h2>
@@ -248,21 +221,7 @@
 
     const isOwner = true;
     let isPaidUser = false;
-    const COOLDOWN_MINUTES = 30;
-
-    function getCooldownEnd() {
-      return localStorage.getItem('cooldownEnd');
-    }
-
-    function isInCooldown() {
-      const end = getCooldownEnd();
-      return end && new Date().getTime() < parseInt(end);
-    }
-
-    function startCooldown() {
-      const cooldownEnd = new Date().getTime() + COOLDOWN_MINUTES * 60000;
-      localStorage.setItem('cooldownEnd', cooldownEnd);
-    }
+    let generationCount = parseInt(localStorage.getItem('generationCount') || '0');
 
     function lockGenerator() {
       ctaPopup.classList.remove('hidden');
@@ -282,11 +241,6 @@
       const bars = document.getElementById('bars').value;
       const bpm = bpmSlider.value;
 
-      if (!isOwner && !isPaidUser && isInCooldown()) {
-        lockGenerator();
-        return;
-      }
-
       const input = `Mood: ${mood}, Bars: ${bars}, Prompt: ${prompt}. Use a tempo that feels like ${bpm} BPM but do not mention BPM in the lyrics.`;
       outputBox.textContent = 'Loading...';
 
@@ -302,31 +256,37 @@
         bpmSlider.value = 120;
 
         if (!isOwner && !isPaidUser) {
-          startCooldown();
-          lockGenerator();
+          generationCount++;
+          localStorage.setItem('generationCount', generationCount);
+          if (generationCount >= 1) {
+            lockGenerator();
+          } else {
+            copyBtn.disabled = false;
+          }
         } else {
           copyBtn.disabled = false;
         }
+
       } catch (err) {
-        outputBox.textContent = 'An error occurred while generating.';
+        outputBox.textContent = 'An error occurred.';
         console.error(err);
       }
     });
 
     copyBtn.addEventListener('click', () => {
-      if (!copyBtn.disabled) {
+      try {
         navigator.clipboard.writeText(outputBox.textContent);
+      } catch (err) {
+        alert("Copy failed. Please select and copy manually:\n\n" + outputBox.textContent);
       }
     });
 
-    if (!isOwner && !isPaidUser && isInCooldown()) {
+    if (!isOwner && !isPaidUser && generationCount >= 1) {
       lockGenerator();
     } else if (!isPaidUser) {
       unlockGenerator();
     }
   </script>
 </body>
-</html>
-
 </html>
 
