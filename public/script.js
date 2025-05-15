@@ -8,7 +8,35 @@ window.addEventListener('DOMContentLoaded', () => {
 
   const isOwner = true;
   let isPaidUser = false;
-  let generationCount = 0;
+
+  const COOLDOWN_MINUTES = 30;
+
+  function getCooldownEnd() {
+    return localStorage.getItem('cooldownEnd');
+  }
+
+  function isInCooldown() {
+    const end = getCooldownEnd();
+    if (!end) return false;
+    return new Date().getTime() < parseInt(end);
+  }
+
+  function startCooldown() {
+    const cooldownEnd = new Date().getTime() + COOLDOWN_MINUTES * 60 * 1000;
+    localStorage.setItem('cooldownEnd', cooldownEnd);
+  }
+
+  function lockGenerator() {
+    ctaPopup.classList.remove('hidden');
+    copyBtn.disabled = true;
+    generateBtn.disabled = true;
+  }
+
+  function unlockGenerator() {
+    ctaPopup.classList.add('hidden');
+    copyBtn.disabled = false;
+    generateBtn.disabled = false;
+  }
 
   bpmSlider.addEventListener('input', () => {
     bpmValue.textContent = bpmSlider.value;
@@ -19,6 +47,11 @@ window.addEventListener('DOMContentLoaded', () => {
     const mood = document.getElementById('mood').value;
     const bars = document.getElementById('bars').value;
     const bpm = bpmSlider.value;
+
+    if (!isOwner && !isPaidUser && isInCooldown()) {
+      lockGenerator();
+      return;
+    }
 
     const input = `Mood: ${mood}, Bars: ${bars}, Prompt: ${prompt}. Use a tempo that feels like ${bpm} BPM but do not mention BPM in the lyrics.`;
     outputBox.textContent = 'Loading...';
@@ -37,15 +70,12 @@ window.addEventListener('DOMContentLoaded', () => {
       bpmValue.textContent = 120;
 
       if (!isOwner && !isPaidUser) {
-        generationCount++;
-        if (generationCount > 1) {
-          ctaPopup.classList.remove('hidden');
-          copyBtn.disabled = true;
-          generateBtn.disabled = true;
-        } else {
-          copyBtn.disabled = false;
-        }
+        startCooldown();
+        lockGenerator();
+      } else {
+        copyBtn.disabled = false;
       }
+
     } catch (error) {
       outputBox.textContent = 'An error occurred while generating.';
       console.error('Fetch error:', error);
@@ -56,4 +86,10 @@ window.addEventListener('DOMContentLoaded', () => {
     if (copyBtn.disabled) return;
     navigator.clipboard.writeText(outputBox.textContent);
   });
+
+  if (!isOwner && !isPaidUser && isInCooldown()) {
+    lockGenerator();
+  } else if (!isPaidUser) {
+    unlockGenerator();
+  }
 });
