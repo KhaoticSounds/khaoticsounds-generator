@@ -1,60 +1,50 @@
-let hasGeneratedOnce = false;
-let isPaid = false;
+// script.js
+let generationCount = 0;
+const generateBtn = document.getElementById('generate');
+const copyBtn = document.getElementById('copy');
+const outputBox = document.getElementById('output');
+const bpmSlider = document.getElementById('bpm');
+const bpmValue = document.getElementById('bpm-value');
+const ctaPopup = document.getElementById('cta-popup');
 
-const generateBtn = document.getElementById("generateBtn");
-const copyBtn = document.getElementById("copyBtn");
-const promptInput = document.getElementById("promptInput");
-const outputBox = document.getElementById("outputBox");
-const bpmSlider = document.getElementById("bpmSlider");
-const barsSelect = document.getElementById("bars");
-const moodSelect = document.getElementById("mood");
-const paypalPopup = document.getElementById("paypalPopup");
+bpmSlider.addEventListener('input', () => {
+  bpmValue.textContent = bpmSlider.value;
+});
 
-generateBtn.addEventListener("click", async () => {
-  if (hasGeneratedOnce && !isPaid) {
-    paypalPopup.classList.remove("hidden");
-    return;
-  }
-
-  const prompt = promptInput.value.trim();
+generateBtn.addEventListener('click', async () => {
+  const prompt = document.getElementById('prompt').value;
+  const mood = document.getElementById('mood').value;
+  const bars = document.getElementById('bars').value;
   const bpm = bpmSlider.value;
-  const bars = barsSelect.value;
-  const mood = moodSelect.value;
 
-  if (!prompt) {
-    outputBox.textContent = "Please enter a prompt.";
-    return;
-  }
+  const input = `Mood: ${mood}, Bars: ${bars}, BPM: ${bpm}, Prompt: ${prompt}`;
 
-  outputBox.textContent = "Generating lyrics...";
+  outputBox.textContent = 'Loading...';
 
   try {
-    const response = await fetch("/generate-lyrics", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, bpm, bars, mood }),
+    const response = await fetch('/generate-lyrics', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: input })
     });
 
     const data = await response.json();
-    outputBox.textContent = data.lyrics;
-    hasGeneratedOnce = true;
+    outputBox.textContent = data.lyrics || 'Error: No lyrics generated';
 
-    if (isPaid) {
+    generationCount++;
+    if (generationCount > 1) {
+      ctaPopup.classList.remove('hidden');
+      copyBtn.disabled = true;
+    } else {
       copyBtn.disabled = false;
     }
-
-  } catch (err) {
-    outputBox.textContent = "Something went wrong. Try again.";
-    console.error(err);
+  } catch (error) {
+    outputBox.textContent = 'An error occurred';
   }
 });
 
-copyBtn.addEventListener("click", () => {
-  const text = outputBox.textContent;
-  navigator.clipboard.writeText(text);
-  copyBtn.textContent = "Copied!";
-  setTimeout(() => {
-    copyBtn.textContent = "Copy Lyric";
-  }, 1500);
+copyBtn.addEventListener('click', () => {
+  if (copyBtn.disabled) return;
+  navigator.clipboard.writeText(outputBox.textContent);
 });
 
