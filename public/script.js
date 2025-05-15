@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const bars = document.getElementById('bars').value;
     const bpm = bpmSlider.value;
 
-    const input = `Mood: ${mood}, Bars: ${bars}, Prompt: ${prompt}. Use a tempo that feels like ${bpm} BPM but do not mention BPM in the lyrics.`;
+    const input = `Mood: ${mood}, Bars: ${bars}, Prompt: ${prompt}. Use a tempo that feels like ${bpm} BPM but don't mention BPM in the lyrics.`;
     outputBox.textContent = 'Loading...';
 
     try {
