@@ -9,17 +9,12 @@
 <body>
   <div class="generator-container">
     <h1>LYRICS GENERATOR</h1>
-
     <div id="output" class="output-box">Your lyrics will appear here...</div>
-
     <div class="bpm-wrapper">
       <input type="range" min="60" max="180" value="120" id="bpm" />
-      <div class="bpm-ticks">
-        <span>|</span><span>|</span><span>|</span><span>|</span><span>|</span><span>|</span><span>120</span>
-      </div>
+      <div class="bpm-ticks"><span>|</span><span>|</span><span>|</span><span>|</span><span>|</span><span>|</span><span>120</span></div>
       <div id="bpm-value">120</div>
     </div>
-
     <div class="dropdown-row">
       <div class="dropdown-block">
         <label for="bars">BARS</label>
@@ -44,16 +39,13 @@
         </select>
       </div>
     </div>
-
     <textarea id="prompt" placeholder="Type your idea here..."></textarea>
-
     <div class="button-row">
       <button id="generate">GENERATE LYRICS</button>
       <button id="copy" disabled>COPY LYRIC</button>
     </div>
   </div>
 
-  <!-- Full-screen call-to-action popup -->
   <div id="cta-popup" class="overlay hidden">
     <div class="popup-screen">
       <h2>🔥 Subscribe to Unlock</h2>
@@ -65,4 +57,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
