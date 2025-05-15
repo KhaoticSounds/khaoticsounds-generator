@@ -1,59 +1,45 @@
-window.addEventListener('DOMContentLoaded', () => {
-  const generateBtn = document.getElementById('generate');
-  const copyBtn = document.getElementById('copy');
-  const outputBox = document.getElementById('output');
-  const bpmSlider = document.getElementById('bpm');
-  const bpmValue = document.getElementById('bpm-value');
-  const ctaPopup = document.getElementById('cta-popup');
+async function generateCover() {
+  const prompt = document.getElementById("prompt").value.trim();
+  const image = document.getElementById("cover-output");
+  const spinner = document.getElementById("loading-spinner");
+  const saveBtn = document.getElementById("save-btn");
 
-  const isOwner = true;
-  let isPaidUser = false;
-  let generationCount = 0;
+  image.src = "";
+  image.alt = "Generating...";
+  spinner.style.display = "block";
+  saveBtn.style.display = "none";
 
-  bpmSlider.addEventListener('input', () => {
-    bpmValue.textContent = bpmSlider.value;
-  });
+  try {
+    const response = await fetch("/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
 
-  generateBtn.addEventListener('click', async () => {
-    const prompt = document.getElementById('prompt').value;
-    const mood = document.getElementById('mood').value;
-    const bars = document.getElementById('bars').value;
-    const bpm = bpmSlider.value;
-
-    const input = `Mood: ${mood}, Bars: ${bars}, Prompt: ${prompt}. Use a tempo that feels like ${bpm} BPM but don't mention BPM in the lyrics.`;
-    outputBox.textContent = 'Loading...';
-
-    try {
-      const response = await fetch('/generate-lyrics', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: input })
-      });
-
-      const data = await response.json();
-      outputBox.textContent = data.lyrics || 'Error: No lyrics generated';
-
-      bpmSlider.value = 120;
-      bpmValue.textContent = 120;
-
-      if (!isOwner && !isPaidUser) {
-        generationCount++;
-        if (generationCount > 1) {
-          ctaPopup.classList.remove('hidden');
-          copyBtn.disabled = true;
-          generateBtn.disabled = true;
-        } else {
-          copyBtn.disabled = false;
-        }
-      }
-    } catch (error) {
-      outputBox.textContent = 'An error occurred while generating.';
-      console.error('Fetch error:', error);
+    const data = await response.json();
+    if (data && data.imageUrl) {
+      image.src = data.imageUrl;
+      image.onload = () => {
+        spinner.style.display = "none";
+        saveBtn.style.display = "inline-block";
+      };
+    } else {
+      throw new Error("No image URL received.");
     }
-  });
+  } catch (err) {
+    console.error(err);
+    spinner.style.display = "none";
+    image.alt = "Failed to load the image.";
+  }
+}
 
-  copyBtn.addEventListener('click', () => {
-    if (copyBtn.disabled) return;
-    navigator.clipboard.writeText(outputBox.textContent);
-  });
-});
+function saveImage() {
+  const img = document.getElementById("cover-output");
+  if (!img.src.startsWith("data:image")) return;
+
+  const link = document.createElement("a");
+  link.href = img.src;
+  link.download = "album_cover.png";
+  link.click();
+}
+
