@@ -32,6 +32,7 @@
       text-align: center;
       font-size: 24px;
       margin-bottom: 10px;
+      color: #00aaff;
     }
 
     .output-box {
@@ -81,6 +82,7 @@
       font-size: 14px;
       margin-bottom: 4px;
       display: block;
+      color: #00aaff;
     }
 
     select {
@@ -90,6 +92,7 @@
       border: 2px solid #00aaff;
       background: transparent;
       color: #00aaff;
+      font-size: 16px;
     }
 
     textarea {
@@ -101,6 +104,7 @@
       resize: none;
       height: 50px;
       margin-bottom: 10px;
+      font-size: 14px;
     }
 
     .button-row {
@@ -118,6 +122,7 @@
       border-radius: 6px;
       font-weight: bold;
       cursor: pointer;
+      font-size: 14px;
     }
 
     button:disabled {
@@ -231,5 +236,93 @@
       <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
     </div>
   </div>
+
+  <script>
+    const generateBtn = document.getElementById('generate');
+    const copyBtn = document.getElementById('copy');
+    const outputBox = document.getElementById('output');
+    const bpmSlider = document.getElementById('bpm');
+    const ctaPopup = document.getElementById('cta-popup');
+
+    const isOwner = true;
+    let isPaidUser = false;
+    const COOLDOWN_MINUTES = 30;
+
+    function getCooldownEnd() {
+      return localStorage.getItem('cooldownEnd');
+    }
+
+    function isInCooldown() {
+      const end = getCooldownEnd();
+      return end && new Date().getTime() < parseInt(end);
+    }
+
+    function startCooldown() {
+      const cooldownEnd = new Date().getTime() + COOLDOWN_MINUTES * 60000;
+      localStorage.setItem('cooldownEnd', cooldownEnd);
+    }
+
+    function lockGenerator() {
+      ctaPopup.classList.remove('hidden');
+      copyBtn.disabled = true;
+      generateBtn.disabled = true;
+    }
+
+    function unlockGenerator() {
+      ctaPopup.classList.add('hidden');
+      copyBtn.disabled = false;
+      generateBtn.disabled = false;
+    }
+
+    generateBtn.addEventListener('click', async () => {
+      const prompt = document.getElementById('prompt').value;
+      const mood = document.getElementById('mood').value;
+      const bars = document.getElementById('bars').value;
+      const bpm = bpmSlider.value;
+
+      if (!isOwner && !isPaidUser && isInCooldown()) {
+        lockGenerator();
+        return;
+      }
+
+      const input = `Mood: ${mood}, Bars: ${bars}, Prompt: ${prompt}. Use a tempo that feels like ${bpm} BPM but do not mention BPM in the lyrics.`;
+      outputBox.textContent = 'Loading...';
+
+      try {
+        const response = await fetch('https://khaoticsounds-generator-production-775c.up.railway.app/generate-lyrics', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: input })
+        });
+
+        const data = await response.json();
+        outputBox.textContent = data.lyrics || 'Error: No lyrics generated';
+        bpmSlider.value = 120;
+
+        if (!isOwner && !isPaidUser) {
+          startCooldown();
+          lockGenerator();
+        } else {
+          copyBtn.disabled = false;
+        }
+      } catch (err) {
+        outputBox.textContent = 'An error occurred while generating.';
+        console.error(err);
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      if (!copyBtn.disabled) {
+        navigator.clipboard.writeText(outputBox.textContent);
+      }
+    });
+
+    if (!isOwner && !isPaidUser && isInCooldown()) {
+      lockGenerator();
+    } else if (!isPaidUser) {
+      unlockGenerator();
+    }
+  </script>
 </body>
 </html>
+
