@@ -2,66 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KhaoticSounds Lyrics Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Album Cover Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="generator-container">
-    <h1>LYRICS GENERATOR</h1>
-
-    <div id="output" class="output-box">
-      Your lyrics will appear here...
+    <div class="output-box">
+      <img id="cover-output" src="" alt="Your album cover will appear here." />
+      <div class="loader" id="loading-spinner" style="display: none;"></div>
     </div>
 
-    <div class="bpm-section">
-      <input type="range" min="60" max="180" value="120" id="bpm" />
-      <div class="bpm-ticks">
-        <span>60</span><span>80</span><span>100</span><span>120</span><span>140</span><span>160</span><span>180</span>
+    <div class="form-section">
+      <input type="text" id="prompt" placeholder="Describe your album cover idea..." />
+      <div class="button-row">
+        <button id="generate-btn" onclick="generateCover()">Generate</button>
+        <button id="save-btn" onclick="saveImage()" style="display: none;">Save</button>
       </div>
-      <div id="bpm-value">120</div>
-    </div>
-
-    <div class="dropdown-row">
-      <div class="dropdown-block">
-        <label for="bars">BARS</label>
-        <select id="bars">
-          <option>None</option>
-          <option>4 Bars</option>
-          <option>8 Bars</option>
-          <option>8 Bar Hook</option>
-          <option>12 Bars</option>
-          <option>16 Bars</option>
-        </select>
-      </div>
-      <div class="dropdown-block">
-        <label for="mood">MOOD</label>
-        <select id="mood">
-          <option>None</option>
-          <option>Hype</option>
-          <option>Dark</option>
-          <option>Chill</option>
-          <option>Romantic</option>
-          <option>Drill</option>
-        </select>
-      </div>
-    </div>
-
-    <textarea id="prompt" placeholder="Type your idea here..."></textarea>
-
-    <div class="button-row">
-      <button id="generate">Generate Lyrics</button>
-      <button id="copy" disabled>Copy Lyric</button>
-    </div>
-
-    <div id="cta-popup" class="popup hidden">
-      <h2>🔥 Unlock Unlimited Access</h2>
-      <p>Subscribe for $5.99/month to keep generating and copying lyrics.</p>
-      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
