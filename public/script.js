@@ -51,4 +51,3 @@ document.addEventListener('DOMContentLoaded', () => {
     navigator.clipboard.writeText(output.textContent);
   });
 });
-
