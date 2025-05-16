@@ -4,289 +4,65 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KhaoticSounds Generator</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #0a0f1c;
-      font-family: Arial, sans-serif;
-      color: #00aaff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .generator-container {
-      width: 100%;
-      max-width: 420px;
-      border: 2px solid #00aaff;
-      border-radius: 12px;
-      box-shadow: 0 0 10px #00aaff;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    h1 {
-      text-align: center;
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-    .output-box {
-      background: white;
-      color: black;
-      border-radius: 6px;
-      height: 150px;
-      padding: 10px;
-      overflow-y: auto;
-      margin-bottom: 10px;
-      white-space: pre-wrap;
-      font-size: 14px;
-    }
-    .bpm-label {
-      text-align: left;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-    .bpm-wrapper {
-      margin-bottom: 10px;
-    }
-    #bpm {
-      width: 100%;
-    }
-    .bpm-ticks {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      margin-top: 5px;
-    }
-    .dropdown-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .dropdown-block {
-      flex: 1;
-    }
-    label {
-      font-size: 14px;
-      margin-bottom: 4px;
-      display: block;
-      color: #00aaff;
-    }
-    select {
-      width: 100%;
-      padding: 8px;
-      border-radius: 6px;
-      border: 2px solid #00aaff;
-      background: transparent;
-      color: #00aaff;
-      font-size: 16px;
-    }
-    textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      background: white;
-      color: black;
-      resize: none;
-      height: 50px;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-    .button-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    button {
-      flex: 1;
-      padding: 12px;
-      background: transparent;
-      color: #00aaff;
-      border: 2px solid #00aaff;
-      border-radius: 6px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    button:disabled {
-      color: #555;
-      border-color: #555;
-      cursor: not-allowed;
-    }
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.95);
-      z-index: 9999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .popup-screen {
-      background: #111;
-      border: 2px solid #00aaff;
-      border-radius: 12px;
-      padding: 30px;
-      text-align: center;
-      color: white;
-      max-width: 300px;
-      box-shadow: 0 0 15px #00aaff;
-    }
-    .popup-screen h2 {
-      color: #00aaff;
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-    .popup-screen p {
-      font-size: 14px;
-      margin-bottom: 15px;
-      color: #ccc;
-    }
-    .popup-screen a {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 10px 20px;
-      color: white;
-      background: #00aaff;
-      text-decoration: none;
-      font-weight: bold;
-      border-radius: 6px;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="generator-container">
-    <h1>LYRICS GENERATOR</h1>
-    <div class="output-box" id="output">Your lyrics will appear here...</div>
-    <div class="bpm-label">BPM</div>
-    <div class="bpm-wrapper">
-      <input type="range" min="60" max="180" value="120" id="bpm" />
-      <div class="bpm-ticks">
-        <span>60</span><span>80</span><span>100</span><span>120</span><span>140</span><span>160</span><span>180</span>
-      </div>
-    </div>
-    <div class="dropdown-row">
-      <div class="dropdown-block">
-        <label for="bars">BARS</label>
-        <select id="bars">
-          <option>None</option>
-          <option>4 Bars</option>
-          <option>8 Bars</option>
-          <option>8 Bar Hook</option>
-          <option>12 Bars</option>
-          <option>16 Bars</option>
-        </select>
-      </div>
-      <div class="dropdown-block">
-        <label for="mood">MOOD</label>
+    <div class="output-box" id="output">Your lyrics will appear here.</div>
+
+    <div class="controls">
+      <label for="mood">Mood</label>
+      <label for="bars">Bars</label>
+      <div class="dropdowns">
         <select id="mood">
-          <option>None</option>
-          <option>Hype</option>
-          <option>Dark</option>
-          <option>Chill</option>
-          <option>Romantic</option>
-          <option>Drill</option>
+          <option value="">None</option>
+          <option value="Energetic, turn-up vibes, club bangers">Hype</option>
+          <option value="Laid-back, mellow, smoke-and-vibe type">Chill</option>
+          <option value="Deep thoughts, heartbreak, storytelling">Emotional</option>
+          <option value="Street, raw, pain music">Gritty</option>
+          <option value="Bragging, flexing, self-assured">Confident</option>
+          <option value="Moody, aggressive, drill/trap style">Dark</option>
+          <option value="Love songs, seductive, flirtatious">Romantic</option>
+          <option value="Inspiring, uplifting, go-getter bars">Motivational</option>
+          <option value="Old-school vibes, memories, vintage feel">Nostalgic</option>
+          <option value="Soulful, introspective, powerful themes">Spiritual</option>
+        </select>
+
+        <select id="bars">
+          <option value="">None</option>
+          <option value="8 Bars">8 Bars</option>
+          <option value="16 Bars">16 Bars</option>
+          <option value="Hook">Hook</option>
+          <option value="Verse">Verse</option>
         </select>
       </div>
     </div>
-    <textarea id="prompt" placeholder="Type your idea here..."></textarea>
+
+    <input type="text" id="prompt" placeholder="Type your idea here..." />
+
+    <div class="bpm-label" id="bpm-value">BPM: 120</div>
+    <input type="range" id="bpm" min="60" max="200" value="120" step="1">
+
+    <div class="tick-marks">
+      <span>60</span><span>80</span><span>100</span><span>120</span><span>140</span><span>160</span><span>180</span><span>200</span>
+    </div>
+
     <div class="button-row">
-      <button id="generate">GENERATE LYRICS</button>
-      <button id="copy" disabled>COPY LYRICS</button>
+      <button id="generate">Generate Lyrics</button>
+      <button id="copy" disabled>Copy Lyrics</button>
+    </div>
+
+    <div id="cta-popup" class="hidden">
+      <div class="cta-content">
+        <h2>🔥 Unlock Unlimited Access</h2>
+        <p>Subscribe for $5.99 to keep generating and copying lyrics with no wait!</p>
+        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
+      </div>
     </div>
   </div>
 
-  <div id="cta-popup" class="overlay hidden">
-    <div class="popup-screen">
-      <h2>🔥 Subscribe to Unlock</h2>
-      <p>You’ve used your free lyric. Subscribe for unlimited access.</p>
-      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
-    </div>
-  </div>
-
-  <script>
-    const generateBtn = document.getElementById('generate');
-    const copyBtn = document.getElementById('copy');
-    const outputBox = document.getElementById('output');
-    const bpmSlider = document.getElementById('bpm');
-    const ctaPopup = document.getElementById('cta-popup');
-
-    const isOwner = true;
-    let isPaidUser = false;
-    let generationCount = parseInt(localStorage.getItem('generationCount') || '0');
-
-    function lockGenerator() {
-      ctaPopup.classList.remove('hidden');
-      copyBtn.disabled = true;
-      generateBtn.disabled = true;
-    }
-
-    function unlockGenerator() {
-      ctaPopup.classList.add('hidden');
-      copyBtn.disabled = false;
-      generateBtn.disabled = false;
-    }
-
-    generateBtn.addEventListener('click', async () => {
-      const prompt = document.getElementById('prompt').value;
-      const mood = document.getElementById('mood').value;
-      const bars = document.getElementById('bars').value;
-      const bpm = bpmSlider.value;
-
-      const input = `Mood: ${mood}, Bars: ${bars}, Prompt: ${prompt}. Use a tempo that feels like ${bpm} BPM but do not mention BPM in the lyrics.`;
-      outputBox.textContent = 'Loading...';
-
-      try {
-        const response = await fetch('https://khaoticsounds-generator-production-775c.up.railway.app/generate-lyrics', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt: input })
-        });
-
-        const data = await response.json();
-        outputBox.textContent = data.lyrics || 'Error: No lyrics generated';
-        bpmSlider.value = 120;
-
-        if (!isOwner && !isPaidUser) {
-          generationCount++;
-          localStorage.setItem('generationCount', generationCount);
-          if (generationCount >= 1) {
-            lockGenerator();
-          } else {
-            copyBtn.disabled = false;
-          }
-        } else {
-          copyBtn.disabled = false;
-        }
-
-      } catch (err) {
-        outputBox.textContent = 'An error occurred.';
-        console.error(err);
-      }
-    });
-
-    copyBtn.addEventListener('click', () => {
-      try {
-        navigator.clipboard.writeText(outputBox.textContent);
-      } catch (err) {
-        alert("Copy failed. Please select and copy manually:\n\n" + outputBox.textContent);
-      }
-    });
-
-    if (!isOwner && !isPaidUser && generationCount >= 1) {
-      lockGenerator();
-    } else if (!isPaidUser) {
-      unlockGenerator();
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
+
 
