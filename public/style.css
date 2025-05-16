@@ -1,176 +1,107 @@
-html, body {
+body {
   margin: 0;
-  padding: 0;
   background: #0a0f1c;
   font-family: Arial, sans-serif;
-  color: #00aaff;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden;
 }
 
 .generator-container {
-  width: 100%;
-  max-width: 420px;
   border: 2px solid #00aaff;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #00aaff;
   padding: 20px;
+  width: 95%;
+  max-width: 600px;
+  background: #111;
   box-sizing: border-box;
-}
-
-h1 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: #00aaff;
 }
 
 .output-box {
   background: white;
   color: black;
-  border-radius: 6px;
-  height: 150px;
   padding: 10px;
+  height: 150px;
   overflow-y: auto;
   margin-bottom: 10px;
-  white-space: pre-wrap;
-  font-size: 14px;
 }
 
-.bpm-label {
-  text-align: left;
-  font-size: 14px;
-  margin-bottom: 5px;
+.controls label {
+  display: inline-block;
+  width: 50%;
+  margin-bottom: 4px;
 }
 
-.bpm-wrapper {
-  margin-bottom: 10px;
-}
-
-#bpm {
-  width: 100%;
-}
-
-.bpm-ticks {
+.dropdowns {
   display: flex;
-  justify-content: space-between;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
-.dropdown-row {
-  display: flex;
-  justify-content: space-between;
   gap: 10px;
   margin-bottom: 10px;
 }
 
-.dropdown-block {
-  flex: 1;
-}
-
-label {
-  font-size: 14px;
-  margin-bottom: 4px;
-  display: block;
-  color: #00aaff;
-}
-
 select {
   width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 2px solid #00aaff;
-  background: transparent;
-  color: #00aaff;
-  font-size: 16px;
+  padding: 5px;
+  font-size: 14px;
 }
 
-textarea {
+input[type="text"] {
   width: 100%;
   padding: 10px;
-  border-radius: 6px;
-  background: white;
-  color: black;
-  resize: none;
-  height: 50px;
   margin-bottom: 10px;
-  font-size: 14px;
+}
+
+.bpm-label {
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+input[type="range"] {
+  width: 100%;
+}
+
+.tick-marks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #00aaff;
+  margin-bottom: 10px;
 }
 
 .button-row {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
 }
 
 button {
-  flex: 1;
-  padding: 12px;
-  background: transparent;
-  color: #00aaff;
-  border: 2px solid #00aaff;
-  border-radius: 6px;
-  font-weight: bold;
+  padding: 10px;
+  background: #00aaff;
+  border: none;
+  color: white;
   cursor: pointer;
-  font-size: 14px;
+  flex: 1;
+  margin: 0 5px;
 }
 
 button:disabled {
-  color: #555;
-  border-color: #555;
-  cursor: not-allowed;
+  background: #555;
 }
 
-/* 🔒 Overlay CTA */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 9999;
+#cta-popup {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.9);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.popup-screen {
+.cta-content {
   background: #111;
-  border: 2px solid #00aaff;
-  border-radius: 12px;
   padding: 30px;
+  border: 2px solid #00aaff;
   text-align: center;
   color: white;
-  max-width: 300px;
-  box-shadow: 0 0 15px #00aaff;
-}
-
-.popup-screen h2 {
-  color: #00aaff;
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.popup-screen p {
-  font-size: 14px;
-  margin-bottom: 15px;
-  color: #ccc;
-}
-
-.popup-screen a {
-  display: inline-block;
-  margin-top: 8px;
-  padding: 10px 20px;
-  color: white;
-  background: #00aaff;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 6px;
 }
 
 .hidden {
