@@ -1,32 +1,31 @@
-// ✅ All Required Imports
+// ✅ Imports
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fetch = require('node-fetch');
 require('dotenv').config();
 
-// ✅ Define the Express App
+// ✅ Setup
 const app = express();
-const PORT = process.env.PORT || 3000; // ✅ Use Railway-compatible port
+const PORT = process.env.PORT || 3000;
 
-// ✅ Middleware Setup
+// ✅ Middleware
 app.use(cors({
-  origin: 'https://www.khaoticsounds.com', // ✅ Allow your live domain
+  origin: 'https://www.khaoticsounds.com', // Your live website
 }));
 app.use(bodyParser.json());
-app.use(express.static('public')); // ✅ Serve frontend files from /public
+app.use(express.static('public')); // For serving static frontend files
 
-// ✅ Lyrics Generator Endpoint
+// ✅ AI Lyrics Generation Endpoint
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
-  // ✅ Confirm API key exists
   if (!process.env.OPENAI_API_KEY) {
-    console.error("❌ Missing OPENAI_API_KEY in .env");
+    console.error("❌ Missing OPENAI_API_KEY");
     return res.status(500).json({ lyrics: '' });
   }
 
-  console.log("📥 /generate endpoint hit. Request body:", req.body);
+  console.log("📥 /generate called with:", req.body);
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -60,7 +59,7 @@ app.post('/generate', async (req, res) => {
   }
 });
 
-// ✅ Start the Server
+// ✅ Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
