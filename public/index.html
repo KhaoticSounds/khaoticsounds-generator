@@ -1,67 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KhaoticSounds Generator</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lyrics Generator</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="generator-container">
-    <div class="output-box" id="output">Your lyrics will appear here.</div>
+    <h1 class="title">LYRICS GENERATOR</h1>
 
-    <div class="controls">
-      <label for="mood">Mood</label>
-      <label for="bars">Bars</label>
-      <div class="dropdowns">
-        <select id="mood">
-          <option value="">None</option>
-          <option value="Energetic, turn-up vibes, club bangers">Hype</option>
-          <option value="Laid-back, mellow, smoke-and-vibe type">Chill</option>
-          <option value="Deep thoughts, heartbreak, storytelling">Emotional</option>
-          <option value="Street, raw, pain music">Gritty</option>
-          <option value="Bragging, flexing, self-assured">Confident</option>
-          <option value="Moody, aggressive, drill/trap style">Dark</option>
-          <option value="Love songs, seductive, flirtatious">Romantic</option>
-          <option value="Inspiring, uplifting, go-getter bars">Motivational</option>
-          <option value="Old-school vibes, memories, vintage feel">Nostalgic</option>
-          <option value="Soulful, introspective, powerful themes">Spiritual</option>
-        </select>
+    <div class="output-box" id="output"> </div>
 
+    <div class="slider-container">
+      <input type="range" min="60" max="160" value="120" class="slider" id="bpmSlider">
+      <div class="bpm-label">120</div>
+    </div>
+
+    <div class="dropdowns">
+      <div class="dropdown-group">
+        <label for="bars">BARS</label>
         <select id="bars">
-          <option value="">None</option>
-          <option value="8 Bars">8 Bars</option>
-          <option value="16 Bars">16 Bars</option>
-          <option value="Hook">Hook</option>
-          <option value="Verse">Verse</option>
+          <option value="none">None</option>
+          <option value="8">8 Bars</option>
+          <option value="16">16 Bars</option>
+          <option value="32">32 Bars</option>
+        </select>
+      </div>
+
+      <div class="dropdown-group">
+        <label for="mood">MOOD</label>
+        <select id="mood">
+          <option value="none">None</option>
+          <option value="hype">Hype</option>
+          <option value="chill">Chill</option>
+          <option value="emotional">Emotional</option>
+          <option value="gritty">Gritty</option>
+          <option value="confident">Confident</option>
+          <option value="dark">Dark</option>
+          <option value="romantic">Romantic</option>
+          <option value="motivational">Motivational</option>
+          <option value="nostalgic">Nostalgic</option>
+          <option value="spiritual">Spiritual</option>
         </select>
       </div>
     </div>
 
-    <input type="text" id="prompt" placeholder="Type your idea here..." />
+    <input type="text" id="prompt" placeholder="The lyrics are about...">
 
-    <div class="bpm-label" id="bpm-value">BPM: 120</div>
-    <input type="range" id="bpm" min="60" max="200" value="120" step="1">
-
-    <div class="tick-marks">
-      <span>60</span><span>80</span><span>100</span><span>120</span><span>140</span><span>160</span><span>180</span><span>200</span>
-    </div>
-
-    <div class="button-row">
-      <button id="generate">Generate Lyrics</button>
-      <button id="copy" disabled>Copy Lyrics</button>
-    </div>
-
-    <div id="cta-popup" class="hidden">
-      <div class="cta-content">
-        <h2>🔥 Unlock Unlimited Access</h2>
-        <p>Subscribe for $5.99 to keep generating and copying lyrics with no wait!</p>
-        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Subscribe Now</a>
-      </div>
+    <div class="buttons">
+      <button id="generate">GENERATE LYRICS</button>
+      <button id="copy">COPY LYRIC</button>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
-
