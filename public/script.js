@@ -3,7 +3,6 @@ const output = document.getElementById('output');
 const overlay = document.getElementById('overlay');
 
 document.getElementById('generate').addEventListener('click', async () => {
-  // Show Paywall after 1 generation
   if (generationCount >= 1 && !localStorage.getItem('paidUser')) {
     overlay.style.display = 'flex';
     return;
@@ -54,4 +53,5 @@ document.getElementById('copy').addEventListener('click', () => {
     alert('Clipboard permissions blocked. Please copy manually.');
   });
 });
+
 
