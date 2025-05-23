@@ -1,37 +1,47 @@
-// ✅ Import required packages
 const express = require('express');
 const bodyParser = require('body-parser');
-const cors = require('cors');
 const fetch = require('node-fetch');
 require('dotenv').config();
 
-// ✅ Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ Allow both production and Railway preview origins
-app.use(cors({
-  origin: [
-    'https://www.khaoticsounds.com',
-    'https://khaoticsounds-generator-production.up.railway.app'
-  ],
-}));
+// ✅ Allow specific origins for CORS
+const allowedOrigins = [
+  'https://www.khaoticsounds.com',
+  'https://khaoticsounds-generator-production.up.railway.app'
+];
 
-// ✅ Middleware setup
+// ✅ Custom CORS middleware
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200); // ✅ Handle preflight
+  }
+
+  next();
+});
+
 app.use(bodyParser.json());
-app.use(express.static('public')); // Serve frontend files from /public
+app.use(express.static('public')); // ✅ Serve frontend files if needed
 
-// ✅ POST endpoint to generate lyrics
+// ✅ POST /generate: Get lyrics from OpenAI
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
-  // ✅ Check for OpenAI key
   if (!process.env.OPENAI_API_KEY) {
-    console.error("❌ Missing OPENAI_API_KEY in .env");
+    console.error("❌ Missing OPENAI_API_KEY in environment");
     return res.status(500).json({ lyrics: '' });
   }
 
-  console.log("📥 /generate called with:", req.body);
+  console.log("📥 Request to /generate:", req.body);
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -65,8 +75,7 @@ app.post('/generate', async (req, res) => {
   }
 });
 
-// ✅ Start the server
+// ✅ Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
-
