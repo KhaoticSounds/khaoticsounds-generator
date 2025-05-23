@@ -3,125 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lyrics Generator</title>
+  <title>KhaoticSounds Lyrics Generator</title>
   <style>
     html, body {
       margin: 0;
       padding: 0;
-      height: 100%;
-      background-color: #020d18;
+      height: 100vh;
+      width: 100vw;
+      overflow: hidden;
       font-family: 'Orbitron', sans-serif;
+      background: #0a0f1c;
       color: #00ffff;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
     }
 
     .generator-container {
+      width: 95%;
+      max-width: 720px;
       border: 2px solid #00ffff;
-      padding: 20px;
-      width: 700px;
-      background-color: #031522;
-      box-shadow: 0 0 20px #00ffff;
+      background-color: #02121f;
+      box-shadow: 0 0 25px #00ffff;
+      padding: 25px;
     }
 
     .title {
       text-align: center;
-      font-size: 36px;
+      font-size: 32px;
       font-weight: bold;
       margin-bottom: 20px;
     }
 
     .output-box {
-      width: 100%;
-      height: 150px;
-      background-color: white;
+      background: white;
       color: black;
-      padding: 10px;
-      font-size: 18px;
-      margin-bottom: 20px;
-      border: none;
+      padding: 15px;
+      height: 150px;
       overflow-y: auto;
+      font-size: 16px;
+      border: none;
+      width: 100%;
+      margin-bottom: 20px;
     }
 
     .slider-container {
-      position: relative;
       margin-bottom: 20px;
     }
 
     .slider {
       width: 100%;
-      -webkit-appearance: none;
-      background: transparent;
-    }
-
-    .slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      height: 20px;
-      width: 20px;
-      background: #00ffff;
-      border: 2px solid #00ffff;
-      cursor: pointer;
-      margin-top: -8px;
     }
 
     .tickmarks {
       display: flex;
       justify-content: space-between;
-      padding: 0 5px;
-      margin-top: -5px;
-    }
-
-    .tickmarks span {
-      color: #00ffff;
       font-size: 12px;
+      color: #00ffff;
+      padding: 0 2px;
     }
 
     .dropdowns {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 15px;
     }
 
     .dropdown-group {
-      width: 48%;
+      flex: 1;
     }
 
     .dropdown-group label {
       display: block;
-      font-size: 18px;
       margin-bottom: 5px;
     }
 
-    select, input[type="text"] {
+    select,
+    input[type="text"] {
       width: 100%;
       padding: 10px;
-      background-color: white;
+      background: white;
       border: 2px solid #00ffff;
       color: black;
       font-size: 16px;
+      box-sizing: border-box;
     }
 
     .buttons {
       display: flex;
       justify-content: space-between;
+      margin-top: 10px;
     }
 
     button {
       width: 48%;
       padding: 12px;
-      background-color: #020d18;
+      background: #0a0f1c;
       border: 2px solid #00ffff;
       color: #00ffff;
+      font-weight: bold;
       font-size: 16px;
       cursor: pointer;
-      font-weight: bold;
     }
 
     button:hover {
-      background-color: #00ffff;
-      color: #020d18;
+      background: #00ffff;
+      color: #0a0f1c;
     }
 
     .overlay {
@@ -158,7 +146,7 @@
   <div class="generator-container">
     <h1 class="title">LYRICS GENERATOR</h1>
 
-    <div class="output-box" id="output"></div>
+    <div class="output-box" id="output">Your lyrics will appear here...</div>
 
     <div class="slider-container">
       <input type="range" min="60" max="160" value="120" class="slider" id="bpmSlider">
@@ -171,7 +159,6 @@
       <div class="dropdown-group">
         <label for="bars">BARS</label>
         <select id="bars">
-          <option value="none">None</option>
           <option value="8">8 Bars</option>
           <option value="16">16 Bars</option>
           <option value="32">32 Bars</option>
@@ -180,7 +167,6 @@
       <div class="dropdown-group">
         <label for="mood">MOOD</label>
         <select id="mood">
-          <option value="none">None</option>
           <option value="hype">Hype</option>
           <option value="chill">Chill</option>
           <option value="emotional">Emotional</option>
@@ -235,17 +221,16 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
+            'Authorization': 'Bearer YOUR_OPENAI_API_KEY' // replace with real key
           },
           body: JSON.stringify({
             model: 'gpt-4',
             messages: [
               {
                 role: 'user',
-                content: `Write ${bars} bars of lyrics in a ${mood} style. The speed should match ${bpm} BPM. Theme: ${prompt}`
+                content: `Write ${bars} bars of lyrics in a ${mood} style. The theme is: ${prompt}. The flow should match a BPM of ${bpm}.`
               }
-            ],
-            temperature: 0.8
+            ]
           })
         });
 
