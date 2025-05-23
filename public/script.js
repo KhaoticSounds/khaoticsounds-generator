@@ -3,6 +3,7 @@ const output = document.getElementById('output');
 const overlay = document.getElementById('overlay');
 
 document.getElementById('generate').addEventListener('click', async () => {
+  // Show Paywall after 1 generation
   if (generationCount >= 1 && !localStorage.getItem('paidUser')) {
     overlay.style.display = 'flex';
     return;
@@ -21,7 +22,7 @@ document.getElementById('generate').addEventListener('click', async () => {
   output.textContent = 'Generating...';
 
   try {
-    const response = await fetch('/generate', {
+    const response = await fetch('https://khaoticsounds-generator-production.up.railway.app/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt, mood, bars, bpm })
@@ -36,13 +37,21 @@ document.getElementById('generate').addEventListener('click', async () => {
     }
   } catch (error) {
     console.error('Fetch error:', error);
-    output.textContent = 'Error generating lyrics. Please try again.';
+    output.textContent = 'Server error. Please try again later.';
   }
 });
 
 document.getElementById('copy').addEventListener('click', () => {
   const text = output.textContent;
+  if (!navigator.clipboard) {
+    alert('Clipboard not supported. Please copy manually.');
+    return;
+  }
+
   navigator.clipboard.writeText(text).then(() => {
     alert('Lyrics copied to clipboard!');
+  }).catch(() => {
+    alert('Clipboard permissions blocked. Please copy manually.');
   });
 });
+
