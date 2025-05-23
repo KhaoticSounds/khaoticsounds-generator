@@ -1,53 +1,31 @@
-let generationCount = 0;
-let paid = false;
+// Update BPM display
+const slider = document.getElementById('bpmSlider');
+const bpmValue = document.getElementById('bpmValue');
+slider.oninput = () => {
+  bpmValue.textContent = slider.value;
+};
 
-document.addEventListener('DOMContentLoaded', () => {
+// Generate lyrics
+document.getElementById('generate').addEventListener('click', async () => {
+  const prompt = document.getElementById('prompt').value;
+  const mood = document.getElementById('mood').value;
+  const bars = document.getElementById('bars').value;
+  const bpm = slider.value;
+
   const output = document.getElementById('output');
-  const prompt = document.getElementById('prompt');
-  const mood = document.getElementById('mood');
-  const bars = document.getElementById('bars');
-  const bpm = document.getElementById('bpm');
-  const bpmValue = document.getElementById('bpm-value');
-  const generateBtn = document.getElementById('generate');
-  const copyBtn = document.getElementById('copy');
-  const ctaPopup = document.getElementById('cta-popup');
+  output.textContent = 'Loading...';
 
-  bpm.addEventListener('input', () => {
-    bpmValue.textContent = `BPM: ${bpm.value}`;
-  });
+  // Simulated generation (replace this with API call)
+  setTimeout(() => {
+    output.textContent = `Mood: ${mood}\nBars: ${bars}\nBPM: ${bpm}\nPrompt: ${prompt}\n\nGenerated lyrics...`;
+  }, 1000);
+});
 
-  generateBtn.addEventListener('click', async () => {
-    if (!paid && generationCount >= 1) {
-      ctaPopup.classList.remove('hidden');
-      return;
-    }
-
-    const input = `Mood: ${mood.value}, Bars: ${bars.value}, BPM: ${bpm.value}, Prompt: ${prompt.value}`;
-    output.textContent = "Loading...";
-
-    try {
-      const res = await fetch('/generate-lyrics', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ input })
-      });
-
-      const data = await res.json();
-      output.textContent = data.lyrics || "No response.";
-      generationCount++;
-
-      if (paid) {
-        copyBtn.disabled = false;
-      }
-      prompt.value = '';
-      bpm.value = 120;
-      bpmValue.textContent = 'BPM: 120';
-    } catch (err) {
-      output.textContent = "Error generating lyrics.";
-    }
-  });
-
-  copyBtn.addEventListener('click', () => {
-    navigator.clipboard.writeText(output.textContent);
+// Copy to clipboard
+document.getElementById('copy').addEventListener('click', () => {
+  const text = document.getElementById('output').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Lyrics copied to clipboard!');
   });
 });
+
