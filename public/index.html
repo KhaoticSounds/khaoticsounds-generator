@@ -4,143 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KhaoticSounds Lyrics Generator</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      width: 100vw;
-      overflow: hidden;
-      font-family: 'Orbitron', sans-serif;
-      background: #0a0f1c;
-      color: #00ffff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .generator-container {
-      width: 95%;
-      max-width: 720px;
-      border: 2px solid #00ffff;
-      background-color: #02121f;
-      box-shadow: 0 0 25px #00ffff;
-      padding: 25px;
-    }
-
-    .title {
-      text-align: center;
-      font-size: 32px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-
-    .output-box {
-      background: white;
-      color: black;
-      padding: 15px;
-      height: 150px;
-      overflow-y: auto;
-      font-size: 16px;
-      border: none;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-
-    .slider-container {
-      margin-bottom: 20px;
-    }
-
-    .slider {
-      width: 100%;
-    }
-
-    .tickmarks {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      color: #00ffff;
-      padding: 0 2px;
-    }
-
-    .dropdowns {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .dropdown-group {
-      flex: 1;
-    }
-
-    .dropdown-group label {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    select,
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      background: white;
-      border: 2px solid #00ffff;
-      color: black;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
-
-    button {
-      width: 48%;
-      padding: 12px;
-      background: #0a0f1c;
-      border: 2px solid #00ffff;
-      color: #00ffff;
-      font-weight: bold;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #00ffff;
-      color: #0a0f1c;
-    }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: rgba(0, 0, 0, 0.9);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-      color: white;
-    }
-
-    .overlay-content {
-      background-color: #031522;
-      padding: 30px;
-      border: 2px solid #00ffff;
-      box-shadow: 0 0 20px #00ffff;
-      text-align: center;
-      width: 300px;
-    }
-
-    .overlay-content a {
-      color: #00ffff;
-      display: inline-block;
-      margin-top: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="generator-container">
@@ -159,6 +23,7 @@
       <div class="dropdown-group">
         <label for="bars">BARS</label>
         <select id="bars">
+          <option value="none" selected>None</option>
           <option value="8">8 Bars</option>
           <option value="16">16 Bars</option>
           <option value="32">32 Bars</option>
@@ -167,6 +32,7 @@
       <div class="dropdown-group">
         <label for="mood">MOOD</label>
         <select id="mood">
+          <option value="none" selected>None</option>
           <option value="hype">Hype</option>
           <option value="chill">Chill</option>
           <option value="emotional">Emotional</option>
@@ -209,10 +75,15 @@
         return;
       }
 
-      const prompt = document.getElementById('prompt').value;
+      const prompt = document.getElementById('prompt').value.trim();
       const mood = document.getElementById('mood').value;
       const bars = document.getElementById('bars').value;
       const bpm = document.getElementById('bpmSlider').value;
+
+      if (!prompt || mood === 'none' || bars === 'none') {
+        output.textContent = 'Please enter a prompt and select a mood and bar count.';
+        return;
+      }
 
       output.textContent = 'Generating...';
 
@@ -221,25 +92,30 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_OPENAI_API_KEY' // replace with real key
+            'Authorization': 'Bearer YOUR_OPENAI_API_KEY' // Replace with your actual key
           },
           body: JSON.stringify({
             model: 'gpt-4',
             messages: [
               {
                 role: 'user',
-                content: `Write ${bars} bars of lyrics in a ${mood} style. The theme is: ${prompt}. The flow should match a BPM of ${bpm}.`
+                content: `Write ${bars} bars of lyrics in a ${mood} style. Theme: ${prompt}. Match a BPM of ${bpm}.`
               }
-            ]
+            ],
+            temperature: 0.8
           })
         });
 
         const data = await response.json();
-        const lyrics = data.choices[0].message.content.trim();
-        output.textContent = lyrics;
-        generationCount++;
+        if (data.choices && data.choices.length > 0) {
+          const lyrics = data.choices[0].message.content.trim();
+          output.textContent = lyrics;
+          generationCount++;
+        } else {
+          output.textContent = 'No response from AI. Please try again.';
+        }
       } catch (err) {
-        output.textContent = 'Error generating lyrics. Try again.';
+        output.textContent = 'Error generating lyrics. Check your API key and try again.';
         console.error(err);
       }
     });
@@ -253,4 +129,3 @@
   </script>
 </body>
 </html>
-
