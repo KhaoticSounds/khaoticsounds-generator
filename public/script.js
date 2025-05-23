@@ -1,29 +1,17 @@
 let generationCount = 0;
 const output = document.getElementById('output');
-const slider = document.getElementById('bpmSlider');
-const bpmValue = document.getElementById('bpmValue');
-
-slider.oninput = () => {
-  bpmValue.textContent = slider.value;
-};
+const overlay = document.getElementById('overlay');
 
 document.getElementById('generate').addEventListener('click', async () => {
   if (generationCount >= 1 && !localStorage.getItem('paidUser')) {
-    output.innerHTML = `
-      <div style="text-align:center;padding:20px;">
-        <h3>🔥 Unlock Unlimited Access</h3>
-        <p>You’ve used your free generation. Support us to continue:</p>
-        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" style="color:#00ffff;">Click here to pay on PayPal</a><br>
-        <small>After payment, refresh the page to unlock</small>
-      </div>
-    `;
+    overlay.style.display = 'flex';
     return;
   }
 
   const prompt = document.getElementById('prompt').value;
   const mood = document.getElementById('mood').value;
   const bars = document.getElementById('bars').value;
-  const bpm = slider.value;
+  const bpm = document.getElementById('bpmSlider').value;
 
   output.textContent = 'Generating...';
 
@@ -32,17 +20,16 @@ document.getElementById('generate').addEventListener('click', async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_OPENAI_API_KEY' // Replace this with your actual key
+        'Authorization': 'Bearer YOUR_OPENAI_API_KEY' // Replace with your real key
       },
       body: JSON.stringify({
         model: 'gpt-4',
         messages: [
           {
             role: 'user',
-            content: `Write ${bars} bars of lyrics in a ${mood} style at ${bpm} BPM. The theme is: ${prompt}`
+            content: `Write ${bars} bars of lyrics in a ${mood} style. The theme is: ${prompt}. The flow should match a BPM of ${bpm}.`
           }
-        ],
-        temperature: 0.8
+        ]
       })
     });
 
