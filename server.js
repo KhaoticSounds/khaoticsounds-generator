@@ -1,3 +1,18 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const fetch = require('node-fetch');
+require('dotenv').config();
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: 'https://www.khaoticsounds.com'
+}));
+app.use(bodyParser.json());
+app.use(express.static('public'));
+
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
@@ -22,8 +37,10 @@ app.post('/generate', async (req, res) => {
     const data = await response.json();
     const lyrics = data.choices?.[0]?.message?.content?.trim() || '';
     res.json({ lyrics });
-  } catch (error) {
-    console.error(error);
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ lyrics: '' });
   }
 });
+
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
