@@ -1,27 +1,27 @@
+// ✅ Full Working server.js for Railway Deployment
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fetch = require('node-fetch');
 require('dotenv').config();
 
-const app = express(); // ✅ CRITICAL: defines app
+const app = express(); // 💡 CRITICAL: define express app
 const PORT = process.env.PORT || 3000;
 
-// CORS: only allow your live domain
+// CORS: allow your frontend domain
 app.use(cors({
   origin: 'https://www.khaoticsounds.com',
 }));
 
-// Middleware
 app.use(bodyParser.json());
-app.use(express.static('public')); // for index.html, script.js, style.css
+app.use(express.static('public')); // for frontend static files
 
-// AI generation endpoint
+// POST /generate endpoint
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
   if (!process.env.OPENAI_API_KEY) {
-    console.error("❌ Missing OPENAI_API_KEY in Railway Variables");
+    console.error('❌ Missing OPENAI_API_KEY');
     return res.status(500).json({ lyrics: '' });
   }
 
@@ -34,16 +34,18 @@ app.post('/generate', async (req, res) => {
       },
       body: JSON.stringify({
         model: 'gpt-4',
-        messages: [{
-          role: 'user',
-          content: `Write ${bars} bars of lyrics in a ${mood} style. Theme: ${prompt}. Match a BPM of ${bpm}.`
-        }],
+        messages: [
+          {
+            role: 'user',
+            content: `Write ${bars} bars of lyrics in a ${mood} style. Theme: ${prompt}. Match a BPM of ${bpm}.`
+          }
+        ],
         temperature: 0.8
       })
     });
 
     const data = await response.json();
-    console.log('✅ OpenAI Response:', data);
+    console.log('✅ OpenAI response:', data);
 
     const lyrics = data.choices?.[0]?.message?.content?.trim();
     if (!lyrics) {
@@ -51,12 +53,14 @@ app.post('/generate', async (req, res) => {
     }
 
     res.json({ lyrics });
-  } catch (err) {
-    console.error('❌ OpenAI ERROR:', err.message);
+  } catch (error) {
+    console.error('❌ AI ERROR:', error.message);
     res.status(500).json({ lyrics: '' });
   }
 });
 
+// Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
