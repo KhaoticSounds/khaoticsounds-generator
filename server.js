@@ -1,8 +1,27 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const fetch = require('node-fetch');
+require('dotenv').config();
+
+const app = express(); // ✅ CRITICAL: defines app
+const PORT = process.env.PORT || 3000;
+
+// CORS: only allow your live domain
+app.use(cors({
+  origin: 'https://www.khaoticsounds.com',
+}));
+
+// Middleware
+app.use(bodyParser.json());
+app.use(express.static('public')); // for index.html, script.js, style.css
+
+// AI generation endpoint
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
   if (!process.env.OPENAI_API_KEY) {
-    console.error("❌ Missing OPENAI_API_KEY in .env");
+    console.error("❌ Missing OPENAI_API_KEY in Railway Variables");
     return res.status(500).json({ lyrics: '' });
   }
 
@@ -27,12 +46,17 @@ app.post('/generate', async (req, res) => {
     console.log('✅ OpenAI Response:', data);
 
     const lyrics = data.choices?.[0]?.message?.content?.trim();
-    if (!lyrics) throw new Error('No lyrics returned');
+    if (!lyrics) {
+      throw new Error('No lyrics returned');
+    }
 
     res.json({ lyrics });
   } catch (err) {
-    console.error('❌ OpenAI ERROR:', err);
+    console.error('❌ OpenAI ERROR:', err.message);
     res.status(500).json({ lyrics: '' });
   }
 });
 
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
