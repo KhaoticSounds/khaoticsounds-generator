@@ -1,26 +1,28 @@
-body {
+html, body {
   margin: 0;
   padding: 0;
+  height: 100%;
   background-color: #020d18;
   font-family: 'Orbitron', sans-serif;
   color: #00ffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  overflow: hidden;
 }
 
 .generator-container {
   border: 2px solid #00ffff;
   padding: 20px;
-  width: 600px;
+  width: 700px;
   background-color: #031522;
   box-shadow: 0 0 20px #00ffff;
 }
 
 .title {
   text-align: center;
-  font-size: 32px;
+  font-size: 36px;
+  font-weight: bold;
   margin-bottom: 20px;
 }
 
@@ -30,24 +32,43 @@ body {
   background-color: white;
   color: black;
   padding: 10px;
-  font-size: 16px;
+  font-size: 18px;
   margin-bottom: 20px;
+  border: none;
+  overflow-y: auto;
 }
 
 .slider-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
   margin-bottom: 20px;
 }
 
 .slider {
-  width: 80%;
+  width: 100%;
+  -webkit-appearance: none;
+  background: transparent;
 }
 
-.bpm-label {
-  margin-left: 10px;
-  font-size: 18px;
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  background: #00ffff;
+  border: 2px solid #00ffff;
+  cursor: pointer;
+  margin-top: -8px;
+}
+
+.tickmarks {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 5px;
+  margin-top: -5px;
+}
+
+.tickmarks span {
+  color: #00ffff;
+  font-size: 12px;
 }
 
 .dropdowns {
@@ -57,20 +78,21 @@ body {
 }
 
 .dropdown-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 45%;
+  width: 48%;
 }
 
-select,
-input[type="text"] {
+.dropdown-group label {
+  display: block;
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+select, input[type="text"] {
   width: 100%;
   padding: 10px;
-  margin-top: 5px;
-  background-color: #020d18;
+  background-color: white;
   border: 2px solid #00ffff;
-  color: #ffffff;
+  color: black;
   font-size: 16px;
 }
 
@@ -81,12 +103,13 @@ input[type="text"] {
 
 button {
   width: 48%;
-  padding: 10px;
+  padding: 12px;
   background-color: #020d18;
   border: 2px solid #00ffff;
   color: #00ffff;
   font-size: 16px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 button:hover {
@@ -94,3 +117,31 @@ button:hover {
   color: #020d18;
 }
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  color: white;
+}
+
+.overlay-content {
+  background-color: #031522;
+  padding: 30px;
+  border: 2px solid #00ffff;
+  box-shadow: 0 0 20px #00ffff;
+  text-align: center;
+  width: 300px;
+}
+
+.overlay-content a {
+  color: #00ffff;
+  display: inline-block;
+  margin-top: 10px;
+}
