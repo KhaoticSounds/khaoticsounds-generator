@@ -21,35 +21,22 @@ document.getElementById('generate').addEventListener('click', async () => {
   output.textContent = 'Generating...';
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('/generate', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_OPENAI_API_KEY' // Replace with your key
-      },
-      body: JSON.stringify({
-        model: 'gpt-4',
-        messages: [
-          {
-            role: 'user',
-            content: `Write ${bars} bars of lyrics in a ${mood} style. Theme: ${prompt}. Match a BPM of ${bpm}.`
-          }
-        ],
-        temperature: 0.8
-      })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, mood, bars, bpm })
     });
 
     const data = await response.json();
-    if (data.choices && data.choices.length > 0) {
-      const lyrics = data.choices[0].message.content.trim();
-      output.textContent = lyrics;
+    if (data.lyrics) {
+      output.textContent = data.lyrics;
       generationCount++;
     } else {
-      output.textContent = 'No response from AI. Please try again.';
+      output.textContent = 'No lyrics received. Try again.';
     }
-  } catch (err) {
-    output.textContent = 'Error generating lyrics. Check your API key and try again.';
-    console.error(err);
+  } catch (error) {
+    console.error('Fetch error:', error);
+    output.textContent = 'Error generating lyrics. Please try again.';
   }
 });
 
