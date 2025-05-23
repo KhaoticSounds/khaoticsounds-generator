@@ -1,27 +1,33 @@
-// ✅ Imports
+// ✅ Import required packages
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fetch = require('node-fetch');
 require('dotenv').config();
 
-// ✅ Setup
+// ✅ Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ Middleware
+// ✅ Allow both production and Railway preview origins
 app.use(cors({
-  origin: 'https://www.khaoticsounds.com', // Your live website
+  origin: [
+    'https://www.khaoticsounds.com',
+    'https://khaoticsounds-generator-production.up.railway.app'
+  ],
 }));
-app.use(bodyParser.json());
-app.use(express.static('public')); // For serving static frontend files
 
-// ✅ AI Lyrics Generation Endpoint
+// ✅ Middleware setup
+app.use(bodyParser.json());
+app.use(express.static('public')); // Serve frontend files from /public
+
+// ✅ POST endpoint to generate lyrics
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
+  // ✅ Check for OpenAI key
   if (!process.env.OPENAI_API_KEY) {
-    console.error("❌ Missing OPENAI_API_KEY");
+    console.error("❌ Missing OPENAI_API_KEY in .env");
     return res.status(500).json({ lyrics: '' });
   }
 
@@ -54,12 +60,12 @@ app.post('/generate', async (req, res) => {
 
     res.json({ lyrics });
   } catch (error) {
-    console.error('❌ AI ERROR:', error.message);
+    console.error('❌ OpenAI error:', error.message);
     res.status(500).json({ lyrics: '' });
   }
 });
 
-// ✅ Start server
+// ✅ Start the server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
