@@ -46,4 +46,3 @@ document.getElementById('copy').addEventListener('click', () => {
     alert('Lyrics copied to clipboard!');
   });
 });
-
