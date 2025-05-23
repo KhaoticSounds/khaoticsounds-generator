@@ -6,13 +6,12 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ Allow specific origins for CORS
+// ✅ Allow both production + Railway origins (CORS)
 const allowedOrigins = [
   'https://www.khaoticsounds.com',
   'https://khaoticsounds-generator-production.up.railway.app'
 ];
 
-// ✅ Custom CORS middleware
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
@@ -23,25 +22,26 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
-    return res.sendStatus(200); // ✅ Handle preflight
+    return res.sendStatus(200); // ✅ Handle CORS preflight
   }
 
   next();
 });
 
+// ✅ Parse JSON & serve static frontend
 app.use(bodyParser.json());
-app.use(express.static('public')); // ✅ Serve frontend files if needed
+app.use(express.static('public'));
 
-// ✅ POST /generate: Get lyrics from OpenAI
+// ✅ POST /generate endpoint for lyrics
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
   if (!process.env.OPENAI_API_KEY) {
-    console.error("❌ Missing OPENAI_API_KEY in environment");
+    console.error("❌ Missing OPENAI_API_KEY");
     return res.status(500).json({ lyrics: '' });
   }
 
-  console.log("📥 Request to /generate:", req.body);
+  console.log("📥 /generate request:", req.body);
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -63,14 +63,14 @@ app.post('/generate', async (req, res) => {
     });
 
     const data = await response.json();
-    console.log('✅ OpenAI response:', data);
 
     const lyrics = data.choices?.[0]?.message?.content?.trim();
     if (!lyrics) throw new Error('No lyrics returned');
 
+    console.log("✅ Lyrics Generated:\n", lyrics);
     res.json({ lyrics });
   } catch (error) {
-    console.error('❌ OpenAI error:', error.message);
+    console.error('❌ OpenAI API error:', error.message);
     res.status(500).json({ lyrics: '' });
   }
 });
@@ -79,3 +79,4 @@ app.post('/generate', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
