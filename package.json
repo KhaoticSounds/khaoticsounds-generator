@@ -1,6 +1,7 @@
 {
   "name": "khaoticsounds-generator",
   "version": "1.0.0",
+  "description": "Lyrics Generator Backend for KhaoticSounds",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -11,5 +12,8 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "node-fetch": "^2.6.11"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
