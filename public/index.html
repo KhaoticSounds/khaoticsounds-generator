@@ -8,14 +8,14 @@
     html, body {
       margin: 0;
       padding: 0;
-      overflow: hidden;
+      height: 100%;
       background-color: #020d18;
       font-family: 'Orbitron', sans-serif;
       color: #00ffff;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      overflow: hidden;
     }
 
     .generator-container {
@@ -42,6 +42,7 @@
       font-size: 18px;
       margin-bottom: 20px;
       border: none;
+      overflow-y: auto;
     }
 
     .slider-container {
@@ -68,7 +69,7 @@
     .tickmarks {
       display: flex;
       justify-content: space-between;
-      padding: 0 10px;
+      padding: 0 5px;
       margin-top: -5px;
     }
 
@@ -96,9 +97,9 @@
     select, input[type="text"] {
       width: 100%;
       padding: 10px;
-      background-color: #020d18;
+      background-color: white;
       border: 2px solid #00ffff;
-      color: white;
+      color: black;
       font-size: 16px;
     }
 
@@ -121,6 +122,35 @@
     button:hover {
       background-color: #00ffff;
       color: #020d18;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      color: white;
+    }
+
+    .overlay-content {
+      background-color: #031522;
+      padding: 30px;
+      border: 2px solid #00ffff;
+      box-shadow: 0 0 20px #00ffff;
+      text-align: center;
+      width: 300px;
+    }
+
+    .overlay-content a {
+      color: #00ffff;
+      display: inline-block;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -173,22 +203,64 @@
     </div>
   </div>
 
-  <script>
-    const slider = document.getElementById('bpmSlider');
-    slider.oninput = () => {};
+  <div class="overlay" id="overlay">
+    <div class="overlay-content">
+      <h3>🔥 Unlock Unlimited Access</h3>
+      <p>You’ve used your free generation. Support us to continue:</p>
+      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Pay with PayPal</a><br>
+      <small>After payment, refresh the page to unlock</small>
+    </div>
+  </div>
 
-    document.getElementById('generate').addEventListener('click', () => {
+  <script>
+    let generationCount = 0;
+    const output = document.getElementById('output');
+    const overlay = document.getElementById('overlay');
+
+    document.getElementById('generate').addEventListener('click', async () => {
+      if (generationCount >= 1 && !localStorage.getItem('paidUser')) {
+        overlay.style.display = 'flex';
+        return;
+      }
+
       const prompt = document.getElementById('prompt').value;
       const mood = document.getElementById('mood').value;
       const bars = document.getElementById('bars').value;
       const bpm = document.getElementById('bpmSlider').value;
 
-      const output = document.getElementById('output');
-      output.textContent = `Mood: ${mood}\nBars: ${bars}\nBPM: ${bpm}\nPrompt: ${prompt}\n\nGenerated lyrics coming soon...`;
+      output.textContent = 'Generating...';
+
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
+          },
+          body: JSON.stringify({
+            model: 'gpt-4',
+            messages: [
+              {
+                role: 'user',
+                content: `Write ${bars} bars of lyrics in a ${mood} style. The speed should match ${bpm} BPM. Theme: ${prompt}`
+              }
+            ],
+            temperature: 0.8
+          })
+        });
+
+        const data = await response.json();
+        const lyrics = data.choices[0].message.content.trim();
+        output.textContent = lyrics;
+        generationCount++;
+      } catch (err) {
+        output.textContent = 'Error generating lyrics. Try again.';
+        console.error(err);
+      }
     });
 
     document.getElementById('copy').addEventListener('click', () => {
-      const text = document.getElementById('output').textContent;
+      const text = output.textContent;
       navigator.clipboard.writeText(text).then(() => {
         alert('Lyrics copied to clipboard!');
       });
