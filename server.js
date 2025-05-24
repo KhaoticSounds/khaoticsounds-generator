@@ -6,39 +6,32 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ Middleware: Custom CORS
+// ✅ CORS for both production and preview
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-
-  // ✅ Allow *any* origin temporarily for debug
   res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  res.setHeader('Vary', 'Origin'); // Handle multiple origins correctly
-
-  // ✅ Allow expected methods
+  res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200); // ✅ Preflight pass
-  }
-
+  if (req.method === 'OPTIONS') return res.sendStatus(200);
   next();
 });
 
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// ✅ Endpoint for lyric generation
+// ✅ AI Lyrics Generator Endpoint
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
   if (!process.env.OPENAI_API_KEY) {
-    console.error("❌ OPENAI_API_KEY missing");
+    console.error("❌ Missing OPENAI_API_KEY");
     return res.status(500).json({ lyrics: '' });
   }
 
-  console.log("📥 /generate:", req.body);
+  console.log("📥 /generate request:", req.body);
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -52,7 +45,7 @@ app.post('/generate', async (req, res) => {
         messages: [
           {
             role: 'user',
-            content: `Write ${bars} bars of lyrics in a ${mood} style. Theme: ${prompt}. Match a BPM of ${bpm}.`
+            content: `Write ${bars} bars of ${mood} style lyrics. Theme: ${prompt}. The rhythm should feel like it's at ${bpm} BPM, but do not mention the BPM number in the lyrics.`
           }
         ],
         temperature: 0.8
@@ -63,11 +56,11 @@ app.post('/generate', async (req, res) => {
     const lyrics = data.choices?.[0]?.message?.content?.trim();
 
     if (!lyrics) throw new Error('No lyrics returned');
+    console.log("✅ Generated Lyrics:\n", lyrics);
 
-    console.log("✅ Lyrics:", lyrics);
     res.json({ lyrics });
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('❌ AI error:', error.message);
     res.status(500).json({ lyrics: '' });
   }
 });
