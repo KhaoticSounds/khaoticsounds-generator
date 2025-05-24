@@ -1,92 +1,70 @@
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const generateBtn = document.getElementById('generate');
-    const copyBtn = document.getElementById('copy');
-    const outputBox = document.getElementById('output');
-    const promptInput = document.getElementById('prompt');
-    const moodSelect = document.getElementById('mood');
-    const barsSelect = document.getElementById('bars');
-    const bpmSlider = document.getElementById('bpm');
-    const bpmValue = document.getElementById('bpm-value');
-    const overlay = document.getElementById('paywall-overlay');
-    const closeBtn = document.getElementById('close-overlay');
-    const countdownDisplay = document.getElementById('countdown');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KhaoticSounds Lyrics Generator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="generator">
+    <h1>LYRICS GENERATOR</h1>
 
-    let hasGenerated = false;
-    let isLocked = false;
+    <div id="output" class="output-box">Your lyrics will appear here...</div>
 
-    bpmSlider.addEventListener('input', () => {
-      bpmValue.textContent = bpmSlider.value;
-    });
+    <div class="bpm-wrapper">
+      <label for="bpm">BPM</label>
+      <input type="range" id="bpm" min="80" max="200" value="120"/>
+      <div class="bpm-ticks">
+        <span>80</span><span>110</span><span>140</span><span>170</span><span>200</span>
+      </div>
+    </div>
 
-    generateBtn.addEventListener('click', async () => {
-      if (isLocked) return;
+    <div class="controls">
+      <div class="dropdown">
+        <label for="bars">BARS</label>
+        <select id="bars">
+          <option value="None">None</option>
+          <option value="8">8</option>
+          <option value="12">12</option>
+          <option value="16">16</option>
+        </select>
+      </div>
+      <div class="dropdown">
+        <label for="mood">MOOD</label>
+        <select id="mood">
+          <option value="None">None</option>
+          <option value="Hype">Hype</option>
+          <option value="Chill">Chill</option>
+          <option value="Emotional">Emotional</option>
+          <option value="Gritty">Gritty</option>
+          <option value="Confident">Confident</option>
+          <option value="Dark">Dark</option>
+          <option value="Romantic">Romantic</option>
+          <option value="Motivational">Motivational</option>
+          <option value="Nostalgic">Nostalgic</option>
+          <option value="Spiritual">Spiritual</option>
+        </select>
+      </div>
+    </div>
 
-      if (hasGenerated) {
-        overlay.style.display = 'flex';
-        isLocked = true;
+    <input type="text" id="prompt" placeholder="Type your theme..." />
 
-        let countdown = 120;
-        countdownDisplay.textContent = `Try again in ${countdown} seconds...`;
+    <div class="buttons">
+      <button id="generate">GENERATE LYRICS</button>
+      <button id="copy">COPY LYRIC</button>
+    </div>
 
-        const interval = setInterval(() => {
-          countdown--;
-          countdownDisplay.textContent = `Try again in ${countdown} seconds...`;
-          if (countdown <= 0) {
-            clearInterval(interval);
-            overlay.style.display = 'none';
-            isLocked = false;
-            hasGenerated = false;
-          }
-        }, 1000);
-
-        return;
-      }
-
-      const prompt = promptInput.value.trim();
-      const mood = moodSelect.value;
-      const bars = barsSelect.value;
-      const bpm = bpmSlider.value;
-
-      outputBox.textContent = 'Loading...';
-
-      try {
-        const response = await fetch('https://khaoticsounds-generator-production.up.railway.app/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt, mood, bars, bpm })
-        });
-
-        const data = await response.json();
-
-        if (data.lyrics) {
-          outputBox.textContent = data.lyrics;
-          hasGenerated = true;
-        } else {
-          outputBox.textContent = 'No lyrics received. Try again.';
-          console.error('AI error:', data.error);
-        }
-      } catch (err) {
-        outputBox.textContent = 'Error connecting. Try again.';
-        console.error(err);
-      }
-    });
-
-    copyBtn.addEventListener('click', () => {
-      const lyrics = outputBox.textContent;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(lyrics).catch(err => {
-          console.error('Clipboard error:', err);
-        });
-      } else {
-        alert('Clipboard not supported.');
-      }
-    });
-
-    closeBtn.addEventListener('click', () => {
-      overlay.style.display = 'none';
-    });
-  });
-</script>
+    <div id="paywall-overlay">
+      <div class="popup">
+        <p>Support the generator to unlock unlimited lyrics!</p>
+        <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Unlock Now</a>
+        <p id="countdown" class="countdown-text"></p>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
 
 
