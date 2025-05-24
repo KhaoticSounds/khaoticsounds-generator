@@ -1,67 +1,67 @@
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const generateBtn = document.getElementById('generate');
-    const copyBtn = document.getElementById('copy');
-    const outputBox = document.getElementById('output');
-    const bpmSlider = document.getElementById('bpm');
-    const bpmValue = document.getElementById('bpm-value');
-    const overlay = document.getElementById('overlay');
-    const countdownDisplay = document.getElementById('countdown');
+window.addEventListener('DOMContentLoaded', () => {
+  const generateBtn = document.getElementById('generate');
+  const copyBtn = document.getElementById('copy');
+  const outputBox = document.getElementById('output');
+  const promptInput = document.getElementById('prompt');
+  const moodSelect = document.getElementById('mood');
+  const barsSelect = document.getElementById('bars');
+  const bpmSlider = document.getElementById('bpm');
+  const overlay = document.getElementById('paywall-overlay');
+  const countdownDisplay = document.getElementById('countdown');
 
-    let hasGenerated = false;
+  let hasGenerated = false;
+  let isLocked = false;
 
-    bpmSlider.addEventListener('input', () => {
-      bpmValue.innerText = bpmSlider.value;
-    });
+  generateBtn.addEventListener('click', async () => {
+    if (isLocked) return;
 
-    generateBtn.addEventListener('click', async () => {
-      if (hasGenerated) {
-        overlay.style.display = 'flex';
-        let countdown = 120;
+    if (hasGenerated) {
+      overlay.style.display = 'flex';
+      isLocked = true;
 
-        countdownDisplay.innerText = `Try again in ${countdown} seconds...`;
+      let seconds = 60;
+      countdownDisplay.textContent = `Try again in ${seconds} seconds`;
 
-        const interval = setInterval(() => {
-          countdown--;
-          countdownDisplay.innerText = `Try again in ${countdown} seconds...`;
-          if (countdown <= 0) {
-            clearInterval(interval);
-            overlay.style.display = 'none';
-            hasGenerated = false;
-          }
-        }, 1000);
+      const interval = setInterval(() => {
+        seconds--;
+        countdownDisplay.textContent = `Try again in ${seconds} seconds`;
+        if (seconds <= 0) {
+          clearInterval(interval);
+          overlay.style.display = 'none';
+          isLocked = false;
+          hasGenerated = false;
+        }
+      }, 1000);
 
-        return;
-      }
+      return;
+    }
 
+    const prompt = promptInput.value;
+    const mood = moodSelect.value;
+    const bars = barsSelect.value;
+    const bpm = bpmSlider.value;
+
+    outputBox.textContent = 'Generating...';
+
+    try {
+      const res = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, mood, bars, bpm })
+      });
+
+      const data = await res.json();
+      outputBox.textContent = data.lyrics || 'Something went wrong.';
       hasGenerated = true;
-
-      const prompt = document.getElementById('prompt').value;
-      const mood = document.getElementById('mood').value;
-      const bars = document.getElementById('bars').value;
-      const bpm = bpmSlider.value;
-
-      outputBox.value = 'Loading...';
-
-      try {
-        const response = await fetch('/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt, mood, bars, bpm })
-        });
-
-        const data = await response.json();
-        outputBox.value = data.lyrics || 'No lyrics returned.';
-      } catch (err) {
-        outputBox.value = 'Failed to generate lyrics.';
-      }
-    });
-
-    copyBtn.addEventListener('click', () => {
-      outputBox.select();
-      document.execCommand('copy');
-    });
+    } catch (err) {
+      outputBox.textContent = 'Error generating lyrics.';
+    }
   });
-</script>
+
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(outputBox.textContent);
+  });
+});
+
 
 
