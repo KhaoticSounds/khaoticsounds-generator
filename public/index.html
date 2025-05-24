@@ -9,15 +9,13 @@
     html, body {
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   background: #000;
   overflow: hidden;
-  touch-action: manipulation;
-  -webkit-text-size-adjust: 100%;
 }
 
     body {
@@ -27,11 +25,12 @@
     }
 
     .generator-container {
-  width: 100vw;
-  height: 100vh;
-  padding: 0;
+  width: 100%;
+  height: auto;
+  max-width: 480px;
+  padding: 0 2vw;
   box-sizing: border-box;
-  margin: 0;
+  margin: 0 auto;
   background: #0a0a0a;
   border: 2px solid #00c6ff;
   border-radius: 0;
@@ -43,15 +42,20 @@
 }
 
     h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 4.5rem;
-      font-weight: 900;
-      letter-spacing: 1px;
-      color: #fff;
-      text-shadow: 0 0 35px #0094ff, 0 0 60px #0094ff, 0 0 90px #0094ff;
-      text-transform: uppercase;
-      margin-bottom: 2vh;
-    }
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3.2rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  color: #fff;
+  text-shadow: 0 0 25px #0094ff, 0 0 40px #0094ff, 0 0 60px #0094ff;
+  text-transform: uppercase;
+  margin: 1.5vh 0;
+  text-align: center;
+  width: 100%;
+  line-height: 1.1;
+  display: flex;
+  justify-content: center;
+}
 
     textarea {
       width: 100%;
@@ -314,4 +318,3 @@ select:focus {
   <script src="script.js"></script>
 </body>
 </html>
-
