@@ -1,4 +1,3 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,22 +9,15 @@
 <body>
   <div class="generator-container">
     <h1>LYRICS GENERATOR</h1>
+
     <textarea id="output" readonly placeholder="Your lyrics will appear here..."></textarea>
 
     <div class="bpm-slider">
       <input type="range" id="bpm" min="60" max="160" value="120" />
       <div class="bpm-labels">
-        <span>60</span>
-        <span>70</span>
-        <span>80</span>
-        <span>90</span>
-        <span>100</span>
-        <span>110</span>
-        <span>120</span>
-        <span>130</span>
-        <span>140</span>
-        <span>150</span>
-        <span>160</span>
+        <span>60</span><span>70</span><span>80</span><span>90</span>
+        <span>100</span><span>110</span><span>120</span>
+        <span>130</span><span>140</span><span>150</span><span>160</span>
       </div>
     </div>
 
@@ -35,7 +27,7 @@
         <select id="bars">
           <option>None</option>
           <option>8 Bars</option>
-          <option>8 Bars hook</option>
+          <option>8 Bar Hook</option>
           <option>16 Bars</option>
           <option>32 Bars</option>
         </select>
@@ -63,6 +55,16 @@
     <div class="action-buttons">
       <button id="generate">GENERATE LYRICS</button>
       <button id="copy">COPY LYRIC</button>
+    </div>
+  </div>
+
+  <!-- 🔒 Paywall Overlay -->
+  <div id="paywall-overlay" class="overlay">
+    <div class="overlay-box">
+      <h2>Subscribe to Unlock Unlimited Lyrics</h2>
+      <p>You’ve used your free generation. Unlock all features for $5.99/month.</p>
+      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="paypal-btn">Subscribe via PayPal</a>
+      <button id="close-overlay">Close</button>
     </div>
   </div>
 
