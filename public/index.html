@@ -7,56 +7,48 @@
   <title>KhaoticSounds Lyrics Generator</title>
   <style>
     html, body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  overflow: hidden;
-}
-
-    body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      font-family: 'Arial', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
     .generator-container {
-  width: 100vw;
-  height: auto;
-  margin: 0 auto;
-  padding: 20px;
-  background: #000;
-  border: 2px solid #00c6ff;
-  box-shadow: 0 0 25px #0094FF;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  position: relative;
-  top: 50%;
-  transform: translateY(-50%);
-}
+      width: 95vw;
+      max-width: 480px;
+      padding: 20px;
+      background: #000;
+      border: 2px solid #00c6ff;
+      box-shadow: 0 0 25px #0094FF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      border-radius: 12px;
+    }
 
     h1 {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 3.2rem;
-  font-weight: 900;
-  letter-spacing: 1px;
-  color: #fff;
-  text-shadow: 0 0 25px #0094ff, 0 0 40px #0094ff, 0 0 60px #0094ff;
-  text-transform: uppercase;
-  margin: 1.5vh 0;
-  text-align: center;
-  width: 100%;
-  line-height: 1.1;
-  display: flex;
-  justify-content: center;
-}
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #fff;
+      text-shadow: 0 0 25px #0094ff, 0 0 40px #0094ff, 0 0 60px #0094ff;
+      text-transform: uppercase;
+      margin: 1.5vh 0;
+      text-align: center;
+      width: 100%;
+      line-height: 1.1;
+      display: flex;
+      justify-content: center;
+    }
 
     textarea {
       width: 100%;
@@ -81,18 +73,16 @@
     }
 
     .bpm-slider input[type=range] {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 12px;
-  background: linear-gradient(to right, #00c6ff, #0072ff);
-  border-radius: 6px;
-  outline: none;
-  box-shadow: 0 0 12px #0094FF;
-  margin-bottom: 6px;
-  transition: background 0.3s ease;
-  
-  
-}
+      -webkit-appearance: none;
+      width: 100%;
+      height: 12px;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      border-radius: 6px;
+      outline: none;
+      box-shadow: 0 0 12px #0094FF;
+      margin-bottom: 6px;
+      transition: background 0.3s ease;
+    }
 
     .bpm-slider input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
@@ -126,18 +116,7 @@
       font-size: 0.8rem;
       padding: 0 5px;
       color: #fff;
-      position: relative;
       margin-top: 10px;
-    }
-    .bpm-labels::before {
-      content: "";
-      position: absolute;
-      bottom: 100%;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background-image: repeating-linear-gradient(to right, #00c6ff 0, #00c6ff 1px, transparent 1px, transparent 9%);
-      background-size: 10% 100%;
     }
 
     .dropdowns {
@@ -154,73 +133,57 @@
     }
 
     label {
-  font-weight: bold;
-  color: #ffffff;
-  text-shadow: 0 0 5px #0094FF;
-  font-size: 1.1rem;
-  display: block;
-  margin-bottom: 4px;
-  transition: color 0.3s ease;
-}
+      font-weight: bold;
+      color: #ffffff;
+      text-shadow: 0 0 5px #0094FF;
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 4px;
+      transition: color 0.3s ease;
+    }
 
     select {
-  width: 100%;
-  padding: 16px 20px;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  border-radius: 12px;
-  background: linear-gradient(145deg, #0072ff, #00c6ff);
-  color: #fff;
-  box-shadow: 0 0 12px #00c6ff;
-  appearance: none;
-  transition: all 0.3s ease-in-out;
-  background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px 16px;
-  padding-right: 40px;
-}
-select:hover {
-  background-color: #001f3f;
-  box-shadow: 0 0 15px #0094FF;
-}
-select:focus {
-  outline: none;
-  background-color: #001f3f;
-  box-shadow: 0 0 20px #00c6ff;
-}
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #0072ff, #00c6ff);
+      color: #fff;
+      box-shadow: 0 0 12px #00c6ff;
+      appearance: none;
+      transition: all 0.3s ease-in-out;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px 16px;
+      padding-right: 40px;
+    }
+
     select:hover {
       transform: scale(1.02);
       box-shadow: 0 0 20px #00c6ff, inset 0 0 10px #fff;
     }
+
     select:focus {
       outline: none;
       background-color: #0072ff;
       box-shadow: 0 0 24px #00c6ff;
     }
-    select:hover {
-      box-shadow: 0 0 20px #0094FF;
-      background-color: #111;
-    }
-    select:focus {
-      outline: none;
-      background-color: #111;
-      box-shadow: 0 0 24px #0094FF;
-    }
 
     input[type="text"] {
-  width: 100%;
-  padding: 18px;
-  background: #fff;
-  color: #000;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border-radius: 12px;
-  border: 2px solid #0094FF;
-  box-shadow: 0 0 12px #0094FF;
-  margin: 2vh 0 4vh 0;
-}
+      width: 100%;
+      padding: 18px;
+      background: #fff;
+      color: #000;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      border: 2px solid #0094FF;
+      box-shadow: 0 0 12px #0094FF;
+      margin: 2vh 0 4vh 0;
+    }
 
     .action-buttons {
       display: flex;
@@ -244,6 +207,7 @@ select:focus {
       box-shadow: 0 0 15px rgba(0, 148, 255, 0.7), inset 0 0 5px rgba(255, 255, 255, 0.2);
       transition: all 0.2s ease-in-out;
     }
+
     button:hover {
       transform: scale(1.03);
       box-shadow: 0 0 20px #00c6ff, inset 0 0 10px #fff;
@@ -255,32 +219,21 @@ select:focus {
     <h1>LYRICS GENERATOR</h1>
     <textarea id="output" readonly placeholder="Your lyrics will appear here..."></textarea>
     <div class="bpm-slider">
-  <div style="text-align:center; font-family:'Orbitron',sans-serif; font-size:1rem; font-weight:bold; color:#00f0ff; letter-spacing:1px; text-shadow: 0 0 8px #00f0ff, 0 0 12px #0094ff; background:#0a0a0a; border:1px solid #0094FF; border-radius:8px; padding:6px 12px; margin-bottom:10px; box-shadow: 0 0 15px #0094FF;">BPM: <span id="bpm-value">120</span></div>
-  <input type="range" id="bpm" min="60" max="160" value="120" oninput="document.getElementById('bpm-value').innerText = this.value" />
-      
+      <div style="text-align:center; font-family:'Orbitron',sans-serif; font-size:1.2rem; font-weight:900; color:#ffffff; letter-spacing:1px; text-shadow: 0 0 4px #00f0ff, 0 0 8px #0094ff; margin-bottom:10px;">BPM: <span id="bpm-value">120</span></div>
+      <input type="range" id="bpm" min="60" max="160" value="120" oninput="document.getElementById('bpm-value').innerText = this.value" />
       <div class="bpm-labels">
-  <span>60</span>
-  <span>70</span>
-  <span>80</span>
-  <span>90</span>
-  <span>100</span>
-  <span>110</span>
-  <span>120</span>
-  <span>130</span>
-  <span>140</span>
-  <span>150</span>
-  <span>160</span>
-</div></span>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+        <span>60</span>
+        <span>70</span>
+        <span>80</span>
+        <span>90</span>
+        <span>100</span>
+        <span>110</span>
+        <span>120</span>
+        <span>130</span>
+        <span>140</span>
+        <span>150</span>
+        <span>160</span>
+      </div>
     </div>
     <div class="dropdowns">
       <div class="dropdown-block">
@@ -294,21 +247,21 @@ select:focus {
         </select>
       </div>
       <div class="dropdown-block">
-  <label>MOOD</label>
-  <select id="mood">
-    <option>None</option>
-    <option>Hype</option>
-    <option>Chill</option>
-    <option>Emotional</option>
-    <option>Gritty</option>
-    <option>Confident</option>
-    <option>Dark</option>
-    <option>Romantic</option>
-    <option>Motivational</option>
-    <option>Nostalgic</option>
-    <option>Spiritual</option>
-  </select>
-</div>
+        <label>MOOD</label>
+        <select id="mood">
+          <option>None</option>
+          <option>Hype</option>
+          <option>Chill</option>
+          <option>Emotional</option>
+          <option>Gritty</option>
+          <option>Confident</option>
+          <option>Dark</option>
+          <option>Romantic</option>
+          <option>Motivational</option>
+          <option>Nostalgic</option>
+          <option>Spiritual</option>
+        </select>
+      </div>
     </div>
     <input id="prompt" type="text" placeholder="Enter your lyrics theme..." />
     <div class="action-buttons">
@@ -316,6 +269,15 @@ select:focus {
       <button id="copy">COPY LYRIC</button>
     </div>
   </div>
-  <script src="script.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const bpmSlider = document.getElementById('bpm');
+      const bpmValue = document.getElementById('bpm-value');
+      bpmSlider.addEventListener('input', () => {
+        bpmValue.innerText = bpmSlider.value;
+      });
+    });
+  </script>
 </body>
 </html>
+
