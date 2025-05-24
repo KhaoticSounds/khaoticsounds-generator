@@ -2,238 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KhaoticSounds Lyrics Generator</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background-color: #010c1f;
-      color: #00bfff;
-      font-family: 'Orbitron', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .generator-container {
-      border: 2px solid #00bfff;
-      padding: 20px;
-      border-radius: 10px;
-      width: 100%;
-      max-width: 768px;
-      background-color: #031124;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .title {
-      font-size: 32px;
-      margin-bottom: 20px;
-      text-align: center;
-      font-weight: bold;
-    }
-
-    .output-box {
-      background: white;
-      color: black;
-      padding: 20px;
-      min-height: 160px;
-      width: 95%;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      font-family: Arial, sans-serif;
-      font-size: 16px;
-      text-align: left;
-      overflow-y: auto;
-      white-space: pre-wrap;
-    }
-
-    .slider-container {
-      width: 95%;
-      margin-bottom: 15px;
-    }
-
-    .slider {
-      width: 100%;
-    }
-
-    .tickmarks {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .dropdowns {
-      display: flex;
-      justify-content: space-between;
-      width: 95%;
-      margin: 15px 0;
-    }
-
-    .dropdown-group {
-      width: 48%;
-      text-align: left;
-    }
-
-    select,
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 16px;
-      border: 2px solid #00bfff;
-      border-radius: 5px;
-      background-color: #000b1c;
-      color: #ffffff;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: space-between;
-      width: 95%;
-      margin-top: 15px;
-    }
-
-    button {
-      width: 48%;
-      padding: 12px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 16px;
-      border: 2px solid #00bfff;
-      background-color: transparent;
-      color: #00bfff;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #00bfff;
-      color: #000b1c;
-    }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      justify-content: center;
-      align-items: center;
-      color: white;
-      z-index: 1000;
-    }
-
-    .overlay-content {
-      background: #031124;
-      padding: 30px;
-      border-radius: 10px;
-      border: 2px solid #00bfff;
-      text-align: center;
-    }
-
-    .overlay-content a {
-      color: #00bfff;
-      font-weight: bold;
-    }
-  </style>
 </head>
 <body>
-  <div class="generator-container">
-    <h1 class="title">LYRICS GENERATOR</h1>
-    <div class="output-box" id="output">Your lyrics will appear here...</div>
-
-    <div class="slider-container">
-      <input type="range" min="60" max="160" value="120" class="slider" id="bpmSlider" />
-      <div class="tickmarks">
-        <span>60</span><span>70</span><span>80</span><span>90</span><span>100</span><span>110</span>
-        <span>120</span><span>130</span><span>140</span><span>150</span><span>160</span>
+  <div class="container">
+    <h1>GENERATE LYRICS WITH AI</h1>
+    <div class="generator-box">
+      <textarea id="output" placeholder="Your lyrics will appear here..." readonly></textarea>
+      <button id="copy">Copy Lyrics</button>
+      <div class="bpm-slider">
+        <label for="bpm">Select BPM: <span id="bpm-value">120</span></label>
+        <input type="range" id="bpm" min="60" max="160" value="120" />
       </div>
-    </div>
-
-    <div class="dropdowns">
-      <div class="dropdown-group">
-        <label for="bars">BARS</label>
-        <select id="bars">
-          <option value="none" selected>None</option>
-          <option value="8">8 Bars</option>
-          <option value="16">16 Bars</option>
-          <option value="32">32 Bars</option>
-        </select>
+      <input type="text" id="prompt" placeholder="Enter your lyrics theme..." />
+      <div class="dropdowns">
+        <div>
+          <label for="mood">Select Mood:</label>
+          <select id="mood">
+            <option>Hype</option>
+            <option>Chill</option>
+            <option>Emotional</option>
+            <option>Gritty</option>
+            <option>Confident</option>
+            <option>Dark</option>
+            <option>Romantic</option>
+            <option>Motivational</option>
+            <option>Nostalgic</option>
+            <option>Spiritual</option>
+          </select>
+        </div>
+        <div>
+          <label for="bars">Select Bars:</label>
+          <select id="bars">
+            <option>8 Bars</option>
+            <option>16 Bars</option>
+            <option>32 Bars</option>
+          </select>
+        </div>
       </div>
-      <div class="dropdown-group">
-        <label for="mood">MOOD</label>
-        <select id="mood">
-          <option value="none" selected>None</option>
-          <option value="hype">Hype</option>
-          <option value="chill">Chill</option>
-          <option value="emotional">Emotional</option>
-          <option value="gritty">Gritty</option>
-          <option value="confident">Confident</option>
-          <option value="dark">Dark</option>
-          <option value="romantic">Romantic</option>
-          <option value="motivational">Motivational</option>
-          <option value="nostalgic">Nostalgic</option>
-          <option value="spiritual">Spiritual</option>
-        </select>
-      </div>
+      <button id="generate">Generate Lyrics</button>
     </div>
-
-    <input type="text" id="prompt" placeholder="The lyrics are about..." />
-
-    <div class="buttons">
-      <button id="generate">GENERATE LYRICS</button>
-      <button id="copy">COPY LYRIC</button>
-    </div>
+    <p class="footer">TRY IT NOW</p>
   </div>
-
-  <div class="overlay" id="overlay">
-    <div class="overlay-content">
-      <h3>🔥 Unlock Unlimited Access</h3>
-      <p>You’ve used your free generation. Support us to continue:</p>
-      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Pay with PayPal</a>
-      <small>After payment, refresh the page to unlock</small>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById("copy").addEventListener("click", function () {
-      const output = document.getElementById("output").innerText;
-      navigator.clipboard.writeText(output).then(() => {
-        alert("Lyrics copied to clipboard!");
-      });
-    });
-
-    document.getElementById("generate").addEventListener("click", async function () {
-      const bars = document.getElementById("bars").value;
-      const mood = document.getElementById("mood").value;
-      const bpm = document.getElementById("bpmSlider").value;
-      const prompt = document.getElementById("prompt").value;
-
-      const finalPrompt = `Write ${bars} bars of ${mood} lyrics that fit the vibe of a ${bpm} BPM beat about "${prompt}". Do not include any beat counts or numbers.`;
-
-      try {
-        const response = await fetch("/generate", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ prompt: finalPrompt }),
-        });
-
-        const data = await response.json();
-        document.getElementById("output").innerText = data.lyrics || "No lyrics received. Try again.";
-      } catch (error) {
-        document.getElementById("output").innerText = "Error generating lyrics.";
-      }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
-
