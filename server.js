@@ -6,7 +6,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ✅ CORS for both production and preview
+// ✅ CORS Middleware
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   res.setHeader('Access-Control-Allow-Origin', origin || '*');
@@ -22,16 +22,16 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-// ✅ AI Lyrics Generator Endpoint
+// ✅ Lyrics Generator Endpoint
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
   if (!process.env.OPENAI_API_KEY) {
     console.error("❌ Missing OPENAI_API_KEY");
-    return res.status(500).json({ lyrics: '' });
+    return res.status(500).json({ lyrics: '', error: 'Missing API key' });
   }
 
-  console.log("📥 /generate request:", req.body);
+  console.log("📥 /generate request received:", req.body);
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -53,15 +53,21 @@ app.post('/generate', async (req, res) => {
     });
 
     const data = await response.json();
+
+    // 🔍 Log the full response for debugging
+    console.log("🧠 OpenAI API raw response:", data);
+
     const lyrics = data.choices?.[0]?.message?.content?.trim();
 
-    if (!lyrics) throw new Error('No lyrics returned');
-    console.log("✅ Generated Lyrics:\n", lyrics);
+    if (!lyrics) {
+      throw new Error(`No lyrics returned. Details: ${JSON.stringify(data)}`);
+    }
 
+    console.log("✅ Lyrics generated:\n", lyrics);
     res.json({ lyrics });
   } catch (error) {
-    console.error('❌ AI error:', error.message);
-    res.status(500).json({ lyrics: '' });
+    console.error('❌ Error generating lyrics:', error.message);
+    res.status(500).json({ lyrics: '', error: error.message });
   }
 });
 
