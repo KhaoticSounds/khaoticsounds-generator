@@ -202,7 +202,14 @@
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    document.getElementById("copy").addEventListener("click", function () {
+      const output = document.getElementById("output").innerText;
+      navigator.clipboard.writeText(output).then(() => {
+        alert("Lyrics copied to clipboard!");
+      });
+    });
+  </script>
 </body>
 </html>
 
