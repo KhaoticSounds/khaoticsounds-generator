@@ -1,16 +1,10 @@
 window.addEventListener('DOMContentLoaded', () => {
   const bpmSlider = document.getElementById('bpm');
-  const bpmValue = document.getElementById('bpm-value');
   const generateBtn = document.getElementById('generate');
   const copyBtn = document.getElementById('copy');
   const outputBox = document.getElementById('output');
 
-  // Update BPM display
-  bpmSlider.addEventListener('input', () => {
-    bpmValue.innerText = bpmSlider.value;
-  });
-
-  // Generate Lyrics
+  // GENERATE LYRICS
   generateBtn.addEventListener('click', async () => {
     const prompt = document.getElementById('prompt').value;
     const mood = document.getElementById('mood').value;
@@ -32,11 +26,10 @@ window.addEventListener('DOMContentLoaded', () => {
       outputBox.textContent = 'Failed to generate lyrics.';
     }
 
-    // Reset dropdown
     document.getElementById('mood').value = 'None';
   });
 
-  // Copy to clipboard
+  // COPY LYRIC
   copyBtn.addEventListener('click', () => {
     const range = document.createRange();
     range.selectNode(outputBox);
@@ -47,7 +40,6 @@ window.addEventListener('DOMContentLoaded', () => {
     selection.removeAllRanges();
   });
 });
-
 
 
 
