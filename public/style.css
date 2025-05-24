@@ -1,75 +1,51 @@
-body {
-  background: #000;
-  font-family: Arial, sans-serif;
-  color: #fff;
-  margin: 0;
-  padding: 20px;
-  display: flex;
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9999;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-}
-
-.container {
-  width: 100%;
-  max-width: 500px;
+  flex-direction: column;
+  color: #00f0ff;
   text-align: center;
-}
-
-.generator-box {
-  border: 2px solid #00f0ff;
   padding: 20px;
+}
+
+.overlay-box {
   background: #111;
+  padding: 30px;
+  border: 2px solid #00f0ff;
   border-radius: 10px;
-}
-
-textarea,
-input,
-select {
+  max-width: 400px;
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  border: none;
-  border-radius: 5px;
-  font-size: 14px;
 }
 
-textarea {
-  height: 120px;
-  resize: none;
+.overlay-box h2 {
+  margin-top: 0;
 }
 
-button {
-  width: 100%;
-  margin-top: 10px;
-  padding: 12px;
+.paypal-btn {
+  display: inline-block;
   background: #00f0ff;
-  border: none;
   color: #000;
-  font-weight: bold;
-  cursor: pointer;
+  padding: 12px 20px;
+  border: none;
   border-radius: 5px;
-}
-
-button:hover {
-  background: #00c0cc;
-}
-
-.bpm-slider {
-  margin-top: 15px;
-  color: #fff;
-}
-
-.dropdowns {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-  flex-wrap: wrap;
-}
-
-.footer {
-  margin-top: 20px;
+  text-decoration: none;
   font-weight: bold;
-  color: #aaa;
+  margin: 10px 0;
 }
+
+#close-overlay {
+  background: transparent;
+  color: #fff;
+  border: none;
+  margin-top: 10px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 
