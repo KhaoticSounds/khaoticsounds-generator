@@ -10,16 +10,14 @@ window.addEventListener('DOMContentLoaded', () => {
   let hasGenerated = false;
   let isLocked = false;
 
-  // Update BPM number display
   bpmSlider.addEventListener('input', () => {
     bpmValue.innerText = bpmSlider.value;
   });
 
-  // GENERATE LYRICS
   generateBtn.addEventListener('click', async () => {
     if (isLocked) return;
 
-    // Show overlay after 1st generation
+    // Show paywall only after first use
     if (hasGenerated) {
       overlay.style.display = 'flex';
       isLocked = true;
@@ -62,15 +60,14 @@ window.addEventListener('DOMContentLoaded', () => {
       outputBox.value = 'Failed to generate lyrics.';
     }
 
-    // Reset dropdown after generate
     document.getElementById('mood').value = 'None';
   });
 
-  // COPY LYRICS
   copyBtn.addEventListener('click', () => {
     outputBox.select();
     document.execCommand('copy');
   });
 });
+
 
 
