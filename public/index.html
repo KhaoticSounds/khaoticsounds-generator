@@ -283,7 +283,14 @@
     const barsSelect = document.getElementById('bars');
     const bpmSlider = document.getElementById('bpm');
 
+    let hasGenerated = false;
+
     generateBtn.addEventListener('click', async () => {
+      if (hasGenerated) {
+        document.getElementById('paywall-overlay').style.display = 'flex';
+        return;
+      }
+      hasGenerated = true;
       const prompt = promptInput.value;
       const mood = moodSelect.value;
       const bars = barsSelect.value;
@@ -315,6 +322,13 @@
     });
   });
 </script>
+<div id="paywall-overlay">
+  <div class="popup">
+    <h2>🔥 Unlimited Access</h2>
+    <p>You’ve used your free generation. Subscribe for unlimited lyrics.</p>
+    <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank">Unlock Now</a>
+  </div>
+</div>
 </body>
 </html>
 
