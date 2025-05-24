@@ -250,7 +250,7 @@
       </div>
       <div class="dropdown-block">
         <label>MOOD</label>
-        <select id="mood" size="6" onchange="this.size=1; this.blur();" onfocus="this.size=6;">
+        <select id="mood">
           <option>None</option>
           <option>Hype</option>
           <option>Chill</option>
@@ -286,6 +286,7 @@
 
       generateBtn.addEventListener('click', () => {
   bpmValue.innerText = bpmSlider.value;
+  document.getElementById('mood').value = 'None';
 });
     });
   </script>
