@@ -1,59 +1,51 @@
-let generationCount = 0;
-const output = document.getElementById('output');
-const overlay = document.getElementById('overlay');
+window.addEventListener('DOMContentLoaded', () => {
+  const generateBtn = document.getElementById('generate');
+  const copyBtn = document.getElementById('copy');
+  const outputBox = document.getElementById('output');
+  const promptInput = document.getElementById('prompt');
+  const moodSelect = document.getElementById('mood');
+  const barsSelect = document.getElementById('bars');
+  const bpmSlider = document.getElementById('bpm');
+  const bpmValue = document.getElementById('bpm-value');
 
-// ✅ Make sure this URL matches your Railway app's domain
-const API_URL = 'https://khaoticsounds-generator-production.up.railway.app/generate';
+  bpmSlider.addEventListener('input', () => {
+    bpmValue.textContent = bpmSlider.value;
+  });
 
-document.getElementById('generate').addEventListener('click', async () => {
-  if (generationCount >= 1 && !localStorage.getItem('paidUser')) {
-    overlay.style.display = 'flex';
-    return;
-  }
+  generateBtn.addEventListener('click', async () => {
+    const prompt = promptInput.value.trim();
+    const mood = moodSelect.value;
+    const bars = barsSelect.value;
+    const bpm = bpmSlider.value;
 
-  const prompt = document.getElementById('prompt').value.trim();
-  const mood = document.getElementById('mood').value;
-  const bars = document.getElementById('bars').value;
-  const bpm = document.getElementById('bpmSlider').value;
+    outputBox.textContent = 'Loading...';
 
-  if (!prompt || mood === 'none' || bars === 'none') {
-    output.textContent = 'Please fill out all fields before generating lyrics.';
-    return;
-  }
+    try {
+      const response = await fetch('https://khaoticsounds-generator-production.up.railway.app/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ prompt, mood, bars, bpm })
+      });
 
-  output.textContent = 'Generating...';
+      const data = await response.json();
 
-  try {
-    const response = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, mood, bars, bpm })
-    });
+      if (data.lyrics) {
+        outputBox.textContent = data.lyrics;
+      } else {
+        outputBox.textContent = 'No lyrics received. Try again.';
+        console.error('AI Response Error:', data.error);
+      }
 
-    const data = await response.json();
-
-    if (data.lyrics) {
-      output.textContent = data.lyrics;
-      generationCount++;
-    } else {
-      output.textContent = 'No lyrics received. Try again.';
+    } catch (error) {
+      outputBox.textContent = 'An error occurred. Check the console.';
+      console.error('Request failed:', error);
     }
-  } catch (error) {
-    console.error('Fetch error:', error);
-    output.textContent = 'Server error. Please try again later.';
-  }
+  });
+
+  copyBtn.addEventListener('click', () => {
+    const lyrics = outputBox.textContent;
+    navigator.clipboard.writeText(lyrics);
+  });
 });
-
-document.getElementById('copy').addEventListener('click', () => {
-  const text = output.textContent;
-  if (!navigator.clipboard) {
-    alert('Clipboard not supported. Please copy manually.');
-    return;
-  }
-
-  navigator.clipboard.writeText(text)
-    .then(() => alert('Lyrics copied to clipboard!'))
-    .catch(() => alert('Clipboard access denied. Copy manually.'));
-});
-
-
