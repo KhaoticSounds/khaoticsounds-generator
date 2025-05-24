@@ -1,92 +1,398 @@
-<script>
-  window.addEventListener('DOMContentLoaded', () => {
-    const generateBtn = document.getElementById('generate');
-    const copyBtn = document.getElementById('copy');
-    const outputBox = document.getElementById('output');
-    const promptInput = document.getElementById('prompt');
-    const moodSelect = document.getElementById('mood');
-    const barsSelect = document.getElementById('bars');
-    const bpmSlider = document.getElementById('bpm');
-    const bpmValue = document.getElementById('bpm-value');
-    const overlay = document.getElementById('paywall-overlay');
-    const closeBtn = document.getElementById('close-overlay');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>KhaoticSounds Lyrics Generator</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #000;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+    }
+
+    .generator-container {
+      width: 95vw;
+      max-width: 480px;
+      padding: 20px;
+      background: #000;
+      border: 2px solid #00c6ff;
+      box-shadow: 0 0 25px #0094FF;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      border-radius: 12px;
+      height: auto;
+      gap: 20px;
+      margin: auto;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #fff;
+      text-shadow: 0 0 25px #0094ff, 0 0 40px #0094ff, 0 0 60px #0094ff;
+      text-transform: uppercase;
+      margin: 1.5vh 0;
+      text-align: center;
+      width: 100%;
+      line-height: 1.1;
+      display: flex;
+      justify-content: center;
+    }
+
+    textarea {
+      width: 100%;
+      height: 25vh;
+      background: #fff;
+      color: #000;
+      padding: 16px;
+      font-size: 1rem;
+      border-radius: 14px;
+      border: 2px solid #0094FF;
+      margin-bottom: 3vh;
+      overflow-y: auto;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bpm-slider {
+      width: 100%;
+      margin: 2vh 0;
+    }
+
+    .bpm-slider input[type=range] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 12px;
+      background: linear-gradient(to right, #0044cc, #ffffff);
+      border-radius: 6px;
+      outline: none;
+      box-shadow: 0 0 12px #0094FF;
+      margin-bottom: 6px;
+      transition: background 0.3s ease;
+    }
+
+    .bpm-slider input[type=range]::-webkit-slider-thumb,
+    .bpm-slider input[type=range]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid #0094FF;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0094FF, inset 0 0 4px #00f0ff;
+      transition: transform 0.2s ease;
+    }
+
+    .bpm-slider input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .bpm-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      padding: 0 5px;
+      color: #fff;
+      margin-top: 10px;
+    }
+
+    .dropdowns {
+      display: flex;
+      width: 100%;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 2vh;
+    }
+
+    .dropdown-block {
+      flex: 1;
+      min-width: 45%;
+    }
+
+    label {
+      font-weight: bold;
+      color: #ffffff;
+      text-shadow: 0 0 5px #0094FF;
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    select {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #0072ff, #00c6ff);
+      color: #fff;
+      box-shadow: 0 0 12px #00c6ff;
+      appearance: none;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px 16px;
+      padding-right: 40px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 18px;
+      background: #fff;
+      color: #000;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 12px;
+      border: 2px solid #0094FF;
+      box-shadow: 0 0 12px #0094FF;
+      margin: 2vh 0 4vh 0;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2vh;
+    }
+
+    button {
+      flex: 1;
+      min-width: 45%;
+      padding: 18px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #00c6ff, #0072ff);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 148, 255, 0.7), inset 0 0 5px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease-in-out;
+    }
+
+    button:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px #00c6ff, inset 0 0 10px #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="generator-container">
+    <h1>Lyrics Generator</h1>
+    <textarea id="output" readonly placeholder="Your lyrics will appear here..."></textarea>
+    <div class="bpm-slider">
+      <input type="range" id="bpm" min="60" max="160" value="120">
+      <div class="bpm-labels">
+        <span>60</span>
+        <span>70</span>
+        <span>80</span>
+        <span>90</span>
+        <span>100</span>
+        <span>110</span>
+        <span>120</span>
+        <span>130</span>
+        <span>140</span>
+        <span>150</span>
+        <span>160</span>
+      </div>
+    </div>
+    <div class="dropdowns">
+      <div class="dropdown-block">
+        <label for="bars">Bars</label>
+        <select id="bars">
+          <option value="None">None</option>
+          <option value="8 Bars">8 Bars</option>
+          <option value="8 Bar Hook">8 Bar Hook</option>
+          <option value="16 Bars">16 Bars</option>
+          <option value="32 Bars">32 Bars</option>
+        </select>
+      </div>
+      <div class="dropdown-block">
+        <label for="mood">Mood</label>
+        <select id="mood">
+          <option value="None">None</option>
+          <option value="Hype">Hype</option>
+          <option value="Chill">Chill</option>
+          <option value="Emotional">Emotional</option>
+          <option value="Gritty">Gritty</option>
+          <option value="Confident">Confident</option>
+          <option value="Dark">Dark</option>
+          <option value="Romantic">Romantic</option>
+          <option value="Motivational">Motivational</option>
+          <option value="Nostalgic">Nostalgic</option>
+          <option value="Spiritual">Spiritual</option>
+        </select>
+      </div>
+    </div>
+    <input id="prompt" type="text" placeholder="Enter your lyrics theme...">
+    <div class="action-buttons">
+      <button id="generate">Generate Lyrics</button>
+      <button id="copy">Copy Lyric</button>
+    </div>
+  </div>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const generateBtn = document.getElementById('generate');
+      const copyBtn = document.getElementById('copy');
+      const outputBox = document.getElementById('output');
+      const bpmSlider = document.getElementById('bpm');
+      const bpmValue = document.createElement('span');
+      bpmValue.innerText = bpmSlider.value;
+
+      bpmSlider.addEventListener('input', () => {
+        bpmValue.innerText = bpmSlider.value;
+      });
+
+      let hasGenerated = false;
+generateBtn.addEventListener('click', async () => {
+  if (hasGenerated) {
+    const overlay = document.getElementById('overlay');
     const countdownDisplay = document.getElementById('countdown');
+    overlay.style.display = 'flex';
+    let countdown = 120;
+    countdownDisplay.innerText = `Try again in ${countdown} seconds...`;
 
-    let hasGenerated = false;
-    let isLocked = false;
-
-    bpmSlider.addEventListener('input', () => {
-      bpmValue.textContent = bpmSlider.value;
-    });
-
-    generateBtn.addEventListener('click', async () => {
-      if (isLocked) return;
-
-      if (hasGenerated) {
-        overlay.style.display = 'flex';
-        isLocked = true;
-
-        let countdown = 120;
-        countdownDisplay.textContent = `Try again in ${countdown} seconds...`;
-
-        const interval = setInterval(() => {
-          countdown--;
-          countdownDisplay.textContent = `Try again in ${countdown} seconds...`;
-          if (countdown <= 0) {
-            clearInterval(interval);
-            overlay.style.display = 'none';
-            isLocked = false;
-            hasGenerated = false;
-          }
-        }, 1000);
-
-        return;
+    const interval = setInterval(() => {
+      countdown--;
+      countdownDisplay.innerText = `Try again in ${countdown} seconds...`;
+      if (countdown <= 0) {
+        clearInterval(interval);
+        overlay.style.display = 'none';
+        hasGenerated = false;
       }
+    }, 1000);
+    return;
+  }
+  hasGenerated = true;
+        const prompt = document.getElementById('prompt').value;
+        const mood = document.getElementById('mood').value;
+        const bars = document.getElementById('bars').value;
+        const bpm = bpmSlider.value;
 
-      const prompt = promptInput.value.trim();
-      const mood = moodSelect.value;
-      const bars = barsSelect.value;
-      const bpm = bpmSlider.value;
+        const input = `Mood: ${mood}, Bars: ${bars}, BPM: ${bpm}, Prompt: ${prompt}`;
+        outputBox.value = 'Loading...';
 
-      outputBox.textContent = 'Loading...';
+        try {
+          const response = await fetch('https://khaoticsounds-generator-production.up.railway.app/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt, mood, bars, bpm })
+          });
 
-      try {
-        const response = await fetch('https://khaoticsounds-generator-production.up.railway.app/generate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt, mood, bars, bpm })
-        });
-
-        const data = await response.json();
-
-        if (data.lyrics) {
-          outputBox.textContent = data.lyrics;
-          hasGenerated = true;
-        } else {
-          outputBox.textContent = 'No lyrics received. Try again.';
-          console.error('AI error:', data.error);
+          const data = await response.json();
+          outputBox.value = data.lyrics || 'No lyrics returned.';
+        } catch (err) {
+          outputBox.value = 'Failed to generate lyrics.';
         }
-      } catch (err) {
-        outputBox.textContent = 'Error connecting. Try again.';
-        console.error(err);
-      }
-    });
+      });
 
-    copyBtn.addEventListener('click', () => {
-      const lyrics = outputBox.textContent;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(lyrics).catch(err => {
-          console.error('Clipboard error:', err);
-        });
+      copyBtn.addEventListener('click', () => {
+        outputBox.select();
+        document.execCommand('copy');
+      });
+    });
+    const countdownDisplay = document.getElementById('countdown');
+  let hasGenerated = false;
+  let isLocked = false;
+
+  generateBtn.addEventListener('click', async () => {
+    if (isLocked) return;
+
+    if (hasGenerated) {
+      paywallOverlay.style.display = 'flex';
+      isLocked = true;
+      let countdown = 120;
+      countdownDisplay.textContent = `Try again in ${countdown} seconds...`;
+
+      const interval = setInterval(() => {
+        countdown--;
+        countdownDisplay.textContent = `Try again in ${countdown} seconds...`;
+        if (countdown <= 0) {
+          clearInterval(interval);
+          paywallOverlay.style.display = 'none';
+          isLocked = false;
+          hasGenerated = false;
+        }
+      }, 1000);
+      return;
+    }
+
+    const prompt = promptInput.value.trim();
+    const mood = moodSelect.value;
+    const bars = barsSelect.value;
+    const bpm = bpmSlider.value;
+
+    outputBox.textContent = 'Loading...';
+
+    try {
+      const response = await fetch('https://khaoticsounds-generator-production.up.railway.app/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, mood, bars, bpm })
+      });
+
+      const data = await response.json();
+
+      if (data.lyrics) {
+        outputBox.textContent = data.lyrics;
+        hasGenerated = true;
       } else {
-        alert('Clipboard not supported.');
+        outputBox.textContent = 'No lyrics received. Try again.';
+        console.error('AI error:', data.error);
       }
-    });
-
-    closeBtn.addEventListener('click', () => {
-      overlay.style.display = 'none';
-    });
+    } catch (err) {
+      outputBox.textContent = 'Error connecting. Try again.';
+      console.error(err);
+    }
   });
-</script>
 
+  copyBtn.addEventListener('click', () => {
+    const lyrics = outputBox.textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(lyrics).catch(err => {
+        console.error('Clipboard error:', err);
+      });
+    } else {
+      alert('Clipboard not supported.');
+    }
+  });
+
+  closeBtn.addEventListener('click', () => {
+    paywallOverlay.style.display = 'none';
+  });
+});
+</script>
+<div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.95); color:#00c6ff; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px;">
+  <h2 style="font-family:'Orbitron',sans-serif; font-size:2rem; margin-bottom:1rem;">Subscribe to Unlock More</h2>
+  <p style="font-size:1.1rem; max-width:400px;">You've used your free generation. Please wait or subscribe for unlimited access.</p>
+  <p id="countdown" style="font-size:1.2rem; margin-top:20px;"></p>
+</div>
+<div id="paywall-overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.95); color:#00c6ff; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px;">
+  <h2 style="font-family:'Orbitron',sans-serif; font-size:2rem; margin-bottom:1rem;">Subscribe to Unlock More</h2>
+  <p style="font-size:1.1rem; max-width:400px;">You've used your free generation. Please wait or subscribe for unlimited access.</p>
+  <p id="countdown" style="font-size:1.2rem; margin-top:20px;"></p>
+  <button id="close-overlay" style="margin-top:20px; padding:10px 20px; background:#00c6ff; color:#000; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Close</button>
+</div>
+</body>
+</html>
 
