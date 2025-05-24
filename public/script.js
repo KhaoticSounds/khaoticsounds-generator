@@ -1,16 +1,18 @@
 window.addEventListener('DOMContentLoaded', () => {
+  const bpmSlider = document.getElementById('bpm');
+  const bpmValue = document.getElementById('bpm-value');
   const generateBtn = document.getElementById('generate');
   const copyBtn = document.getElementById('copy');
   const outputBox = document.getElementById('output');
-  const promptInput = document.getElementById('prompt');
-  const moodSelect = document.getElementById('mood');
-  const barsSelect = document.getElementById('bars');
-  const bpmSlider = document.getElementById('bpm');
   const overlay = document.getElementById('paywall-overlay');
   const countdownDisplay = document.getElementById('countdown');
 
   let hasGenerated = false;
   let isLocked = false;
+
+  bpmSlider.addEventListener('input', () => {
+    bpmValue.innerText = bpmSlider.value;
+  });
 
   generateBtn.addEventListener('click', async () => {
     if (isLocked) return;
@@ -36,32 +38,35 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const prompt = promptInput.value;
-    const mood = moodSelect.value;
-    const bars = barsSelect.value;
+    const prompt = document.getElementById('prompt').value;
+    const mood = document.getElementById('mood').value;
+    const bars = document.getElementById('bars').value;
     const bpm = bpmSlider.value;
 
-    outputBox.textContent = 'Generating...';
+    outputBox.value = 'Loading...';
 
     try {
-      const res = await fetch('/generate', {
+      const response = await fetch('https://khaoticsounds-generator-production.up.railway.app/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, mood, bars, bpm })
       });
 
-      const data = await res.json();
-      outputBox.textContent = data.lyrics || 'Something went wrong.';
+      const data = await response.json();
+      outputBox.value = data.lyrics || 'No lyrics returned.';
       hasGenerated = true;
     } catch (err) {
-      outputBox.textContent = 'Error generating lyrics.';
+      outputBox.value = 'Failed to generate lyrics.';
     }
+
+    // Optional: reset mood to None
+    document.getElementById('mood').value = 'None';
   });
 
   copyBtn.addEventListener('click', () => {
-    navigator.clipboard.writeText(outputBox.textContent);
+    outputBox.select();
+    document.execCommand('copy');
   });
 });
-
 
 
