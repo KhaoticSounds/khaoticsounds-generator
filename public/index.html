@@ -219,6 +219,46 @@
       box-shadow: 0 0 20px #00c6ff, inset 0 0 10px #fff;
     }
   </style>
-</head>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const generateBtn = document.getElementById('generate');
+    const copyBtn = document.getElementById('copy');
+    const outputBox = document.getElementById('output');
+    const bpmSlider = document.getElementById('bpm');
+    const bpmValue = document.getElementById('bpm-value');
 
+    bpmSlider.addEventListener('input', () => {
+      bpmValue.innerText = bpmSlider.value;
+    });
+
+    generateBtn.addEventListener('click', async () => {
+      const prompt = document.getElementById('prompt').value;
+      const mood = document.getElementById('mood').value;
+      const bars = document.getElementById('bars').value;
+      const bpm = bpmSlider.value;
+
+      const input = `Mood: ${mood}, Bars: ${bars}, BPM: ${bpm}, Prompt: ${prompt}`;
+      outputBox.value = 'Loading...';
+
+      try {
+        const response = await fetch('https://khaoticsounds-generator-production.up.railway.app/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, mood, bars, bpm })
+        });
+
+        const data = await response.json();
+        outputBox.value = data.lyrics || 'No lyrics returned.';
+      } catch (err) {
+        outputBox.value = 'Failed to generate lyrics.';
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      outputBox.select();
+      document.execCommand('copy');
+    });
+  });
+</script>
+</head>
 
