@@ -96,9 +96,11 @@
       box-shadow: 0 0 10px #0094FF, inset 0 0 4px #00f0ff;
       transition: transform 0.2s ease;
     }
+
     .bpm-slider input[type=range]::-webkit-slider-thumb:hover {
       transform: scale(1.2);
     }
+
     .bpm-slider input[type=range]::-moz-range-thumb {
       width: 20px;
       height: 20px;
@@ -220,7 +222,7 @@
     <textarea id="output" readonly placeholder="Your lyrics will appear here..."></textarea>
     <div class="bpm-slider">
       <div style="text-align:center; font-family:'Orbitron',sans-serif; font-size:1.2rem; font-weight:900; color:#ffffff; letter-spacing:1px; text-shadow: 0 0 4px #00f0ff, 0 0 8px #0094ff; margin-bottom:10px;">BPM: <span id="bpm-value">120</span></div>
-      <input type="range" id="bpm" min="60" max="160" value="120" oninput="document.getElementById('bpm-value').innerText = this.value" />
+      <input type="range" id="bpm" min="60" max="160" value="120" />
       <div class="bpm-labels">
         <span>60</span>
         <span>70</span>
@@ -248,7 +250,7 @@
       </div>
       <div class="dropdown-block">
         <label>MOOD</label>
-        <select id="mood">
+        <select id="mood" size="6" onchange="this.size=1; this.blur();" onfocus="this.size=6;">
           <option>None</option>
           <option>Hype</option>
           <option>Chill</option>
@@ -269,41 +271,25 @@
       <button id="copy">COPY LYRIC</button>
     </div>
   </div>
+  
   <script>
-  let generationCount = 0;
-  window.addEventListener('DOMContentLoaded', () => {
-    const bpmSlider = document.getElementById('bpm');
-    const bpmValue = document.getElementById('bpm-value');
-    const generateBtn = document.getElementById('generate');
-    const overlay = document.getElementById('overlay');
+    window.addEventListener('DOMContentLoaded', () => {
+      const bpmSlider = document.getElementById('bpm');
+      const bpmValue = document.getElementById('bpm-value');
+      const generateBtn = document.getElementById('generate');
+      const overlay = document.getElementById('overlay');
+      let hasGenerated = false; // flag for call-to-action timing
 
-    bpmSlider.addEventListener('input', () => {
-      bpmValue.innerText = bpmSlider.value;
-    });
+      bpmSlider.addEventListener('input', () => {
+        bpmValue.innerText = bpmSlider.value;
+      });
 
-    generateBtn.addEventListener('click', () => {
-  generationCount++;
-  if (generationCount > 1) {
-    overlay.style.display = 'flex';
-    setTimeout(() => {
-      overlay.innerHTML = '<h2 style="font-family:\'Orbitron\',sans-serif; font-size:2rem; margin-bottom:1rem;">Please wait 5 minutes</h2><p style="font-size:1.1rem; max-width:400px;">You must wait before generating another set of lyrics.</p>';
-    }, 500);
-    setTimeout(() => {
-      overlay.style.display = 'none';
-      overlay.innerHTML = `<h2 style="font-family:'Orbitron',sans-serif; font-size:2rem; margin-bottom:1rem;">Subscribe to Unlock Unlimited Lyrics</h2>
-      <p style="font-size:1.1rem; max-width:400px;">You've used your free generation. Subscribe now to get unlimited access to lyrics generation and more!</p>
-      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" style="margin-top:1.5rem; padding:12px 24px; background:#00c6ff; color:#000; font-weight:bold; text-decoration:none; border-radius:8px; box-shadow:0 0 12px #00c6ff;">Subscribe Now</a>`;
-      generationCount = 1;
-    }, 300000); // 5 minutes
-  }
+      generateBtn.addEventListener('click', () => {
+  bpmValue.innerText = bpmSlider.value;
 });
-  });
-</script>
-<div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.9); color:#00c6ff; z-index:1000; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px; box-sizing:border-box;">
-  <h2 style="font-family:'Orbitron',sans-serif; font-size:2rem; margin-bottom:1rem;">Subscribe to Unlock Unlimited Lyrics</h2>
-  <p style="font-size:1.1rem; max-width:400px;">You've used your free generation. Subscribe now to get unlimited access to lyrics generation and more!</p>
-  <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" style="margin-top:1.5rem; padding:12px 24px; background:#00c6ff; color:#000; font-weight:bold; text-decoration:none; border-radius:8px; box-shadow:0 0 12px #00c6ff;">Subscribe Now</a>
-</div>
+    });
+  </script>
+
 </body>
 </html>
 
