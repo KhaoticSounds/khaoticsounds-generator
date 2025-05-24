@@ -209,6 +209,30 @@
         alert("Lyrics copied to clipboard!");
       });
     });
+
+    document.getElementById("generate").addEventListener("click", async function () {
+      const bars = document.getElementById("bars").value;
+      const mood = document.getElementById("mood").value;
+      const bpm = document.getElementById("bpmSlider").value;
+      const prompt = document.getElementById("prompt").value;
+
+      const finalPrompt = `Write ${bars} bars of ${mood} lyrics that fit the vibe of a ${bpm} BPM beat about "${prompt}". Do not include any beat counts or numbers.`;
+
+      try {
+        const response = await fetch("/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ prompt: finalPrompt }),
+        });
+
+        const data = await response.json();
+        document.getElementById("output").innerText = data.lyrics || "No lyrics received. Try again.";
+      } catch (error) {
+        document.getElementById("output").innerText = "Error generating lyrics.";
+      }
+    });
   </script>
 </body>
 </html>
