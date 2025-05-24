@@ -1,51 +1,70 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KhaoticSounds Lyrics Generator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lyrics Generator</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>GENERATE LYRICS WITH AI</h1>
-    <div class="generator-box">
-      <textarea id="output" placeholder="Your lyrics will appear here..." readonly></textarea>
-      <button id="copy">Copy Lyrics</button>
-      <div class="bpm-slider">
-        <label for="bpm">Select BPM: <span id="bpm-value">120</span></label>
-        <input type="range" id="bpm" min="60" max="160" value="120" />
+  <div class="generator-container">
+    <h1>LYRICS GENERATOR</h1>
+    <textarea id="output" readonly placeholder="Your lyrics will appear here..."></textarea>
+
+    <div class="bpm-slider">
+      <input type="range" id="bpm" min="60" max="160" value="120" />
+      <div class="bpm-labels">
+        <span>60</span>
+        <span>70</span>
+        <span>80</span>
+        <span>90</span>
+        <span>100</span>
+        <span>110</span>
+        <span>120</span>
+        <span>130</span>
+        <span>140</span>
+        <span>150</span>
+        <span>160</span>
       </div>
-      <input type="text" id="prompt" placeholder="Enter your lyrics theme..." />
-      <div class="dropdowns">
-        <div>
-          <label for="mood">Select Mood:</label>
-          <select id="mood">
-            <option>Hype</option>
-            <option>Chill</option>
-            <option>Emotional</option>
-            <option>Gritty</option>
-            <option>Confident</option>
-            <option>Dark</option>
-            <option>Romantic</option>
-            <option>Motivational</option>
-            <option>Nostalgic</option>
-            <option>Spiritual</option>
-          </select>
-        </div>
-        <div>
-          <label for="bars">Select Bars:</label>
-          <select id="bars">
-            <option>8 Bars</option>
-            <option>16 Bars</option>
-            <option>32 Bars</option>
-          </select>
-        </div>
-      </div>
-      <button id="generate">Generate Lyrics</button>
     </div>
-    <p class="footer">TRY IT NOW</p>
+
+    <div class="dropdowns">
+      <div class="dropdown-block">
+        <label>BARS</label>
+        <select id="bars">
+          <option>None</option>
+          <option>8 Bars</option>
+          <option>16 Bars</option>
+          <option>32 Bars</option>
+        </select>
+      </div>
+      <div class="dropdown-block">
+        <label>MOOD</label>
+        <select id="mood">
+          <option>None</option>
+          <option>Hype</option>
+          <option>Chill</option>
+          <option>Emotional</option>
+          <option>Gritty</option>
+          <option>Confident</option>
+          <option>Dark</option>
+          <option>Romantic</option>
+          <option>Motivational</option>
+          <option>Nostalgic</option>
+          <option>Spiritual</option>
+        </select>
+      </div>
+    </div>
+
+    <input id="prompt" type="text" placeholder="Enter your lyrics theme..." />
+
+    <div class="action-buttons">
+      <button id="generate">GENERATE LYRICS</button>
+      <button id="copy">COPY LYRIC</button>
+    </div>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
