@@ -5,6 +5,111 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KhaoticSounds Lyrics Generator</title>
   <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #010c1f;
+      color: #00bfff;
+      font-family: 'Orbitron', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .generator-container {
+      border: 2px solid #00bfff;
+      padding: 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+      background-color: #031124;
+    }
+    .title {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    .output-box {
+      background: white;
+      color: black;
+      padding: 15px;
+      min-height: 120px;
+      border-radius: 5px;
+      margin-bottom: 15px;
+    }
+    .slider-container {
+      margin-bottom: 10px;
+    }
+    .slider {
+      width: 100%;
+    }
+    .tickmarks {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+    .dropdowns {
+      display: flex;
+      justify-content: space-between;
+      margin: 15px 0;
+    }
+    .dropdown-group {
+      width: 48%;
+    }
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      border: 1px solid #00bfff;
+      border-radius: 5px;
+      background-color: #000b1c;
+      color: #00bfff;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 15px;
+    }
+    button {
+      width: 48%;
+      padding: 10px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      border: 1px solid #00bfff;
+      background-color: #000b1c;
+      color: #00bfff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #00bfff;
+      color: #000b1c;
+    }
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      color: white;
+      z-index: 1000;
+    }
+    .overlay-content {
+      background: #031124;
+      padding: 30px;
+      border-radius: 10px;
+      border: 2px solid #00bfff;
+      text-align: center;
+    }
+    .overlay-content a {
+      color: #00bfff;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
   <div class="generator-container">
@@ -14,8 +119,8 @@
     <div class="slider-container">
       <input type="range" min="60" max="160" value="120" class="slider" id="bpmSlider" />
       <div class="tickmarks">
-        <span>60</span><span>70</span><span>80</span><span>90</span><span>100</span>
-        <span>110</span><span>120</span><span>130</span><span>140</span><span>150</span><span>160</span>
+        <span>60</span><span>70</span><span>80</span><span>90</span><span>100</span><span>110</span>
+        <span>120</span><span>130</span><span>140</span><span>150</span><span>160</span>
       </div>
     </div>
 
