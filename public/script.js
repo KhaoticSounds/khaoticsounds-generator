@@ -7,12 +7,21 @@ window.addEventListener('DOMContentLoaded', () => {
   const barsSelect = document.getElementById('bars');
   const bpmSlider = document.getElementById('bpm');
   const bpmValue = document.getElementById('bpm-value');
+  const overlay = document.getElementById('paywall-overlay');
+  const closeBtn = document.getElementById('close-overlay');
+
+  let hasGenerated = false;
 
   bpmSlider.addEventListener('input', () => {
     bpmValue.textContent = bpmSlider.value;
   });
 
   generateBtn.addEventListener('click', async () => {
+    if (hasGenerated) {
+      overlay.style.display = 'flex';
+      return;
+    }
+
     const prompt = promptInput.value.trim();
     const mood = moodSelect.value;
     const bars = barsSelect.value;
@@ -23,9 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
     try {
       const response = await fetch('https://khaoticsounds-generator-production.up.railway.app/generate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, mood, bars, bpm })
       });
 
@@ -33,13 +40,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
       if (data.lyrics) {
         outputBox.textContent = data.lyrics;
+        hasGenerated = true;
       } else {
         outputBox.textContent = 'No lyrics received. Try again.';
-        console.error('OpenAI error:', data.error);
+        console.error('AI error:', data.error);
       }
     } catch (err) {
-      outputBox.textContent = 'Failed to connect. Check console.';
-      console.error('Request error:', err);
+      outputBox.textContent = 'Error connecting. Try again.';
+      console.error(err);
     }
   });
 
@@ -53,4 +61,9 @@ window.addEventListener('DOMContentLoaded', () => {
       alert('Clipboard not supported.');
     }
   });
+
+  closeBtn.addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
 });
+
