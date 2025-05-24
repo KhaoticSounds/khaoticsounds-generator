@@ -35,17 +35,22 @@ window.addEventListener('DOMContentLoaded', () => {
         outputBox.textContent = data.lyrics;
       } else {
         outputBox.textContent = 'No lyrics received. Try again.';
-        console.error('AI Response Error:', data.error);
+        console.error('OpenAI error:', data.error);
       }
-
-    } catch (error) {
-      outputBox.textContent = 'An error occurred. Check the console.';
-      console.error('Request failed:', error);
+    } catch (err) {
+      outputBox.textContent = 'Failed to connect. Check console.';
+      console.error('Request error:', err);
     }
   });
 
   copyBtn.addEventListener('click', () => {
     const lyrics = outputBox.textContent;
-    navigator.clipboard.writeText(lyrics);
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(lyrics).catch(err => {
+        console.error('Clipboard error:', err);
+      });
+    } else {
+      alert('Clipboard not supported.');
+    }
   });
 });
