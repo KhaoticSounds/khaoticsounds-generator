@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>KhaoticSounds Lyrics Generator</title>
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
-      background: #000;
-      color: #0094FF;
-      font-family: 'Arial', sans-serif;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+      height: 100vh;
+  height: 100vh;
+  background: #000;
+  font-family: 'Arial', sans-serif;
+  overflow: hidden;
+}
 
     body {
       display: flex;
@@ -24,24 +25,29 @@
 
     .generator-container {
       width: 100vw;
-      height: 100vh;
-      padding: 5vw;
+      
+      padding: 4vh 4vw;
+      gap: 2vh;
       box-sizing: border-box;
       background: #0a0a0a;
-      border: 2px solid #0094FF;
+      border: 2px solid #00c6ff;
       border-radius: 12px;
       box-shadow: 0 0 25px #0094FF;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: start;
     }
 
     h1 {
-      font-size: 5vw;
-      color: #0094FF;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 4.5rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: #fff;
+      text-shadow: 0 0 35px #0094ff, 0 0 60px #0094ff, 0 0 90px #0094ff;
+      text-transform: uppercase;
       margin-bottom: 2vh;
-      text-align: center;
     }
 
     textarea {
@@ -53,23 +59,12 @@
       font-size: 1rem;
       border-radius: 14px;
       border: 2px solid #0094FF;
-      margin-bottom: 10px;
+      margin-bottom: 3vh;
       overflow-y: auto;
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 16px;
-      background: #fff;
-      color: #000;
-      font-size: 1rem;
-      border-radius: 14px;
-      border: none;
-      margin-top: 10px;
     }
 
     .bpm-slider {
@@ -78,35 +73,43 @@
     }
 
     .bpm-slider input[type=range] {
-      -webkit-appearance: none;
-      width: 100%;
-      height: 10px;
-      background: #111;
-      border-radius: 5px;
-      outline: none;
-      box-shadow: 0 0 10px #0094FF;
-      margin-bottom: 6px;
-    }
+  -webkit-appearance: none;
+  width: 100%;
+  height: 12px;
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  border-radius: 6px;
+  outline: none;
+  box-shadow: 0 0 12px #0094FF;
+  margin-bottom: 6px;
+  transition: background 0.3s ease;
+  
+  
+}
 
     .bpm-slider input[type=range]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: #0094FF;
+      background: #fff;
+      border: 2px solid #0094FF;
       cursor: pointer;
-      box-shadow: 0 0 10px #0094FF;
-      margin-top: -4px;
+      box-shadow: 0 0 10px #0094FF, inset 0 0 4px #00f0ff;
+      transition: transform 0.2s ease;
     }
-
+    .bpm-slider input[type=range]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
     .bpm-slider input[type=range]::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: #0094FF;
+      background: #fff;
+      border: 2px solid #0094FF;
       cursor: pointer;
-      box-shadow: 0 0 10px #0094FF;
+      box-shadow: 0 0 10px #0094FF, inset 0 0 4px #00f0ff;
+      transition: transform 0.2s ease;
     }
 
     .bpm-labels {
@@ -114,7 +117,19 @@
       justify-content: space-between;
       font-size: 0.8rem;
       padding: 0 5px;
-      color: #0094FF;
+      color: #fff;
+      position: relative;
+      margin-top: 10px;
+    }
+    .bpm-labels::before {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background-image: repeating-linear-gradient(to right, #00c6ff 0, #00c6ff 1px, transparent 1px, transparent 9%);
+      background-size: 10% 100%;
     }
 
     .dropdowns {
@@ -122,6 +137,7 @@
       width: 100%;
       gap: 10px;
       flex-wrap: wrap;
+      margin-bottom: 2vh;
     }
 
     .dropdown-block {
@@ -130,25 +146,79 @@
     }
 
     label {
-      font-weight: bold;
-      color: #0094FF;
-      display: block;
-      margin-bottom: 4px;
-    }
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 0 5px #0094FF;
+  font-size: 1.1rem;
+  display: block;
+  margin-bottom: 4px;
+  transition: color 0.3s ease;
+}
 
     select {
-      width: 100%;
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 14px;
-      border: none;
+  width: 100%;
+  padding: 16px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #0072ff, #00c6ff);
+  color: #fff;
+  box-shadow: 0 0 12px #00c6ff;
+  appearance: none;
+  transition: all 0.3s ease-in-out;
+  background-image: url('data:image/svg+xml;utf8,<svg fill="%23ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+  padding-right: 40px;
+}
+select:hover {
+  background-color: #001f3f;
+  box-shadow: 0 0 15px #0094FF;
+}
+select:focus {
+  outline: none;
+  background-color: #001f3f;
+  box-shadow: 0 0 20px #00c6ff;
+}
+    select:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px #00c6ff, inset 0 0 10px #fff;
     }
+    select:focus {
+      outline: none;
+      background-color: #0072ff;
+      box-shadow: 0 0 24px #00c6ff;
+    }
+    select:hover {
+      box-shadow: 0 0 20px #0094FF;
+      background-color: #111;
+    }
+    select:focus {
+      outline: none;
+      background-color: #111;
+      box-shadow: 0 0 24px #0094FF;
+    }
+
+    input[type="text"] {
+  width: 100%;
+  padding: 18px;
+  background: #fff;
+  color: #000;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: 2px solid #0094FF;
+  box-shadow: 0 0 12px #0094FF;
+  margin: 2vh 0 4vh 0;
+}
 
     .action-buttons {
       display: flex;
       gap: 10px;
       width: 100%;
-      margin-top: 2vh;
+      margin-bottom: 4vh;
       flex-wrap: wrap;
     }
 
@@ -156,76 +226,54 @@
       flex: 1;
       min-width: 45%;
       padding: 18px;
-      font-size: 1rem;
-      background: #0094FF;
-      color: #000;
-      font-weight: bold;
-      border: none;
-      border-radius: 14px;
-      cursor: pointer;
-      box-shadow: 0 0 12px #0094FF;
-    }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.95);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      color: #0094FF;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .overlay-box {
-      background: #111;
-      padding: 30px;
-      border: 2px solid #0094FF;
-      border-radius: 10px;
-      max-width: 400px;
-      width: 100%;
-    }
-
-    .paypal-btn {
-      display: inline-block;
-      background: #0094FF;
-      color: #000;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 5px;
-      text-decoration: none;
-      font-weight: bold;
-      margin: 10px 0;
-    }
-
-    #close-overlay {
-      background: transparent;
+      font-size: 1.1rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #00c6ff, #0072ff);
       color: #fff;
       border: none;
-      margin-top: 10px;
-      text-decoration: underline;
+      border-radius: 12px;
       cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 148, 255, 0.7), inset 0 0 5px rgba(255, 255, 255, 0.2);
+      transition: all 0.2s ease-in-out;
+    }
+    button:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px #00c6ff, inset 0 0 10px #fff;
     }
   </style>
 </head>
 <body>
   <div class="generator-container">
     <h1>LYRICS GENERATOR</h1>
-
     <textarea id="output" readonly placeholder="Your lyrics will appear here..."></textarea>
-
     <div class="bpm-slider">
-      <input type="range" id="bpm" min="60" max="160" value="120" />
+  <div style="text-align:center; font-family:'Orbitron',sans-serif; font-size:1rem; font-weight:bold; color:#00f0ff; letter-spacing:1px; text-shadow: 0 0 8px #00f0ff, 0 0 12px #0094ff; background:#0a0a0a; border:1px solid #0094FF; border-radius:8px; padding:6px 12px; margin-bottom:10px; box-shadow: 0 0 15px #0094FF;">BPM: <span id="bpm-value">120</span></div>
+  <input type="range" id="bpm" min="60" max="160" value="120" oninput="document.getElementById('bpm-value').innerText = this.value" />
+      
       <div class="bpm-labels">
-        <span>60</span><span>70</span><span>80</span><span>90</span><span>100</span><span>110</span><span>120</span><span>130</span><span>140</span><span>150</span><span>160</span>
-      </div>
+  <span>60</span>
+  <span>70</span>
+  <span>80</span>
+  <span>90</span>
+  <span>100</span>
+  <span>110</span>
+  <span>120</span>
+  <span>130</span>
+  <span>140</span>
+  <span>150</span>
+  <span>160</span>
+</div></span>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
     </div>
-
     <div class="dropdowns">
       <div class="dropdown-block">
         <label>BARS</label>
@@ -238,40 +286,28 @@
         </select>
       </div>
       <div class="dropdown-block">
-        <label>MOOD</label>
-        <select id="mood">
-          <option>None</option>
-          <option>Hype</option>
-          <option>Chill</option>
-          <option>Emotional</option>
-          <option>Gritty</option>
-          <option>Confident</option>
-          <option>Dark</option>
-          <option>Romantic</option>
-          <option>Motivational</option>
-          <option>Nostalgic</option>
-          <option>Spiritual</option>
-        </select>
-      </div>
+  <label>MOOD</label>
+  <select id="mood">
+    <option>None</option>
+    <option>Hype</option>
+    <option>Chill</option>
+    <option>Emotional</option>
+    <option>Gritty</option>
+    <option>Confident</option>
+    <option>Dark</option>
+    <option>Romantic</option>
+    <option>Motivational</option>
+    <option>Nostalgic</option>
+    <option>Spiritual</option>
+  </select>
+</div>
     </div>
-
     <input id="prompt" type="text" placeholder="Enter your lyrics theme..." />
-
     <div class="action-buttons">
       <button id="generate">GENERATE LYRICS</button>
       <button id="copy">COPY LYRIC</button>
     </div>
   </div>
-
-  <div id="paywall-overlay" class="overlay">
-    <div class="overlay-box">
-      <h2>Subscribe to Unlock Unlimited Lyrics</h2>
-      <p>You’ve used your free generation. Unlock all features for $5.99/month.</p>
-      <a href="https://www.paypal.com/ncp/payment/TZRN5VM22UNJU" target="_blank" class="paypal-btn">Subscribe via PayPal</a>
-      <button id="close-overlay">Close</button>
-    </div>
-  </div>
-
   <script src="script.js"></script>
 </body>
 </html>
