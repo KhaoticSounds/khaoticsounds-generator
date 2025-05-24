@@ -1,28 +1,3 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const fetch = require('node-fetch');
-require('dotenv').config();
-
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-// ✅ CORS Middleware
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  res.setHeader('Access-Control-Allow-Origin', origin || '*');
-  res.setHeader('Vary', 'Origin');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  if (req.method === 'OPTIONS') return res.sendStatus(200);
-  next();
-});
-
-app.use(bodyParser.json());
-app.use(express.static('public'));
-
-// ✅ Lyrics Generator Endpoint
 app.post('/generate', async (req, res) => {
   const { prompt, mood, bars, bpm } = req.body;
 
@@ -31,7 +6,7 @@ app.post('/generate', async (req, res) => {
     return res.status(500).json({ lyrics: '', error: 'Missing API key' });
   }
 
-  console.log("📥 /generate request received:", req.body);
+  console.log("📥 /generate request:", req.body);
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -54,25 +29,24 @@ app.post('/generate', async (req, res) => {
 
     const data = await response.json();
 
-    // 🔍 Log the full response for debugging
-    console.log("🧠 OpenAI API raw response:", data);
+    if (!response.ok) {
+      console.error("❌ OpenAI API Error:", data);
+      return res.status(500).json({ lyrics: '', error: data });
+    }
 
     const lyrics = data.choices?.[0]?.message?.content?.trim();
 
     if (!lyrics) {
-      throw new Error(`No lyrics returned. Details: ${JSON.stringify(data)}`);
+      console.error("❌ No lyrics returned:", data);
+      return res.status(500).json({ lyrics: '', error: 'No lyrics in response' });
     }
 
-    console.log("✅ Lyrics generated:\n", lyrics);
+    console.log("✅ Generated Lyrics:\n", lyrics);
     res.json({ lyrics });
+
   } catch (error) {
-    console.error('❌ Error generating lyrics:', error.message);
+    console.error('❌ Error talking to OpenAI:', error.message);
     res.status(500).json({ lyrics: '', error: error.message });
   }
 });
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
-
 
